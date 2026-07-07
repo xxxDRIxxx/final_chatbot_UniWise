@@ -1,0 +1,120 @@
+Q: Greetings, hello, hi
+A: Hello! I’m UniWise, your school assistant. You may ask me about enrollment, school documents, uniforms, school address, contact information, and academic strands.
+
+Q: Goodbye, bye
+A: Goodbye! If you need anything else, just message me anytime.
+
+Q: Fallback, unknown, what can you do
+A: We could only cater to School-related questions, like enrollment, documents, ID, report card, or absences.
+
+Q: Contact Information, Phone, Email, Facebook, Address
+A: Office involved: School Administration; Registrar. Phone: (046) 872-0411. Email: 342602@deped.gov.ph. Facebook Page: https://web.facebook.com/DepEdTayoSHSwithinBES342602?_rdc=1&_rdr#. Address: Tincoco St., Campo Santo, Bacoor City, Cavite. For enrollment, documents, and student concerns, contact the Registrar or School Administration during office hours.
+
+Q: About the School, topics to ask
+A: You may ask about: school address, who can apply, academic strands offered, class size, learning modes, scholarships, and eligibility requirements.
+
+Q: How to replace a lost ID
+A: Office involved: Class Adviser; Admin Office; School Cashier; School Head. Steps: 1) Report the loss to your Class Adviser immediately. 2) Get and fill out the ID Replacement Request Form. 3) Class Adviser endorses to Admin for record verification. 4) Request is forwarded to the School Head for approval. 5) After approval, Admin or Class Adviser issues a new ID or temporary gate pass. Reference: DepEd Order No. 41, s. 2012; School-based policy.
+
+Q: How to replace a lost report card
+A: Office involved: Class Adviser; Registrar; School Head. Steps: 1) Submit a written request to your Class Adviser. 2) Adviser evaluates and endorses to the Registrar. 3) Registrar verifies your academic records. 4) Request goes to the School Head for approval. 5) Registrar releases a certified true copy of the report card. Reference: DepEd Order No. 8, s. 2015; DepEd Order No. 41, s. 2012.
+
+Q: How to enroll
+A: Office involved: Enrollment Committee; Registrar; Guidance Office. Steps: 1) Get an enrollment form from the Registrar. 2) Submit the accomplished form plus requirements (SF9, Birth Certificate, JHS Certificate of Completion, etc.). 3) Registrar evaluates and validates the records. 4) Guidance Office confirms strand placement if applicable. 5) You are officially enrolled after confirmation and encoding. Reference: DepEd Order No. 3, s. 2018; Annual DepEd Enrollment Guidelines Memorandum.
+
+Q: How to request school forms, what documents can I request
+A: You can request documents such as: Good Moral Certificate, Certificate of Enrollment, SF9 / Report Card, SF10, and F137.
+
+Q: When will requested records or documents be released? How long does it take to process documents?
+A: Office involved: Registrar. Steps: 1) Request is logged and acknowledged by the Registrar. 2) Records are verified and prepared. 3) Approved documents are released within the processing period. Standard processing time is 3–7 working days. Reference: DepEd Citizen’s Charter; Republic Act No. 11032.
+
+Q: How much is the uniform? Uniform cost
+A: Office involved: School Administration; Authorized School Supplier. Process: 1) School announces the approved uniform design and price at the start of the school year. 2) Learners inquire from the school or authorized supplier. 3) Uniforms are bought from the authorized supplier. Note: Uniform is encouraged but must not be used as basis to exclude learners from classes. Prices depend on the student’s size. For more information, proceed to the school admin. Reference: DepEd Order No. 46, s. 2008; DepEd Order No. 88, s. 2010.
+
+Q: Process for transferees or late enrollees
+A: Office involved: Registrar; Guidance Office; School Head. Steps: 1) Submit complete transfer credentials to the Registrar. 2) Registrar checks authenticity and completeness. 3) Guidance Office conducts assessment or interview. 4) School Head approves enrollment, subject to available slots. 5) Learner is officially enrolled upon approval. Reference: DepEd Order No. 3, s. 2018; DepEd Order No. 54, s. 2016.
+
+Q: How to request a change of strand
+A: Office involved: Guidance Office; Registrar; School Head. Steps: 1) Submit a written request to the Guidance Office. 2) Guidance Counselor assesses suitability. 3) Registrar reviews academic records. 4) School Head gives final approval. 5) Approved change is reflected in Form 201. Reference: DepEd Order No. 51, s. 2014; DepEd Order No. 54, s. 2016.
+
+Q: What happens if you have failing marks
+A: Office involved: Subject Teacher; Class Adviser; Guidance; School Head. Steps: 1) Subject teacher informs the learner about failing or at-risk performance. 2) Learner undergoes academic counseling and intervention. 3) Remedial or support programs are provided when applicable. 4) Performance is reassessed after intervention. 5) Final grades follow DepEd assessment guidelines. Reference: DepEd Order No. 8, s. 2015; DepEd Order No. 73, s. 2012.
+
+Q: Graduation requirements
+A: Office involved: Subject Teachers; Class Adviser; Registrar; School Head. Steps: 1) Complete all required SHS subjects. 2) Secure academic clearances, forms, and required documents. 3) Registrar verifies records. 4) School Head confirms eligibility for graduation. Reference: DepEd Order No. 36, s. 2016; DepEd Order No. 8, s. 2015.
+
+Q: Process for dropping and adding subjects
+A: Office involved: Class Adviser; Registrar; School Head. Steps: 1) Submit a written request within the allowed adjustment period. 2) Class Adviser evaluates and endorses the request. 3) Registrar reviews subject load and records. 4) School Head approval is secured. 5) Records are officially updated. Reference: DepEd Order No. 54, s. 2016.
+
+Q: Process of dropping students
+A: Office involved: Class Adviser; Guidance; School Head; Registrar. Steps: 1) Learner is identified due to absences, academic deficiency, or disciplinary concerns. 2) Counseling and parent or guardian conference is conducted. 3) Due process and documentation are completed. 4) School Head issues decision. 5) Registrar records the dropping officially. Reference: DepEd Order No. 92, s. 2012; DepEd Order No. 8, s. 2015.
+
+Q: Excuse letter or absence policy
+A: Office involved: Class Adviser. Steps: 1) Submit a written excuse letter signed by parent or guardian upon return. 2) Attach supporting documents if applicable. 3) Class Adviser validates the excuse. 4) Attendance records are updated. Reference: DepEd Order No. 8, s. 2015.
+
+Q: How to request use of school facilities
+A: Office involved: Subject Teacher or Class Adviser; Property Custodian; School Head. Steps: 1) Submit a written request with purpose and schedule. 2) Adviser or subject teacher endorses the request. 3) Property Custodian checks availability and safety. 4) School Head gives final approval. Reference: DepEd Order No. 40, s. 2015; DepEd Order No. 13, s. 2018.
+
+Q: Where to get the enrollment form
+A: Office involved: Registrar. Steps: 1) Inquire at the Registrar’s Office. 2) Enrollment form is issued and explained. Reference: DepEd Order No. 3, s. 2018.
+
+Q: Enrollment requirements
+A: Office involved: Registrar. Steps: 1) Prepare required documents (SF9, Birth Certificate, JHS Certificate of Completion). 2) Submit documents for evaluation. 3) Compliance is confirmed before enrollment. Reference: DepEd Order No. 58, s. 2017; DepEd Order No. 3, s. 2018.
+
+Q: Can someone claim documents on your behalf? Authorized claim
+A: Office involved: Registrar. Steps: 1) Representative presents an authorization letter. 2) Submit valid IDs of both parties. 3) Registrar verifies records. 4) Documents are released to the authorized representative. Reference: DepEd Order No. 41, s. 2012.
+
+Q: Is there a fee for requesting certificates or forms? Certificate fee
+A: Office involved: Registrar. Process: 1) Submit the request form to the Registrar. 2) Registrar verifies request and records. 3) Certificates or forms are processed without payment. 4) Document is released upon completion. Note: Public schools do not collect fees for issuance of school records, certificates, or forms. Reference: DepEd Order No. 46, s. 2008.
+
+Q: How is class standing computed?
+A: Office involved: Subject Teacher. Steps: 1) Written works are assessed. 2) Performance tasks are evaluated using rubrics. 3) Quarterly assessments are administered. 4) Final grades are computed following DepEd policy. Reference: DepEd Order No. 8, s. 2015.
+
+Q: How many absences are allowed before failing or dropping? Absence limit
+A: Office involved: Class Adviser; Guidance Office. Steps: 1) Attendance is monitored regularly. 2) Learners nearing the limit are notified. 3) Counseling or intervention is provided. 4) Exceeding 20% of total school days may result in dropping or failing, with due process. Reference: DepEd Order No. 8, s. 2015; DepEd Order No. 3, s. 2018.
+
+Q: Good Moral Certificate, Certificate of Enrollment, SF10, F137 request process
+A: Office involved: Registrar; School Head if approval is needed. Steps: 1) Secure and accomplish the request form or use the online form. 2) Submit the request to the Registrar. 3) Registrar verifies your records and purpose. 4) For cases needing approval, it is endorsed to the School Head. 5) Release is done by the Registrar. Processing time: 3–7 working days. Fee: FREE. Request here: https://docs.google.com/forms/d/e/1FAIpQLSdJ8jZXFnllT0lpGBtW4onQZTi0aUKzr6TI2nQ3N00sQd8r1w/viewform
+
+Q: SF9, Report Card request process
+A: Office involved: Class Adviser; Registrar; School Head. Steps: 1) Submit a written request to your adviser or registrar. 2) The school verifies your academic record. 3) Approval is secured when required. 4) A certified true copy or official record is prepared. 5) Release is done by the Registrar. Processing time: 3–7 working days. Fee: FREE.
+
+Q: School Address
+A: Tincoco St. Campo Santo Brgy. Poblacion, City of Bacoor, Cavite 4102.
+
+Q: Who can apply
+A: All incoming Grade 11 and Grade 12 transferee Filipino or foreign students for S.Y. 2025–2026 are welcome to apply.
+
+Q: Academic Strands Offered
+A: We offer academic strands such as STEM and HUMSS. For more detailed information, please visit the Academic Information page.
+
+Q: Can I switch strands in between semesters?
+A: Yes, but you will have to take irregular classes for the subjects you may have missed.
+
+Q: Can I transfer into or out of the school mid semester?
+A: Yes, but you will have to take irregular classes for the subjects you may have missed.
+
+Q: Class Size
+A: Both Grade 11 and Grade 12 have 30 to 40 students per section.
+
+Q: Learning Modes
+A: We offer flexible learning modes to suit students’ capacity and internet access. Students can choose: Remote online learning and join regular synchronous classes OR Remote offline learning and pick up digital modules from the school at regular intervals.
+
+Q: Learning Modules / Books
+A: Books are available and can be accessed at the LRMDS.
+
+Q: Scholarships
+A: No, we do not provide scholarships.
+
+Q: Eligibility Requirements
+A: The HUMSS strand does not have eligibility requirements. The STEM strand requires at least a general weighted average of 85 in all subjects.
+
+Q: School Background, History
+A: Senior High School within Bacoor Elementary School was established in 2016. It is one of the five public senior high schools in the Division of Bacoor City. It started catering to students under the Science, Technology, Engineering, and Mathematics (STEM) Strand, and later added the Humanities and Social Sciences (HUMSS) strand in 2020. SHS within Bacoor ES was first housed in SHS Dulong Bayan, alongside SHS Dulong Bayan and SHS within Sineguelasan. In June 2021, the school was transferred and housed within Bacoor ES. It was originally named SHS Alima, as Bacoor ES is situated in Barangay Alima, but was later renamed to SHS within Bacoor Elementary School. The school's main gate is situated in Barangay Campo Santo, making it a proud constituent of the local community.
+
+Q: Teachers List, Faculty, Administration
+A: Here are the dedicated faculty and staff of Senior High School within Bacoor Elementary School (SHSwBES):
+Administration: Ms. Kynah Amor M. Darvin (Assistant School Principal II / School Head)
+Master Teachers: Mrs. Lourdes G. Austria, Mrs. Joy S. Abuan, Mrs. Mary Ann Ilagan, Mr. Edwin U. Ugali
+Subject Teachers & Advisers: Mr. Bryan Jazel Yu Paciente, Mr. Ariel Y. Almasco Jr., Mr. Oliric C. Fabiolas, Engr. Marlone J. Arevalo (along with our other dedicated teaching staff).
+For the complete and most up-to-date list, visit our official directory here: https://sites.google.com/view/shswithinbes-campersite/faculty-and-staff
