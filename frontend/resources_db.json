@@ -1,9 +1,4 @@
 {
-  "announcement": {
-    "title": "Suspension of CLasses",
-    "body": "There is no Classes tomorrow",
-    "extra": "No Office"
-  },
   "about": {
     "title": "About UniWise",
     "text1": "UniWise is a school assistant chatbot that helps students find answers quickly.",
@@ -51,34 +46,39 @@
   ],
   "posts": [
     {
-      "id": "15a631be0f17459ca0e63f39d7abf365",
+      "id": "e99fc79fb0a045039a2624077daa11be",
+      "type": "announcement",
+      "title": "Suspension of Classes",
+      "body": "Please be reminded that the classes on July 13, 2026 is suspended due to Holiday.",
+      "extra": "There will be no office available that day.",
+      "caption": "Please be reminded that the classes on July 13, 2026 is suspended due to Holiday.",
+      "author": "admin",
+      "attachments": [],
+      "created_at": "2026-07-07 13:47:12",
+      "updated_at": "2026-07-07 13:47:12"
+    },
+    {
+      "id": "fd9fe8b9631a4c24a033b08afea9fea1",
       "type": "upload",
-      "title": "CONGRATULATIONS",
-      "body": "CONGRATS",
+      "title": "Congratulations!",
+      "body": "𝗖𝗔𝗠𝗣𝗘𝗥𝗦 𝗣𝗥𝗜𝗗𝗘! ✨\r\n𝐂𝐨𝐧𝐠𝐫𝐚𝐭𝐮𝐥𝐚𝐭𝐢𝐨𝐧𝐬 𝐭𝐨 𝐒𝐇𝐒𝐁𝐄𝐒 𝐒𝐢𝐧𝐚𝐠𝐭𝐚𝐥𝐚 𝐃𝐚𝐧𝐜𝐞𝐫𝐬 𝐟𝐨𝐫 𝐝𝐨𝐦𝐢𝐧𝐚𝐭𝐢𝐧𝐠 𝐭𝐡𝐞 𝐬𝐭𝐫𝐞𝐞𝐭 𝐝𝐚𝐧𝐜𝐞 𝐜𝐨𝐦𝐩𝐞𝐭𝐢𝐭𝐢𝐨𝐧! 👏🕺\r\n\r\nYour breathtaking performance, creativity, and dedication through every practice and hard work had earned you these awards that truly inspires many.\r\n\r\n╰ 𝗕𝗲𝘀𝘁 𝗶𝗻 𝗖𝗵𝗼𝗿𝗲𝗼𝗴𝗿𝗮𝗽𝗵𝘆 - 𝗛𝗶𝗴𝗵𝘀𝗰𝗵𝗼𝗼𝗹 𝗗𝗶𝘃𝗶𝘀𝗶𝗼𝗻\r\n╰ 𝗚𝗿𝗮𝗻𝗱 𝗖𝗵𝗮𝗺𝗽𝗶𝗼𝗻 - 𝗛𝗶𝗴𝗵𝘀𝗰𝗵𝗼𝗼𝗹 𝗗𝗶𝘃𝗶𝘀𝗶𝗼𝗻\r\n\r\nKeep dancing, keep inspiring, and continue reaching greater heights. Congratulations, champions! ✨💃\r\n\r\n🎨: Luis Gabrielle Roa\r\n🖋️: Zyerina Alexa Millonte",
       "extra": "",
-      "caption": "CONGRATS",
+      "caption": "𝗖𝗔𝗠𝗣𝗘𝗥𝗦 𝗣𝗥𝗜𝗗𝗘! ✨\r\n𝐂𝐨𝐧𝐠𝐫𝐚𝐭𝐮𝐥𝐚𝐭𝐢𝐨𝐧𝐬 𝐭𝐨 𝐒𝐇𝐒𝐁𝐄𝐒 𝐒𝐢𝐧𝐚𝐠𝐭𝐚𝐥𝐚 𝐃𝐚𝐧𝐜𝐞𝐫𝐬 𝐟𝐨𝐫 𝐝𝐨𝐦𝐢𝐧𝐚𝐭𝐢𝐧𝐠 𝐭𝐡𝐞 𝐬𝐭𝐫𝐞𝐞𝐭 𝐝𝐚𝐧𝐜𝐞 𝐜𝐨𝐦𝐩𝐞𝐭𝐢𝐭𝐢𝐨𝐧! 👏🕺\r\n\r\nYour breathtaking performance, creativity, and dedication through every practice and hard work had earned you these awards that truly inspires many.\r\n\r\n╰ 𝗕𝗲𝘀𝘁 𝗶𝗻 𝗖𝗵𝗼𝗿𝗲𝗼𝗴𝗿𝗮𝗽𝗵𝘆 - 𝗛𝗶𝗴𝗵𝘀𝗰𝗵𝗼𝗼𝗹 𝗗𝗶𝘃𝗶𝘀𝗶𝗼𝗻\r\n╰ 𝗚𝗿𝗮𝗻𝗱 𝗖𝗵𝗮𝗺𝗽𝗶𝗼𝗻 - 𝗛𝗶𝗴𝗵𝘀𝗰𝗵𝗼𝗼𝗹 𝗗𝗶𝘃𝗶𝘀𝗶𝗼𝗻\r\n\r\nKeep dancing, keep inspiring, and continue reaching greater heights. Congratulations, champions! ✨💃\r\n\r\n🎨: Luis Gabrielle Roa\r\n🖋️: Zyerina Alexa Millonte",
       "author": "admin",
       "attachments": [
         {
           "type": "image",
-          "url": "/static/uploads/669289f4b2ee45bbac154740287dc13d.png",
-          "name": "wallhaven-o37dx7_1920x1200.png"
+          "url": "/static/uploads/12681a733d74430f864e929920d3a24f.jpg",
+          "name": "730695113_1397514579093200_8854496691271917581_n.jpg"
         }
       ],
-      "created_at": "2026-07-07 12:41:26",
-      "updated_at": "2026-07-07 12:41:26"
-    },
-    {
-      "id": "11e67fa5b6bf4e50adad3b5a7aae2b44",
-      "type": "announcement",
-      "title": "Suspension of CLasses",
-      "body": "There is no Classes tomorrow",
-      "extra": "No Office",
-      "caption": "There is no Classes tomorrow",
-      "author": "admin",
-      "attachments": [],
-      "created_at": "2026-07-07 12:22:49",
-      "updated_at": "2026-07-07 12:22:49"
+      "created_at": "2026-07-07 13:43:05",
+      "updated_at": "2026-07-07 13:43:05"
     }
-  ]
+  ],
+  "announcement": {
+    "title": "Suspension of Classes",
+    "body": "Please be reminded that the classes on July 13, 2026 is suspended due to Holiday.",
+    "extra": "There will be no office available that day."
+  }
 }

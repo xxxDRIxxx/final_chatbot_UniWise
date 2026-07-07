@@ -537,7 +537,7 @@ def admin():
     resources_data = load_resources()
     
     return render_template(
-        "admin-resources.html", # Make sure this matches your new HTML filename
+        "admin.html", # Make sure this matches your new HTML filename
         admin_name=session.get("admin_username", "Admin"),
         resources_data=resources_data # 2. Pass the data to the HTML file!
     )

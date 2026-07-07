@@ -21,7 +21,7 @@ function applySavedAppearance() {
   document.body.classList.add(`font-${font}`);
 
   document.body.classList.remove("size-small", "size-medium", "size-large");
-  document.body.classList.add(`size-${size}`);
+  document.body.classList.add(`size-${size}`);  
 
   document.body.classList.remove("bubble-default", "bubble-solid-bluegold", "bubble-solid-greengold");
   document.body.classList.add(`bubble-${bubble}`);
