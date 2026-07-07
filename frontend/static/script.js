@@ -589,6 +589,9 @@ function formatInlineMarkdown(text) {
   html = html.replace(/(^|[\s(])\*(?!\*)([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
   html = html.replace(/(^|[\s(])_(?!_)([^_\n]+)_(?!_)/g, "$1<em>$2</em>");
 
+  // NEW: Convert chatbot attachment links into clickable buttons
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline; font-weight: 700;">$1 <i class="bi bi-box-arrow-up-right" style="font-size: 10px;"></i></a>');
+
   return html;
 }
 
@@ -760,18 +763,15 @@ function buildRegularMessage(msg) {
     inner.className = msg.role === "user" ? "user-text-content" : "bot-text-content";
 
     const img = document.createElement("img");
-    img.src = msg.url;
+    img.src = msg.url; // This will now display the image directly
     img.alt = msg.fileName || "image";
     img.className = "chat-image";
+    
+    // Add click-to-enlarge functionality
+    img.style.cursor = "pointer";
+    img.onclick = () => window.open(img.src, "_blank");
+    
     inner.appendChild(img);
-
-    if (msg.fileName) {
-      const cap = document.createElement("div");
-      cap.className = "file-caption";
-      cap.textContent = msg.fileName;
-      inner.appendChild(cap);
-    }
-
     bubble.appendChild(inner);
   } else if (msg.type === "file") {
     const inner = document.createElement("div");
@@ -867,19 +867,29 @@ function attachFileMessage(file, type = "file") {
 /* =========================
    RASA API
 ========================= */
-async function sendToRasa(sender, message) {
-  const res = await fetch(RASA_URL, {
+/* =========================
+   AI BACKEND API (Replaced Rasa)
+========================= */
+async function sendToAI(sender, message) {
+  const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sender, message })
+    body: JSON.stringify({ message: message }) // Matches what app.py expects
   });
 
   if (!res.ok) {
     const t = await res.text().catch(() => "");
-    throw new Error(`Rasa HTTP ${res.status} ${t}`);
+    throw new Error(`Flask HTTP ${res.status} ${t}`);
   }
 
-  return await res.json();
+  const data = await res.json();
+
+  // We wrap the Flask reply in an array so your existing normalizeRasaReplies function still works perfectly!
+  if (data.success) {
+      return [{ text: data.reply }];
+  } else {
+      return [{ text: "I encountered an error: " + data.error }];
+  }
 }
 
 function dedupeButtons(buttons) {
@@ -1077,27 +1087,65 @@ async function sendMessage(messageOverride = null, displayOverride = null) {
   scrollChatToBottom();
 
   try {
-    const sender = conv.id;
-    const replies = await sendToRasa(sender, actualText);
+    // Send to your backend
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        sender: conv.id,
+        message: actualText
+      })
+    });
+
+    const data = await res.json();
 
     if (loaderRow) {
       loaderRow.remove();
       loaderRow = null;
     }
 
-    const normalized = normalizeRasaReplies(replies, actualText);
+    if (data.success) {
 
-    if (!normalized.length) {
+      // Add bot text reply
+      if (data.reply) {
+        conv.messages.push({
+          role: "bot",
+          type: "text",
+          text: data.reply
+        });
+      }
+
+      // Add image reply if present
+      if (data.image_url) {
+        conv.messages.push({
+          role: "bot",
+          type: "image",
+          url: data.image_url,
+          fileName: "Announcement Image"
+        });
+      }
+
+      // Optional: Handle buttons if your backend returns them
+      if (Array.isArray(data.buttons) && data.buttons.length) {
+        conv.messages.push({
+          role: "bot",
+          type: "bot_bundle",
+          text: "",
+          buttons: data.buttons,
+          sourceQuestion: actualText
+        });
+      }
+
+    } else {
       conv.messages.push({
         role: "bot",
-        type: "bot_bundle",
-        text: "No reply received from Rasa.",
-        buttons: [],
-        sourceQuestion: actualText
+        type: "text",
+        text: data.reply || "No reply received."
       });
-    } else {
-      conv.messages.push(...normalized);
     }
+
   } catch (err) {
     if (loaderRow) {
       loaderRow.remove();
@@ -1107,7 +1155,7 @@ async function sendMessage(messageOverride = null, displayOverride = null) {
     conv.messages.push({
       role: "bot",
       type: "bot_bundle",
-      text: "⚠️ Can’t reach Rasa. Check: rasa run --enable-api --cors \"*\" --port 5005",
+      text: "⚠️ Can't reach the server.",
       buttons: [],
       sourceQuestion: actualText
     });

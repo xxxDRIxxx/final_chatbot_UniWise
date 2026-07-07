@@ -345,7 +345,7 @@
   </div>
 
   <script>
-    window.initialResourcesData = {{ resources_data | tojson }};
+    window.initialResourcesData = {{ resources_data | tojson | safe }};
   </script>
   <script src="{{ url_for('static', filename='admin-resources.js') }}"></script>
 </body>

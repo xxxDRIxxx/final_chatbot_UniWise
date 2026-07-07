@@ -1,3 +1,14 @@
+# --- AI & LangChain Imports ---
+import shutil
+from langchain_core.documents import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_ollama import OllamaEmbeddings, ChatOllama
+from langchain_chroma import Chroma
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_classic.chains import create_history_aware_retriever, create_retrieval_chain
+from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import json
 import os
@@ -27,6 +38,73 @@ app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB total request size
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# =========================
+# AI BOT INITIALIZATION
+# =========================
+# BASE_DIR is currently your 'frontend' folder.
+# We need to go one level up to the main 'chatbot' folder to find faq.txt and chroma_db
+PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
+
+FAQ_FILE = os.path.join(PROJECT_ROOT, "faq.txt")
+DB_FOLDER = os.path.join(PROJECT_ROOT, "chroma_db")
+
+print("Loading FAQs for UniWise...")
+with open(FAQ_FILE, "r", encoding="utf-8") as f:
+    text_content = f.read()
+
+docs = [Document(page_content=text_content)]
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+splits = text_splitter.split_documents(docs)
+
+if os.path.exists(DB_FOLDER):
+    print("Clearing old memory to sync latest FAQ updates...")
+    shutil.rmtree(DB_FOLDER)
+
+print("Building AI vector database...")
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
+vectorstore = Chroma.from_documents(
+    documents=splits, 
+    embedding=embeddings, 
+    persist_directory=DB_FOLDER
+)
+retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+
+llm = ChatOllama(model="llama3")
+
+contextualize_q_prompt = ChatPromptTemplate.from_messages([
+    ("system", """Given a chat history and the latest user question, formulate a standalone question 
+    which can be understood without the chat history. Do NOT answer the question, 
+    just reformulate it if needed and otherwise return it as is."""),
+    MessagesPlaceholder("chat_history"),
+    ("human", "{input}"),
+])
+history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
+
+qa_prompt = ChatPromptTemplate.from_messages([
+    ("system", """You are UniWise, a professional and friendly school assistant for Senior High School within Bacoor Elementary School.
+    
+    Context from our FAQ: {context}
+    
+    LATEST LIVE ANNOUNCEMENTS & POSTS:
+    {latest_news}
+    
+    Strict Instructions:
+    1. GREETINGS: Only introduce yourself if the user explicitly types a greeting.
+    2. DEFAULT TO BRIEF: Provide brief, 1-to-2 sentence answers. 
+    3. DATE MATH: Calculate dates silently. If a post from July 7 says "tomorrow", state July 8.
+    4. PINNED POSTS: Always prioritize information from posts marked [PINNED - HIGH PRIORITY].
+    5. ATTACHMENTS (CRITICAL): If an announcement contains an 'Attachment URL', you MUST provide that link to the user in your response using this exact markdown format: [File Name](URL). Do not leave out the link if they ask about the post!
+    6. ANTI-HALLUCINATION: NEVER invent steps or fees.
+    """),
+    MessagesPlaceholder("chat_history"),
+    ("human", "{input}"),
+])
+
+question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
+# Global chat history memory
+chat_history = []
 
 # =========================
 # FILE HELPERS
@@ -455,9 +533,13 @@ def logout():
 @app.route("/admin")
 @login_required
 def admin():
+    # 1. Load the data from your JSON file
+    resources_data = load_resources()
+    
     return render_template(
-        "admin.html",
-        admin_name=session.get("admin_username", "Admin")
+        "admin-resources.html", # Make sure this matches your new HTML filename
+        admin_name=session.get("admin_username", "Admin"),
+        resources_data=resources_data # 2. Pass the data to the HTML file!
     )
 
 
@@ -844,6 +926,30 @@ def delete_admin_post(post_id):
             "error": str(e)
         }), 500
 
+@app.route("/api/admin/posts/<post_id>/pin", methods=["POST"])
+def toggle_pin_post(post_id):
+    auth_error = api_login_required()
+    if auth_error: return auth_error
+
+    try:
+        resources_data = load_resources()
+        posts = resources_data.get("posts", [])
+        
+        target_post = None
+        for p in posts:
+            if str(p.get("id")) == str(post_id):
+                p["is_pinned"] = not p.get("is_pinned", False) # Toggle pin status
+                target_post = p
+                break
+                
+        if not target_post:
+            return jsonify({"success": False, "error": "Post not found."}), 404
+            
+        save_resources(resources_data)
+        return jsonify({"success": True, "is_pinned": target_post["is_pinned"]})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    
 
 # =========================
 # ROUTES - ANALYTICS / LOGS
@@ -912,6 +1018,85 @@ def analytics():
             "error": str(e)
         }), 500
 
+# =========================
+# ROUTES - CHATBOT
+# =========================
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    global chat_history
+    
+    data = request.get_json() or {}
+    user_input = data.get("message", "").strip()
+    
+    if not user_input:
+        return jsonify({"success": False, "error": "No message provided"}), 400
+
+    try:
+        # 1. Log the question to your existing chat_logs.json
+        logs = load_logs()
+        logs.append({
+            "question": user_input,
+            "created_at": now_str()
+        })
+        save_logs(logs)
+
+# --- NEW: Fetch Live Posts, Pins, and Attachments ---
+        resources_data = load_resources()
+        posts = resources_data.get("posts", [])
+        
+        news_list = []
+        for p in posts:
+            pin_status = "[PINNED - HIGH PRIORITY] " if p.get("is_pinned") else ""
+            title = p.get("title", "")
+            body = p.get("body", "")
+            date = p.get("created_at", "")
+            
+            # Extract attachments if this is an "upload" post
+            attach_str = ""
+            if p.get("attachments"):
+                links = [f"[{a.get('name', 'File')}]({a.get('url', '')})" for a in p.get("attachments")]
+                attach_str = f" | Attachment URLs: {', '.join(links)}"
+                
+            news_list.append(f"{pin_status}Date: {date} | Title: {title} | Content: {body}{attach_str}")
+            
+        latest_news_str = "\n\n".join(news_list) if news_list else "No recent announcements."
+        # ---------------------------------------------------
+
+        # 2. Get the answer from LangChain, passing the live news
+        response = rag_chain.invoke({
+            "input": user_input, 
+            "chat_history": chat_history,
+            "latest_news": latest_news_str
+        })
+        full_answer = response.get("answer", "I'm having trouble retrieving that information.")
+        
+        # 3. Update conversation memory
+        chat_history.extend([
+            HumanMessage(content=user_input),
+            AIMessage(content=full_answer),
+        ])
+        
+        # 4. Return the JSON payload to the frontend
+        image_attachment = None
+        # Check the first post/announcement for an attachment
+        recent_posts = posts[:1] 
+        if recent_posts and recent_posts[0].get("attachments"):
+            # Filter for image type
+            for attach in recent_posts[0].get("attachments"):
+                if attach.get("type") == "image":
+                    image_attachment = attach.get("url")
+                    break
+
+        return jsonify({
+            "success": True, 
+            "reply": full_answer,
+            "image_url": image_attachment # Send the URL explicitly to the UI
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 
 # =========================
 # ROUTES - DICTIONARY
@@ -942,4 +1127,4 @@ def dictionary_lookup():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

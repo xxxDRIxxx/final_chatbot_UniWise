@@ -1,8 +1,8 @@
 {
   "announcement": {
-    "title": "Enrollment Reminder",
-    "body": "Please submit your enrollment requirements to the school office within the posted schedule.",
-    "extra": "Office Hours: 8:00 AM to 4:00 PM (Mon to Fri)."
+    "title": "Suspension of CLasses",
+    "body": "There is no Classes tomorrow",
+    "extra": "No Office"
   },
   "about": {
     "title": "About UniWise",
@@ -49,5 +49,36 @@
       "text": "Bring complete documents, valid details, and confirm the office or concern before going to school."
     }
   ],
-  "posts": []
+  "posts": [
+    {
+      "id": "15a631be0f17459ca0e63f39d7abf365",
+      "type": "upload",
+      "title": "CONGRATULATIONS",
+      "body": "CONGRATS",
+      "extra": "",
+      "caption": "CONGRATS",
+      "author": "admin",
+      "attachments": [
+        {
+          "type": "image",
+          "url": "/static/uploads/669289f4b2ee45bbac154740287dc13d.png",
+          "name": "wallhaven-o37dx7_1920x1200.png"
+        }
+      ],
+      "created_at": "2026-07-07 12:41:26",
+      "updated_at": "2026-07-07 12:41:26"
+    },
+    {
+      "id": "11e67fa5b6bf4e50adad3b5a7aae2b44",
+      "type": "announcement",
+      "title": "Suspension of CLasses",
+      "body": "There is no Classes tomorrow",
+      "extra": "No Office",
+      "caption": "There is no Classes tomorrow",
+      "author": "admin",
+      "attachments": [],
+      "created_at": "2026-07-07 12:22:49",
+      "updated_at": "2026-07-07 12:22:49"
+    }
+  ]
 }

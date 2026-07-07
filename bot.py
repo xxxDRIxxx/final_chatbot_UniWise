@@ -1,7 +1,9 @@
 import os
 import shutil
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-# Modern LangChain imports (Avoids community deprecation warnings)
+# Modern LangChain imports
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings, ChatOllama
@@ -11,24 +13,22 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_classic.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 
+# --- Initialize Flask App ---
+app = Flask(__name__)
+CORS(app) # This allows your frontend to talk to this backend
 
 print("Loading FAQs...")
-# Use standard Python to read the text file
 with open("./faq.txt", "r", encoding="utf-8") as f:
     text_content = f.read()
 
-# Wrap the raw text in LangChain's native Document format
 docs = [Document(page_content=text_content)]
-
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
 splits = text_splitter.split_documents(docs)
 
-# --- NEW AUTO-UPDATE CODE ---
 db_folder = "./chroma_db"
 if os.path.exists(db_folder):
     print("Clearing old memory to sync latest FAQ updates...")
     shutil.rmtree(db_folder)
-# ----------------------------
 
 print("Building database...")
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
@@ -41,7 +41,6 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 llm = ChatOllama(model="llama3")
 
-# --- NEW: Step 1. Rephrase the question based on chat history ---
 contextualize_q_prompt = ChatPromptTemplate.from_messages([
     ("system", """Given a chat history and the latest user question, formulate a standalone question 
     which can be understood without the chat history. Do NOT answer the question, 
@@ -51,8 +50,6 @@ contextualize_q_prompt = ChatPromptTemplate.from_messages([
 ])
 history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
 
-
-# --- NEW: Step 2. Answer the question using the retrieved context ---
 qa_prompt = ChatPromptTemplate.from_messages([
     ("system", """You are UniWise, a professional and friendly school assistant for Senior High School within Bacoor Elementary School.
     
@@ -72,33 +69,36 @@ qa_prompt = ChatPromptTemplate.from_messages([
 ])
 question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
 
-
-# --- NEW: Step 3. Combine them into one final pipeline ---
 rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
 
-print("\n✅ FAQ Bot ready! Type 'exit' to quit.\n")
-
-# This empty list will store the conversation memory while the script runs
+# This list will store the conversation memory while the server runs
 chat_history = []
 
-while True:
-    user_input = input("You: ")
-    if user_input.lower() == 'exit':
-        break
-        
-    print("Bot: ", end="", flush=True)
+# --- Create the Web API Route ---
+@app.route('/chat', methods=['POST'])
+def chat():
+    global chat_history
     
-    full_answer = ""
-    # We pass BOTH the user's input and the chat history into the chain
-    for chunk in rag_chain.stream({"input": user_input, "chat_history": chat_history}):
-        # The chain outputs dictionary chunks; we only want to print the answer text
-        if "answer" in chunk:
-            print(chunk["answer"], end="", flush=True)
-            full_answer += chunk["answer"]
-    print("\n")
+    # Get the JSON data sent from the frontend UI
+    data = request.json
+    user_input = data.get("message") # Make sure your frontend sends data like {"message": "Hello"}
     
-    # Save the back-and-forth to the memory list so it's ready for the next loop
+    if not user_input:
+        return jsonify({"error": "No message provided"}), 400
+
+    # Instead of streaming to the terminal, we invoke the chain to get the final answer string
+    response = rag_chain.invoke({"input": user_input, "chat_history": chat_history})
+    full_answer = response["answer"]
+    
+    # Save the back-and-forth to the memory list
     chat_history.extend([
         HumanMessage(content=user_input),
         AIMessage(content=full_answer),
     ])
+    
+    # Send the response back to the UI in JSON format
+    return jsonify({"reply": full_answer}) # Make sure your frontend looks for data.reply
+
+if __name__ == '__main__':
+    print("\n✅ API is running! Your frontend can now connect to http://127.0.0.1:5000/chat\n")
+    app.run(port=5000, debug=False)
