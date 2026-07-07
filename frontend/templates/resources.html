@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise | Resources</title>
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='resources.css') }}?v=50">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="night theme-bluegold font-inter size-medium bubble-default">
+
+  <div class="resources-shell">
+
+    <!-- TOP NAV -->
+    <header class="resources-header glass-panel">
+      <div class="header-left">
+        <div class="brand-badge">
+          <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo" class="brand-logo">
+        </div>
+
+        <div class="brand-copy">
+          <div class="mini-label">UniWise Resource Hub</div>
+          <h1>School Resources</h1>
+          <p>Announcements, school posts, maps, contacts, and official links in one polished feed.</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button onclick="goHome()" class="header-btn" title="Home">
+          <i class="bi bi-house-fill"></i>
+        </button>
+
+        <button onclick="goSettings()" class="header-btn" title="Settings">
+          <i class="bi bi-gear-fill"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO STRIP -->
+    <section class="hero-strip glass-panel">
+      <div class="hero-copy">
+        <div class="pill-label">
+          <i class="bi bi-grid-1x2-fill"></i>
+          <span>Campus Feed</span>
+        </div>
+        <h2>Latest announcement, updates, and school uploads</h2>
+        <p>Built like a clean social feed with a softer Apple-style visual layer for a more premium reading experience.</p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat-card">
+          <span>Total Feed Items</span>
+          <strong>
+            {% if resources_data.posts and resources_data.posts|length > 0 %}
+              {{ 1 + (resources_data.posts | length) }}
+            {% elif resources_data.updates %}
+              {{ 1 + (resources_data.updates | length) }}
+            {% else %}
+              1
+            {% endif %}
+          </strong>
+        </div>
+
+        <div class="hero-stat-card">
+          <span>Pinned</span>
+          <strong>1</strong>
+        </div>
+
+        <div class="hero-stat-card">
+          <span>Posts</span>
+          <strong>
+            {% if resources_data.posts %}
+              {{ resources_data.posts | length }}
+            {% elif resources_data.updates %}
+              {{ resources_data.updates | length }}
+            {% else %}
+              0
+            {% endif %}
+          </strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN FEED LAYOUT -->
+    <section class="feed-layout">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="feed-sidebar">
+
+        <div class="sidebar-card glass-panel">
+          <div class="sidebar-head">
+            <div class="pill-label">
+              <i class="bi bi-info-circle-fill"></i>
+              <span>About</span>
+            </div>
+            <h3>{{ resources_data.about.title if resources_data.about.title else "About UniWise" }}</h3>
+          </div>
+
+          <div class="sidebar-body">
+            <p>{{ resources_data.about.text1 }}</p>
+            <p>{{ resources_data.about.text2 }}</p>
+          </div>
+        </div>
+
+        <div class="sidebar-card glass-panel">
+          <div class="sidebar-head">
+            <div class="pill-label">
+              <i class="bi bi-telephone-fill"></i>
+              <span>Contact</span>
+            </div>
+            <h3>School Contact</h3>
+          </div>
+
+          <div class="contact-list">
+            <div class="contact-row">
+              <span class="contact-label">Phone</span>
+              <span class="contact-value" id="contactPhone">{{ resources_data.contact.phone }}</span>
+            </div>
+
+            <div class="contact-row">
+              <span class="contact-label">Email</span>
+              <span class="contact-value" id="contactEmail">{{ resources_data.contact.email }}</span>
+            </div>
+
+            <div class="contact-row">
+              <span class="contact-label">Location</span>
+              <span class="contact-value" id="contactLocation">{{ resources_data.contact.location }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card glass-panel">
+          <div class="sidebar-head">
+            <div class="pill-label">
+              <i class="bi bi-link-45deg"></i>
+              <span>Official Links</span>
+            </div>
+            <h3>Verified Pages</h3>
+          </div>
+
+          <div class="official-links">
+            <a
+              class="official-link"
+              href="{{ resources_data.links.website }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="official-link-left">
+                <div class="official-link-icon"><i class="bi bi-globe2"></i></div>
+                <div>
+                  <strong>School Website</strong>
+                  <span>Open the official campus site</span>
+                </div>
+              </div>
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+
+            <a
+              class="official-link"
+              href="{{ resources_data.links.facebook }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="official-link-left">
+                <div class="official-link-icon"><i class="bi bi-facebook"></i></div>
+                <div>
+                  <strong>Facebook Page</strong>
+                  <span>View school announcements</span>
+                </div>
+              </div>
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER FEED -->
+      <main class="feed-center">
+
+        <!-- PINNED ANNOUNCEMENT -->
+        <article class="feed-post-card glass-panel pinned-post">
+          <div class="feed-post-head">
+            <div class="feed-post-avatar">
+              <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo">
+            </div>
+
+            <div class="feed-post-meta">
+              <div class="feed-post-author">UniWise School Admin</div>
+              <div class="feed-post-time">Official campus update</div>
+            </div>
+
+            <div class="feed-post-status">Pinned</div>
+          </div>
+
+          <div class="feed-chip-row">
+            <span class="feed-chip">
+              <i class="bi bi-megaphone-fill"></i>
+              Announcement
+            </span>
+          </div>
+
+          <h2 id="announcementTitle" class="feed-post-title large-title">{{ resources_data.announcement.title }}</h2>
+          <div id="announcementBody" class="feed-post-body">{{ resources_data.announcement.body }}</div>
+
+          {% if resources_data.announcement.extra %}
+          <div class="feed-post-extra" id="announcementExtra">
+            {{ resources_data.announcement.extra }}
+          </div>
+          {% endif %}
+        </article>
+
+        <!-- SOCIAL POSTS -->
+        <div class="feed-posts-stack">
+
+          {% if resources_data.posts and resources_data.posts|length > 0 %}
+            {% for post in resources_data.posts %}
+            {% set attachments = post.attachments if post.attachments else [] %}
+
+            <article class="feed-post-card glass-panel">
+              <div class="feed-post-head">
+                <div class="feed-post-avatar">
+                  <img src="{{ url_for('static', filename='uniwiselogo.png') }}" alt="UniWise Logo">
+                </div>
+
+                <div class="feed-post-meta">
+                  <div class="feed-post-author">{{ post.author if post.author else "UniWise School Admin" }}</div>
+                  <div class="feed-post-time">
+                    {% if post.type == "announcement" %}
+                      Announcement
+                    {% elif post.type == "status" %}
+                      Status
+                    {% elif post.type == "update" %}
+                      Update
+                    {% elif post.type == "upload" %}
+                      Upload
+                    {% else %}
+                      School Post
+                    {% endif %}
+                    {% if post.created_at %} • {{ post.created_at }}{% endif %}
+                  </div>
+                </div>
+
+                <div class="feed-post-status subtle-status">
+                  {% if post.type == "announcement" %}
+                    <i class="bi bi-megaphone-fill"></i>
+                  {% elif post.type == "status" %}
+                    <i class="bi bi-chat-dots-fill"></i>
+                  {% elif post.type == "update" %}
+                    <i class="bi bi-info-circle-fill"></i>
+                  {% elif post.type == "upload" %}
+                    <i class="bi bi-cloud-upload-fill"></i>
+                  {% else %}
+                    <i class="bi bi-stickies-fill"></i>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="feed-chip-row">
+                <span class="feed-chip">
+                  {% if post.type == "announcement" %}
+                    <i class="bi bi-megaphone-fill"></i><span>Announcement</span>
+                  {% elif post.type == "status" %}
+                    <i class="bi bi-chat-dots-fill"></i><span>Status</span>
+                  {% elif post.type == "update" %}
+                    <i class="bi bi-info-circle-fill"></i><span>Update</span>
+                  {% elif post.type == "upload" %}
+                    <i class="bi bi-cloud-upload-fill"></i><span>Upload</span>
+                  {% else %}
+                    <i class="bi bi-stickies-fill"></i><span>Post</span>
+                  {% endif %}
+                </span>
+              </div>
+
+              {% if post.title %}
+              <h3 class="feed-post-title">{{ post.title }}</h3>
+              {% endif %}
+
+              {% if post.body %}
+              <div class="feed-post-body">{{ post.body }}</div>
+              {% endif %}
+
+              {% if post.extra %}
+              <div class="feed-post-extra">{{ post.extra }}</div>
+              {% endif %}
+
+              <!-- New attachments format -->
+              {% if attachments and attachments|length > 0 %}
+                {% set image_attachments = attachments | selectattr('type', 'equalto', 'image') | list %}
+                {% set file_attachments = attachments | selectattr('type', 'equalto', 'file') | list %}
+
+                {% if image_attachments|length > 0 %}
+                  <div class="post-gallery
+                    {% if image_attachments|length == 1 %}one
+                    {% elif image_attachments|length == 2 %}two
+                    {% elif image_attachments|length == 3 %}three
+                    {% elif image_attachments|length == 4 %}four
+                    {% else %}more{% endif %}
+                  ">
+                    {% for item in image_attachments[:4] %}
+                      <div class="gallery-item">
+                        <img src="{{ item.url }}" alt="{{ item.name if item.name else 'Post image' }}">
+                        {% if image_attachments|length > 4 and loop.index == 4 %}
+                          <div class="gallery-more-overlay">+{{ image_attachments|length - 4 }}</div>
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if file_attachments|length > 0 %}
+                  <div class="post-files">
+                    {% for item in file_attachments %}
+                    <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" class="file-row">
+                      <div class="file-left">
+                        <div class="file-icon">
+                          <i class="bi bi-file-earmark-fill"></i>
+                        </div>
+                        <div class="file-meta">
+                          <div class="file-name">{{ item.name if item.name else 'Attached File' }}</div>
+                          <div class="file-sub">Open file</div>
+                        </div>
+                      </div>
+                      <div class="file-open-mini">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                      </div>
+                    </a>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+              {% else %}
+                <!-- Backward compatibility old single file fields -->
+                {% if post.mediaType == "image" and post.mediaUrl %}
+                <div class="post-gallery one">
+                  <div class="gallery-item">
+                    <img src="{{ post.mediaUrl }}" alt="{{ post.title or 'Post image' }}">
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if post.mediaType == "file" and post.mediaUrl %}
+                <div class="post-files">
+                  <a href="{{ post.mediaUrl }}" target="_blank" rel="noopener noreferrer" class="file-row">
+                    <div class="file-left">
+                      <div class="file-icon">
+                        <i class="bi bi-file-earmark-fill"></i>
+                      </div>
+                      <div class="file-meta">
+                        <div class="file-name">{{ post.fileName if post.fileName else 'Attached File' }}</div>
+                        <div class="file-sub">Open file</div>
+                      </div>
+                    </div>
+                    <div class="file-open-mini">
+                      <i class="bi bi-box-arrow-up-right"></i>
+                    </div>
+                  </a>
+                </div>
+                {% endif %}
+              {% endif %}
+            </article>
+            {% endfor %}
+
+          {% elif resources_data.updates %}
+            {% for update in resources_data.updates %}
+            <article class="feed-post-card glass-panel">
+              <div class="feed-post-head">
+                <div class="feed-post-avatar">
+                  <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo">
+                </div>
+
+                <div class="feed-post-meta">
+                  <div class="feed-post-author">UniWise School Admin</div>
+                  <div class="feed-post-time">{{ update.label if update.label else "Update" }}</div>
+                </div>
+
+                <div class="feed-post-status subtle-status">
+                  <i class="bi {{ update.icon if update.icon else 'bi-info-circle-fill' }}"></i>
+                </div>
+              </div>
+
+              <div class="feed-chip-row">
+                <span class="feed-chip">
+                  <i class="bi {{ update.icon if update.icon else 'bi-info-circle-fill' }}"></i>
+                  <span>{{ update.label if update.label else "Update" }}</span>
+                </span>
+              </div>
+
+              <h3 class="feed-post-title">{{ update.title }}</h3>
+              <div class="feed-post-body">{{ update.text }}</div>
+            </article>
+            {% endfor %}
+
+          {% else %}
+            <article class="feed-post-card glass-panel empty-post-state">
+              <div class="empty-state large-empty">
+                <i class="bi bi-inboxes-fill"></i>
+                <h3>No posts yet</h3>
+                <p>School announcements and updates will appear here once available.</p>
+              </div>
+            </article>
+          {% endif %}
+
+        </div>
+      </main>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="feed-rightbar">
+        <div class="sidebar-card glass-panel">
+          <div class="sidebar-head">
+            <div class="pill-label">
+              <i class="bi bi-bar-chart-fill"></i>
+              <span>Overview</span>
+            </div>
+            <h3>Feed Organizer</h3>
+          </div>
+
+          <div class="summary-list">
+            <div class="summary-row">
+              <span>Total Feed Items</span>
+              <strong>
+                {% if resources_data.posts %}
+                  {{ 1 + (resources_data.posts | length) }}
+                {% elif resources_data.updates %}
+                  {{ 1 + (resources_data.updates | length) }}
+                {% else %}
+                  1
+                {% endif %}
+              </strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Pinned</span>
+              <strong>1</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Regular Posts</span>
+              <strong>
+                {% if resources_data.posts %}
+                  {{ resources_data.posts | length }}
+                {% elif resources_data.updates %}
+                  {{ resources_data.updates | length }}
+                {% else %}
+                  0
+                {% endif %}
+              </strong>
+            </div>
+          </div>
+
+          <div class="side-note">
+            Updates are arranged in a clean vertical stream so reading stays smooth even when more posts are added.
+          </div>
+        </div>
+
+        <div class="sidebar-card glass-panel">
+          <div class="sidebar-head">
+            <div class="pill-label">
+              <i class="bi bi-pin-map-fill"></i>
+              <span>Location</span>
+            </div>
+            <h3>{{ resources_data.school.name }}</h3>
+          </div>
+
+          <div class="mini-map-wrap">
+            <iframe
+              id="schoolMap"
+              src="{{ resources_data.school.map_embed }}"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+
+          <button
+            type="button"
+            class="soft-btn full-btn"
+            onclick="window.open('{{ resources_data.school.google_maps_search }}','_blank')">
+            <i class="bi bi-box-arrow-up-right"></i>
+            Open in Google Maps
+          </button>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ROUTE / MAP SECTION -->
+    <section class="travel-section glass-panel">
+      <div class="travel-section-head">
+        <div>
+          <div class="pill-label">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>Campus Finder</span>
+          </div>
+          <h2>Locate the school and estimate your travel</h2>
+          <p>Use your current location or type your address manually to get a route and estimated travel time.</p>
+        </div>
+      </div>
+
+      <div class="travel-grid">
+        <div class="travel-card">
+          <div class="travel-card-head">
+            <h3>Get Directions</h3>
+            <p>Enter your address or detect your location automatically.</p>
+          </div>
+
+          <div class="travel-form">
+            <label for="userLocation">Your location</label>
+
+            <div class="input-row">
+              <input
+                type="text"
+                id="userLocation"
+                placeholder="Enter your address, barangay, or city"
+              />
+              <button id="detectLocationBtn" class="soft-btn detect-btn" type="button">
+                <i class="bi bi-crosshair"></i>
+                Detect
+              </button>
+            </div>
+
+            <button id="routeBtn" class="primary-btn" type="button">
+              <i class="bi bi-sign-turn-right-fill"></i>
+              Open Route
+            </button>
+          </div>
+
+          <div class="travel-info">
+            <div class="travel-row">
+              <span>Destination</span>
+              <strong>{{ resources_data.school.name }}</strong>
+            </div>
+
+            <div class="travel-row">
+              <span>Distance</span>
+              <strong id="travelDistance">--</strong>
+            </div>
+
+            <div class="travel-row">
+              <span>Estimated travel time</span>
+              <strong id="travelDuration">--</strong>
+            </div>
+
+            <div class="travel-row">
+              <span>Mode</span>
+              <strong id="travelMode">Driving estimate</strong>
+            </div>
+
+            <div class="travel-row">
+              <span>Status</span>
+              <strong id="travelStatus">Waiting for your location input</strong>
+            </div>
+          </div>
+
+          <div class="travel-note">
+            Travel time shown here is an estimate and may differ from live traffic data in Google Maps.
+          </div>
+        </div>
+
+        <div class="travel-card map-card">
+          <div class="travel-card-head">
+            <h3>Campus Map</h3>
+            <p>Explore the school location in a larger map panel.</p>
+          </div>
+
+          <div class="large-map-wrap">
+            <iframe
+              src="{{ resources_data.school.map_embed }}"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    window.resourcesConfig = {
+      schoolName: {{ resources_data.school.name | tojson }},
+      schoolDestination: {{ resources_data.school.destination | tojson }},
+      schoolCoords: {
+        lat: {{ resources_data.school.coordinates.lat }},
+        lon: {{ resources_data.school.coordinates.lon }}
+      }
+    };
+  </script>
+
+  <script src="{{ url_for('static', filename='resources.js') }}?v=50"></script>
+</body>
+</html>

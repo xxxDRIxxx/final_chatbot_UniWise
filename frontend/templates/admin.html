@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise | Admin</title>
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}?v=41">
+</head>
+<body class="day theme-bluegold font-inter size-medium bubble-default">
+  <div class="admin-page-shell">
+
+    <header class="admin-header glass-panel">
+      <div class="header-left">
+        <div class="admin-logo-wrap">
+          <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise" class="admin-brand-logo" />
+        </div>
+
+        <div class="brand-text">
+          <div class="apple-mini-label">UniWise Control Center</div>
+          <h1 class="brand-title">Admin Studio</h1>
+          <p class="brand-subtitle">Welcome, {{ admin_name }} • Premium social content command center</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="header-icon-btn" id="refreshAdminBtn" type="button" title="Refresh">
+          <i class="bi bi-arrow-repeat"></i>
+        </button>
+
+        <a href="{{ url_for('index') }}" class="header-icon-btn" title="Back to chat" style="text-decoration:none;">
+          <i class="bi bi-house-door-fill"></i>
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="header-icon-btn danger-soft" title="Logout" style="text-decoration:none;">
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- TOP COMMAND CENTER -->
+    <section class="top-command-center glass-panel">
+      <div class="command-top">
+        <div class="command-copy">
+          <div class="section-kicker"><i class="bi bi-sliders2"></i> Command Center</div>
+          <h2>Compose, update, and publish</h2>
+          <p>Create announcements, uploads, About info, and Contact details in one premium dashboard.</p>
+        </div>
+
+        <div class="quick-stats">
+          <article class="quick-stat-card">
+            <span class="quick-label">Total Posts</span>
+            <strong id="metricTotalPosts">0</strong>
+          </article>
+
+          <article class="quick-stat-card">
+            <span class="quick-label">Composer</span>
+            <strong id="metricComposerReady">Ready</strong>
+          </article>
+
+          <article class="quick-stat-card">
+            <span class="quick-label">Media</span>
+            <strong id="metricMediaAttached">0</strong>
+          </article>
+
+          <article class="quick-stat-card">
+            <span class="quick-label">Preview</span>
+            <strong id="metricPreviewStatus">Live</strong>
+          </article>
+        </div>
+      </div>
+
+      <div class="editor-shell">
+        <div class="editor-tabs">
+          <button type="button" class="editor-tab active" data-editor-tab="feedTab">Feed</button>
+          <button type="button" class="editor-tab" data-editor-tab="aboutTab">About</button>
+          <button type="button" class="editor-tab" data-editor-tab="contactTab">Contact</button>
+        </div>
+
+        <div class="editor-panels">
+          <!-- FEED TAB -->
+          <section class="editor-panel active" id="feedTab">
+            <div class="composer-card">
+              <div class="composer-top-row">
+                <div class="composer-state" id="editorModeLabel">Creating New Post</div>
+                <button type="button" class="ghost-btn" id="cancelEditBtn" style="display:none;">
+                  <i class="bi bi-x-circle"></i>
+                  <span>Cancel Edit</span>
+                </button>
+              </div>
+
+              <label class="admin-label" for="postType">Post Type</label>
+              <select class="admin-field" id="postType">
+                <option value="announcement">Announcement</option>
+                <option value="upload">Upload</option>
+              </select>
+
+              <div id="announcementFields" class="form-group">
+                <label class="admin-label" for="announcementTitle">Title</label>
+                <input class="admin-field" id="announcementTitle" type="text" placeholder="Write the announcement title">
+
+                <label class="admin-label" for="announcementBody">Content / Caption</label>
+                <textarea class="admin-textarea" id="announcementBody" placeholder="Write your announcement..."></textarea>
+
+                <label class="admin-label" for="announcementExtra">Extra Note</label>
+                <input class="admin-field" id="announcementExtra" type="text" placeholder="Office hours or extra note">
+              </div>
+
+              <div id="uploadFields" class="form-group">
+                <label class="admin-label" for="uploadTitle">Title</label>
+                <input class="admin-field" id="uploadTitle" type="text" placeholder="Write the post title">
+
+                <label class="admin-label" for="uploadBody">Content / Caption</label>
+                <textarea class="admin-textarea" id="uploadBody" placeholder="Write your post content or caption..."></textarea>
+
+                <label class="admin-label">Attach Images or Files</label>
+
+                <div class="attach-toolbar" id="attachToolbar">
+                  <button class="attach-plus-btn" id="attachMenuButton" type="button" aria-label="Attach files">
+                    <i class="bi bi-plus-lg"></i>
+                  </button>
+
+                  <div class="attach-toolbar-copy">
+                    <div class="attach-title">Add media or documents</div>
+                    <div class="attach-sub" id="selectedFileName">No files selected</div>
+                  </div>
+
+                  <div class="attach-menu" id="attachMenu">
+                    <button type="button" class="attach-menu-item" id="chooseImagesBtn">
+                      <i class="bi bi-images"></i>
+                      <span>Choose images</span>
+                    </button>
+
+                    <button type="button" class="attach-menu-item" id="chooseFilesBtn">
+                      <i class="bi bi-file-earmark-arrow-up"></i>
+                      <span>Choose files</span>
+                    </button>
+                  </div>
+                </div>
+
+                <input id="uploadImages" type="file" accept="image/*" multiple hidden>
+                <input id="uploadFiles" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip,.rar" multiple hidden>
+
+                <div class="admin-upload-hint">
+                  Images: PNG, JPG, JPEG, GIF, WEBP • Files: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, TXT, ZIP, RAR
+                </div>
+
+                <div id="selectedFilesChips" class="selected-files-chips"></div>
+              </div>
+
+              <div class="composer-actions">
+                <button class="primary-btn save-btn" id="saveAnnouncementBtn" type="button">
+                  <i class="bi bi-send-check-fill"></i>
+                  <span>Publish Announcement</span>
+                </button>
+
+                <button class="primary-btn save-btn" id="uploadPostBtn" type="button">
+                  <i class="bi bi-cloud-upload-fill"></i>
+                  <span>Publish Post</span>
+                </button>
+              </div>
+
+              <div id="uploadStatus" class="upload-status"></div>
+            </div>
+          </section>
+
+          <!-- ABOUT TAB -->
+          <section class="editor-panel" id="aboutTab">
+            <div class="composer-card">
+              <label class="admin-label" for="aboutTitle">Title</label>
+              <input class="admin-field" id="aboutTitle" type="text" placeholder="About title">
+
+              <label class="admin-label" for="aboutText1">Content</label>
+              <textarea class="admin-textarea" id="aboutText1" placeholder="Write first paragraph..."></textarea>
+
+              <label class="admin-label" for="aboutText2">Extra Content</label>
+              <textarea class="admin-textarea" id="aboutText2" placeholder="Write second paragraph..."></textarea>
+
+              <div class="composer-actions">
+                <button class="primary-btn" id="saveAboutBtn" type="button">
+                  <i class="bi bi-save2-fill"></i>
+                  <span>Save About</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- CONTACT TAB -->
+          <section class="editor-panel" id="contactTab">
+            <div class="composer-card">
+              <label class="admin-label" for="contactPhone">Phone</label>
+              <input class="admin-field" id="contactPhone" type="text" placeholder="Phone number">
+
+              <label class="admin-label" for="contactEmail">Email</label>
+              <input class="admin-field" id="contactEmail" type="text" placeholder="Email address">
+
+              <label class="admin-label" for="contactLocation">Location</label>
+              <textarea class="admin-textarea" id="contactLocation" placeholder="School location..."></textarea>
+
+              <div class="composer-actions">
+                <button class="primary-btn" id="saveContactBtn" type="button">
+                  <i class="bi bi-save2-fill"></i>
+                  <span>Save Contact</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM LIVE FEED PREVIEW -->
+    <section class="feed-preview-section">
+      <div class="feed-layout">
+        <!-- LEFT SIDEBAR -->
+        <aside class="feed-sidebar">
+          <div class="sidebar-card glass-panel">
+            <div class="sidebar-head">
+              <div class="section-kicker"><i class="bi bi-info-circle"></i> About</div>
+              <h3 id="previewAboutTitle">About UniWise</h3>
+            </div>
+            <div class="sidebar-body">
+              <p id="previewAboutBody1">UniWise is a school assistant chatbot that helps students find answers quickly.</p>
+              <p id="previewAboutBody2">Use it for FAQs like requirements, schedules, office contacts, and school updates.</p>
+            </div>
+          </div>
+
+          <div class="sidebar-card glass-panel">
+            <div class="sidebar-head">
+              <div class="section-kicker"><i class="bi bi-telephone"></i> Contact</div>
+              <h3>School Contact</h3>
+            </div>
+            <div class="contact-list">
+              <div class="contact-row">
+                <span class="contact-label">Phone</span>
+                <span class="contact-value" id="previewContactPhone">0912-345-6789</span>
+              </div>
+              <div class="contact-row">
+                <span class="contact-label">Email</span>
+                <span class="contact-value" id="previewContactEmail">shs.office@school.edu</span>
+              </div>
+              <div class="contact-row">
+                <span class="contact-label">Location</span>
+                <span class="contact-value" id="previewContactLocation">SHS Building, Bacoor Elementary School Campus</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- CENTER FEED -->
+        <main class="feed-center">
+          <div class="feed-preview-shell glass-panel">
+            <div class="feed-top-copy">
+              <div class="section-kicker"><i class="bi bi-newspaper"></i> Live Feed Preview</div>
+              <h2>Latest announcement, updates, and uploads</h2>
+              <p>Premium Facebook-style post flow with softer Apple glass styling.</p>
+            </div>
+
+            <!-- Pinned Announcement -->
+            <article class="feed-post-card glass-panel pinned-announcement" id="announcementPreviewBox">
+              <div class="feed-post-head">
+                <div class="feed-post-avatar">
+                  <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise">
+                </div>
+
+                <div class="feed-post-meta">
+                  <div class="feed-post-author">UniWise Admin</div>
+                  <div class="feed-post-time">Pinned announcement</div>
+                </div>
+
+                <div class="feed-post-status">Pinned</div>
+              </div>
+
+              <div class="feed-chip-row">
+                <span class="feed-chip"><i class="bi bi-megaphone-fill"></i> Announcement</span>
+              </div>
+
+              <h3 class="feed-post-title large-title" id="previewAnnouncementTitle">Enrollment Reminder</h3>
+              <div class="feed-post-body" id="previewAnnouncementBody">
+                Please submit requirements at the SHS office by Friday.
+              </div>
+              <div class="feed-post-extra" id="previewAnnouncementExtra">
+                Office Hours: 8:00 AM to 4:00 PM (Mon to Fri).
+              </div>
+            </article>
+
+            <!-- Composer Preview -->
+            <article class="feed-post-card glass-panel">
+              <div class="feed-post-head">
+                <div class="feed-post-avatar">
+                  <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise">
+                </div>
+
+                <div class="feed-post-meta">
+                  <div class="feed-post-author">UniWise Admin</div>
+                  <div class="feed-post-time" id="previewPostModeText">Composer Preview</div>
+                </div>
+
+                <div class="feed-post-status" id="previewPostBadge">Draft</div>
+              </div>
+
+              <div class="feed-chip-row">
+                <span class="feed-chip" id="previewPostTypeChip">Upload</span>
+              </div>
+
+              <h3 class="feed-post-title" id="previewUploadTitle">Your post title will appear here</h3>
+              <div class="feed-post-body" id="previewUploadBody">Your post content will appear here.</div>
+
+              <div id="previewUploadMedia" class="preview-media-wrap">
+                <div class="empty-state inline-empty">
+                  <i class="bi bi-image"></i>
+                  <span>No media attached</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Published Posts -->
+            <div id="publishedPostsList" class="published-posts-list">
+              <div class="empty-state large-empty">
+                <i class="bi bi-stickies"></i>
+                <span>No published posts yet.</span>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="feed-rightbar">
+          <div class="sidebar-card glass-panel">
+            <div class="sidebar-head">
+              <div class="section-kicker"><i class="bi bi-bar-chart"></i> Quick Stats</div>
+              <h3>Overview</h3>
+            </div>
+
+            <div class="mini-stats-stack">
+              <div class="mini-stat">
+                <span>Posts</span>
+                <strong id="sidebarTotalPosts">0</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Mode</span>
+                <strong id="sidebarComposerState">Ready</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Media</span>
+                <strong id="sidebarMediaCount">0</strong>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='admin.js') }}?v=40"></script>
+</body>
+</html>

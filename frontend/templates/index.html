@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise | Main</title>
+
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body class="night">
+  <div class="app-shell">
+
+    <header class="app-header glass">
+      <div class="header-left">
+        <img src="{{ url_for('static', filename='uniwiselogo.png') }}" alt="UniWise" class="brand-logo" />
+        <div class="brand-text">
+          <h1 class="brand-title">UniWise</h1>
+          <p class="brand-subtitle">School AI-Assistant</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <a href="{{ url_for('resources') }}" class="menu-btn icon-only" title="Resources">
+          <i class="bi bi-folder2-open"></i>
+        </a>
+
+        <a href="{{ url_for('history') }}" class="menu-btn icon-only" title="History">
+          <i class="bi bi-clock-history"></i>
+        </a>
+
+        <a href="{{ url_for('settings') }}" class="menu-btn icon-only" title="Settings">
+          <i class="bi bi-gear"></i>
+        </a>
+
+        <a href="{{ url_for('login') }}" class="menu-btn icon-only" title="Admin Login">
+          <i class="bi bi-person-lock"></i>
+        </a>
+      </div>
+    </header>
+
+    <main class="app-main" id="appMain">
+
+      <aside class="side-drawer glass" id="drawer">
+        <div class="drawer-toggle-only" id="drawerToggleDock">
+          <label class="apple-switch drawer-switch">
+            <input type="checkbox" id="drawerToggle" checked>
+            <span class="apple-slider"></span>
+          </label>
+        </div>
+
+        <div class="drawer-shell" id="drawerShell">
+          <div class="drawer-top">
+            <div class="drawer-titlewrap">
+              <div class="drawer-title">History</div>
+              <div class="drawer-sub">Recent saved chats</div>
+            </div>
+          </div>
+
+          <div class="drawer-body" id="historyList"></div>
+
+          <div class="drawer-bottom">
+            <button class="secondary-btn" id="newChatBtn">
+              <i class="bi bi-plus-circle"></i>
+              <span>New chat</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="center-panel glass">
+        <section class="panel">
+          <div class="chat-area" id="chatArea"></div>
+
+          <div class="composer">
+
+            <div class="faq-wrap">
+              <button class="faq-btn" data-question="Latest announcement">Latest Announcement</button>
+              <button class="faq-btn" data-question="Enrollment requirements">Enrollment Requirements</button>
+              <button class="faq-btn" data-question="Contact information">Contact Info</button>
+              <button class="faq-btn" data-question="About the school">About the School</button>
+            </div>
+
+            <div class="composer-row">
+              <button class="icon-btn" id="uploadBtn" type="button">
+                <i class="bi bi-paperclip"></i>
+              </button>
+
+              <button class="icon-btn" id="imageBtn" type="button">
+                <i class="bi bi-image"></i>
+              </button>
+
+              <input
+                class="composer-input"
+                id="userInput"
+                type="text"
+                placeholder="Hi, Camper! Ask me anything..."
+                autocomplete="off"
+              />
+
+              <button class="send-btn" id="sendBtn" type="button">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </div>
+
+            <input id="fileInput" type="file" hidden />
+            <input id="imageInput" type="file" accept="image/*" hidden />
+
+            <div class="composer-hint" id="composerHint"></div>
+
+          </div>
+        </section>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

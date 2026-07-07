@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise | History</title>
+
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}" />
+</head>
+<body class="night">
+  <div class="app-shell">
+
+    <header class="app-header glass apple-page-header">
+      <div class="apple-page-topbar">
+        <div class="header-left apple-brand-left">
+          <img src="{{ url_for('static', filename='uniwiselogo.png') }}" alt="UniWise" class="brand-logo" />
+          <div class="brand-text">
+            <div class="apple-mini-label">UniWise</div>
+            <h1 class="apple-page-title">History</h1>
+            <p class="apple-page-subtitle">Full saved conversations and chat records</p>
+          </div>
+        </div>
+
+        <div class="top-actions apple-top-actions">
+          <a href="{{ url_for('index') }}" class="menu-btn apple-header-btn" style="text-decoration:none;">
+            <i class="bi bi-arrow-left-circle"></i>
+            <span>Back</span>
+          </a>
+
+          <button class="menu-btn apple-header-btn apple-danger-soft" id="clearAllHistoryBtn" type="button">
+            <i class="bi bi-trash3"></i>
+            <span>Clear All</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="center-page glass apple-page-panel history-page-shell">
+      <div class="apple-panel-intro">
+        <div class="apple-panel-kicker">
+          <i class="bi bi-clock-history"></i>
+          <span>Conversation Archive</span>
+        </div>
+
+        <div class="apple-panel-copy">
+          <h2>All Conversations</h2>
+          <p>Search previous questions, answers, and saved chatbot interactions.</p>
+        </div>
+      </div>
+
+      <div class="history-big glass-soft apple-content-card">
+        <div class="history-tools">
+          <div class="history-big-title">Saved Chats</div>
+
+          <div class="history-search-wrap apple-search-wrap">
+            <i class="bi bi-search history-search-icon"></i>
+            <input
+              type="text"
+              id="historySearchInput"
+              class="history-search-input apple-search-input"
+              placeholder="Search questions, answers, or titles..."
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <div class="history-big-list" id="historyBigList"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='history.js') }}"></script>
+</body>
+</html>

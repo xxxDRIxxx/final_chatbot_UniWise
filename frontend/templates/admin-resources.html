@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise Admin | Resources Studio</title>
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin-resources.css') }}">
+</head>
+<body>
+
+  <div class="admin-shell">
+
+    <aside class="admin-sidebar glass-strong">
+      <div class="admin-brand">
+        <div class="brand-mark">
+          <i class="bi bi-stars"></i>
+        </div>
+        <div>
+          <h1>Resources Studio</h1>
+          <p>Admin control panel with live preview</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-pill active" data-target="announcementPanel">
+          <i class="bi bi-megaphone-fill"></i>
+          <span>Announcement</span>
+        </button>
+
+        <button class="nav-pill" data-target="updatesPanel">
+          <i class="bi bi-card-list"></i>
+          <span>Posts</span>
+        </button>
+
+        <button class="nav-pill" data-target="contactPanel">
+          <i class="bi bi-telephone-fill"></i>
+          <span>Contacts</span>
+        </button>
+
+        <button class="nav-pill" data-target="linksPanel">
+          <i class="bi bi-globe2"></i>
+          <span>Official Links</span>
+        </button>
+
+        <button class="nav-pill" data-target="schoolPanel">
+          <i class="bi bi-geo-alt-fill"></i>
+          <span>School Info</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer glass-soft">
+        <div class="mini-stat">
+          <span>Preview Mode</span>
+          <strong>Live</strong>
+        </div>
+        <div class="mini-stat">
+          <span>Status</span>
+          <strong id="editorStatus">Editing</strong>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+
+      <header class="topbar glass-strong">
+        <div>
+          <h2>Resources Admin Panel</h2>
+          <p>Update the public resources page and watch changes appear instantly.</p>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="soft-btn" id="resetBtn" type="button">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            Reset
+          </button>
+          <button class="primary-btn" id="saveBtn" type="button">
+            <i class="bi bi-floppy-fill"></i>
+            Save Changes
+          </button>
+        </div>
+      </header>
+
+      <div class="workspace">
+
+        <section class="editor-column">
+
+          <div class="editor-panel-group active" id="announcementPanel">
+            <div class="editor-card glass-strong">
+              <div class="editor-head">
+                <div>
+                  <span class="eyebrow">Pinned Post</span>
+                  <h3>Main Announcement</h3>
+                </div>
+              </div>
+
+              <div class="form-grid single">
+                <div class="field">
+                  <label for="announcementTitle">Title</label>
+                  <input type="text" id="announcementTitle" placeholder="Enter announcement title">
+                </div>
+
+                <div class="field">
+                  <label for="announcementBody">Body</label>
+                  <textarea id="announcementBody" rows="6" placeholder="Write the announcement body"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="announcementExtra">Extra Info</label>
+                  <input type="text" id="announcementExtra" placeholder="Office hours, reminders, deadline, etc.">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-panel-group" id="updatesPanel">
+            <div class="editor-card glass-strong">
+              <div class="editor-head split">
+                <div>
+                  <span class="eyebrow">Feed Posts</span>
+                  <h3>Regular Updates</h3>
+                  <p class="updates-count-text" id="updatesCountText">0 posts added</p>
+                </div>
+
+                <button class="soft-btn" id="addUpdateBtn" type="button">
+                  <i class="bi bi-plus-lg"></i>
+                  Add Post
+                </button>
+              </div>
+
+              <div id="updatesContainer" class="updates-editor-list"></div>
+            </div>
+          </div>
+
+          <div class="editor-panel-group" id="contactPanel">
+            <div class="editor-card glass-strong">
+              <div class="editor-head">
+                <div>
+                  <span class="eyebrow">Official Contact</span>
+                  <h3>Contact Information</h3>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="contactPhone">Phone</label>
+                  <input type="text" id="contactPhone" placeholder="Phone number">
+                </div>
+
+                <div class="field">
+                  <label for="contactEmail">Email</label>
+                  <input type="text" id="contactEmail" placeholder="Email address">
+                </div>
+
+                <div class="field full">
+                  <label for="contactLocation">Location</label>
+                  <input type="text" id="contactLocation" placeholder="School address">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-panel-group" id="linksPanel">
+            <div class="editor-card glass-strong">
+              <div class="editor-head">
+                <div>
+                  <span class="eyebrow">Public Access</span>
+                  <h3>Official Links</h3>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="websiteLink">Website</label>
+                  <input type="text" id="websiteLink" placeholder="https://...">
+                </div>
+
+                <div class="field">
+                  <label for="facebookLink">Facebook</label>
+                  <input type="text" id="facebookLink" placeholder="https://facebook.com/...">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-panel-group" id="schoolPanel">
+            <div class="editor-card glass-strong">
+              <div class="editor-head">
+                <div>
+                  <span class="eyebrow">Map Section</span>
+                  <h3>School Information</h3>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="schoolName">School Name</label>
+                  <input type="text" id="schoolName" placeholder="School name">
+                </div>
+
+                <div class="field">
+                  <label for="schoolDestination">Destination</label>
+                  <input type="text" id="schoolDestination" placeholder="Google Maps destination text">
+                </div>
+
+                <div class="field full">
+                  <label for="googleMapsSearch">Google Maps Search Link</label>
+                  <input type="text" id="googleMapsSearch" placeholder="https://www.google.com/maps/...">
+                </div>
+
+                <div class="field full">
+                  <label for="mapEmbed">Map Embed Link</label>
+                  <input type="text" id="mapEmbed" placeholder="https://www.google.com/maps/embed?...">
+                </div>
+
+                <div class="field">
+                  <label for="schoolLat">Latitude</label>
+                  <input type="number" step="any" id="schoolLat" placeholder="14.4589">
+                </div>
+
+                <div class="field">
+                  <label for="schoolLon">Longitude</label>
+                  <input type="number" step="any" id="schoolLon" placeholder="120.9418">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="preview-column">
+          <div class="preview-shell glass-strong">
+            <div class="preview-head">
+              <div>
+                <span class="eyebrow">Live Preview</span>
+                <h3>Resources Page</h3>
+              </div>
+              <div class="preview-badge">
+                <span class="pulse-dot"></span>
+                Live
+              </div>
+            </div>
+
+            <div class="preview-canvas">
+              <div class="preview-page">
+
+                <section class="preview-hero glass">
+                  <div class="preview-brand">
+                    <div class="preview-logo">UW</div>
+                    <div>
+                      <h1>School Resources</h1>
+                      <p>Announcements, school posts, location guidance, and official contacts.</p>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="preview-feed">
+                  <div class="preview-bubble">
+                    <i class="bi bi-newspaper"></i>
+                    <span>School Posts and Announcements</span>
+                  </div>
+
+                  <article class="preview-featured-post glass-strong">
+                    <div class="preview-post-head">
+                      <div class="preview-admin">
+                        <div class="preview-avatar">U</div>
+                        <div>
+                          <strong>UniWise School Admin</strong>
+                          <p>Official Campus Update</p>
+                        </div>
+                      </div>
+                      <div class="preview-verified">
+                        <i class="bi bi-patch-check-fill"></i>
+                      </div>
+                    </div>
+
+                    <div class="preview-chip">Announcement</div>
+                    <h2 id="previewAnnouncementTitle">Enrollment Reminder</h2>
+                    <p id="previewAnnouncementBody">Please complete your requirements before the deadline.</p>
+                    <div class="preview-extra" id="previewAnnouncementExtra">Office Hours: 8:00 AM to 4:00 PM</div>
+                  </article>
+
+                  <div class="preview-post-list" id="previewUpdatesList"></div>
+                </section>
+
+                <section class="preview-section glass">
+                  <div class="preview-bubble">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span>Locate the school and estimate your travel</span>
+                  </div>
+
+                  <div class="preview-map-card">
+                    <div class="fake-map">
+                      <i class="bi bi-map-fill"></i>
+                      <span id="previewSchoolName">Senior Highschool within Bacoor Elementary School</span>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="preview-section glass">
+                  <div class="preview-bubble">
+                    <i class="bi bi-telephone-fill"></i>
+                    <span>Reach the school through official channels</span>
+                  </div>
+
+                  <div class="preview-contact-grid">
+                    <div class="preview-contact-card">
+                      <i class="bi bi-telephone-fill"></i>
+                      <strong>Phone</strong>
+                      <p id="previewContactPhone">0912-345-6789</p>
+                    </div>
+                    <div class="preview-contact-card">
+                      <i class="bi bi-envelope-fill"></i>
+                      <strong>Email</strong>
+                      <p id="previewContactEmail">shs.office@school.edu</p>
+                    </div>
+                    <div class="preview-contact-card">
+                      <i class="bi bi-geo-alt-fill"></i>
+                      <strong>Location</strong>
+                      <p id="previewContactLocation">139 Tingcoco St, Bacoor, Cavite</p>
+                    </div>
+                  </div>
+
+                  <div class="preview-links">
+                    <div class="preview-link-item">
+                      <span>Website</span>
+                      <strong id="previewWebsite">https://example.com</strong>
+                    </div>
+                    <div class="preview-link-item">
+                      <span>Facebook</span>
+                      <strong id="previewFacebook">https://facebook.com/example</strong>
+                    </div>
+                  </div>
+                </section>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.initialResourcesData = {{ resources_data | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='admin-resources.js') }}"></script>
+</body>
+</html>

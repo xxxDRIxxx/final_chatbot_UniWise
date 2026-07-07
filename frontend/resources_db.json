@@ -1,0 +1,53 @@
+{
+  "announcement": {
+    "title": "Enrollment Reminder",
+    "body": "Please submit your enrollment requirements to the school office within the posted schedule.",
+    "extra": "Office Hours: 8:00 AM to 4:00 PM (Mon to Fri)."
+  },
+  "about": {
+    "title": "About UniWise",
+    "text1": "UniWise is a school assistant chatbot that helps students find answers quickly.",
+    "text2": "Use it for FAQs like requirements, schedules, office contacts, school updates, and location assistance."
+  },
+  "contact": {
+    "phone": "0912-345-6789 / (046) 872-0411",
+    "email": "shs.office@school.edu",
+    "location": "FW5Q+37F, 139 Tingcoco St, Brgy. Poblacion, Bacoor, Cavite, Philippines"
+  },
+  "school": {
+    "name": "Senior Highschool within Bacoor Elementary School",
+    "destination": "Senior Highschool within Bacoor Elementary School, Bacoor, Cavite",
+    "address": "FW5Q+37F, 139 Tingcoco St, Brgy. Poblacion, Bacoor, Cavite, Philippines",
+    "map_embed": "https://www.google.com/maps?q=Senior+Highschool+within+Bacoor+Elementary+School&output=embed",
+    "google_maps_search": "https://www.google.com/maps/search/?api=1&query=Senior+Highschool+within+Bacoor+Elementary+School",
+    "coordinates": {
+      "lat": 14.4589,
+      "lon": 120.9418
+    }
+  },
+  "links": {
+    "website": "https://sites.google.com/view/shswithinbes-campersite/",
+    "facebook": "https://www.facebook.com/DepEdTayoSHSwithinBES342602"
+  },
+  "updates": [
+    {
+      "label": "Update",
+      "icon": "bi-info-circle-fill",
+      "title": "School Services",
+      "text": "Access enrollment details, school notices, campus guidance, and important service information."
+    },
+    {
+      "label": "Schedule",
+      "icon": "bi-calendar-event-fill",
+      "title": "Campus Hours",
+      "text": "For faster transactions, visit during official office hours and prepare the department you need."
+    },
+    {
+      "label": "Reminder",
+      "icon": "bi-shield-check",
+      "title": "Before You Visit",
+      "text": "Bring complete documents, valid details, and confirm the office or concern before going to school."
+    }
+  ],
+  "posts": []
+}

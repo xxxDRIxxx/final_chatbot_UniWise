@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise | Privacy Consent</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='privacy-consent.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="privacy-scene">
+    <div class="privacy-backdrop-orb orb-1"></div>
+    <div class="privacy-backdrop-orb orb-2"></div>
+    <div class="privacy-backdrop-orb orb-3"></div>
+
+    <div class="privacy-dim"></div>
+
+    <div class="privacy-modal-wrap">
+      <div class="privacy-modal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+        <div class="privacy-grabber"></div>
+
+        <div class="privacy-header">
+          <div class="privacy-logo-shell">
+            <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" class="logo" alt="UniWise Logo">
+          </div>
+
+          <p class="privacy-kicker">Privacy & Security</p>
+          <h1 class="privacy-title" id="privacyTitle">Data Privacy Consent</h1>
+          <p class="privacy-subtitle">
+            Before entering UniWise, please review and confirm your consent for data handling and usage.
+          </p>
+        </div>
+
+        <div class="privacy-notice-card">
+          <div class="notice-chip">
+            <i class="bi bi-shield-lock"></i>
+            <span>Protected Access</span>
+          </div>
+
+          <div class="notice-body">
+            <p>
+              UniWise may collect and process your questions, chatbot responses, and related interaction data
+              for educational assistance, administrative support, analytics, and service improvement.
+            </p>
+
+            <p>
+              Your data will be handled according to applicable privacy regulations and institutional policies.
+            </p>
+
+            <p>
+              Consent is required each time the page is refreshed before re-entering the chatbot.
+            </p>
+          </div>
+        </div>
+
+        <div class="consent-list">
+          <label class="consent-row" for="readToggle">
+            <div class="consent-copy">
+              <strong>I have read the Privacy Consent Act</strong>
+              <span>I confirm that I understand the privacy notice above.</span>
+            </div>
+
+            <span class="ios-switch">
+              <input type="checkbox" id="readToggle">
+              <span class="ios-slider"></span>
+            </span>
+          </label>
+
+          <label class="consent-row" for="agreeToggle">
+            <div class="consent-copy">
+              <strong>I agree to the Privacy Consent Act</strong>
+              <span>I allow the system to proceed with access to UniWise.</span>
+            </div>
+
+            <span class="ios-switch">
+              <input type="checkbox" id="agreeToggle">
+              <span class="ios-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <div class="privacy-footer">
+          <button id="continueBtn" disabled>
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Agree & Continue</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='privacy-consent.js') }}"></script>
+</body>
+</html>

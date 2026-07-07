@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniWise | Settings</title>
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='settings.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="night">
+  <div class="settings-page">
+    <div class="settings-shell glass-shell">
+
+      <div class="settings-topbar">
+        <button class="icon-btn" onclick="window.location.href='{{ url_for('index') }}'" title="Back">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+
+        <div class="settings-title-wrap">
+          <div class="brand-mark">
+            <img src="{{ url_for('static', filename='uniwiselogo.png') }}" alt="UniWise logo">
+          </div>
+          <div>
+            <h1>Settings</h1>
+            <p>Refined appearance, typography, and theme controls</p>
+          </div>
+        </div>
+
+        <button class="icon-btn" onclick="window.location.href='{{ url_for('index') }}'" title="Home">
+          <i class="bi bi-house"></i>
+        </button>
+      </div>
+
+      <div class="settings-grid">
+        <!-- APPEARANCE -->
+        <section class="settings-card solid-card">
+          <div class="card-head">
+            <div>
+              <h2>Appearance</h2>
+              <p>Clean, minimal, and premium</p>
+            </div>
+            <i class="bi bi-stars"></i>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-copy">
+              <h3>Mode</h3>
+              <p>Choose between light and dark</p>
+            </div>
+
+            <label class="apple-switch" aria-label="Toggle light dark mode">
+              <input type="checkbox" id="themeSwitch">
+              <span class="apple-slider"></span>
+            </label>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="setting-row school-theme-stack">
+            <div class="setting-copy">
+              <h3>School Theme</h3>
+              <p>Minimalist styling only. Existing theme behavior stays the same.</p>
+            </div>
+
+            <div class="school-switches">
+              <div class="theme-toggle-row">
+                <div class="theme-toggle-copy">
+                  <strong>Bulldogs</strong>
+                  <span>Navy-gold style</span>
+                </div>
+                <label class="apple-switch" aria-label="Toggle bulldogs theme">
+                  <input type="checkbox" id="blueGoldSwitch">
+                  <span class="apple-slider"></span>
+                </label>
+              </div>
+
+              <div class="theme-toggle-row">
+                <div class="theme-toggle-copy">
+                  <strong>Campers</strong>
+                  <span>Green-gold style</span>
+                </div>
+                <label class="apple-switch" aria-label="Toggle campers theme">
+                  <input type="checkbox" id="greenGoldSwitch">
+                  <span class="apple-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TYPOGRAPHY -->
+        <section class="settings-card solid-card">
+          <div class="card-head">
+            <div>
+              <h2>Typography</h2>
+              <p>Make the text respond to settings</p>
+            </div>
+            <span class="type-badge">Aa</span>
+          </div>
+
+          <div class="setting-block">
+            <h3>Font Style</h3>
+            <div class="segmented-control" id="fontStyleSegment">
+              <button type="button" class="segment-btn" data-font="inter">Inter</button>
+              <button type="button" class="segment-btn" data-font="poppins">Poppins</button>
+              <button type="button" class="segment-btn" data-font="roboto">Roboto</button>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <h3>Font Size</h3>
+            <div class="segmented-control" id="fontSizeSegment">
+              <button type="button" class="segment-btn" data-size="small">Small</button>
+              <button type="button" class="segment-btn" data-size="medium">Medium</button>
+              <button type="button" class="segment-btn" data-size="large">Large</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- LIVE PREVIEW -->
+      <section class="settings-card preview-card solid-card">
+        <div class="card-head">
+          <div>
+            <h2>Live Preview</h2>
+            <p>Outer shell stays glass, inner chat bubbles stay solid</p>
+          </div>
+          <i class="bi bi-chat-square-text"></i>
+        </div>
+
+        <div class="preview-chat">
+          <div class="preview-bot-meta">
+            <div class="preview-avatar">U</div>
+            <div>
+              <strong>UniWise Assistant</strong>
+              <p>Minimalist Apple-style preview</p>
+            </div>
+          </div>
+
+          <div class="preview-bubble preview-bubble-bot">
+            The outer shell is glass. The inner bubble is solid. Sleek and tidy.
+          </div>
+
+          <div class="preview-bubble preview-bubble-user">
+            Nice. Keep the theme logic and school theme logic untouched.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='settings.js') }}"></script>
+</body>
+</html>

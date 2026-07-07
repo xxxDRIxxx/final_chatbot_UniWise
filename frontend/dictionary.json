@@ -1,0 +1,11 @@
+DICT_FILE = os.path.join(BASE_DIR, "dictionary.json")
+
+def load_dictionary():
+    return load_json_file(DICT_FILE, {})
+{
+  "scholarship": "Financial assistance granted to students based on academic merit or financial need.",
+  "enrollment": "The process of officially registering as a student in a school or course.",
+  "registrar": "The office responsible for maintaining student records, enrollment, and academic documents.",
+  "tuition": "The fee paid for instruction at an educational institution.",
+  "requirements": "Documents or qualifications needed for admission or enrollment."
+}
