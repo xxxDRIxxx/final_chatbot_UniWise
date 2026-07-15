@@ -2,70 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniWise Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UW | OTP Verification</title>
 
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo.png') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin-login.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}?v=500">
 </head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
 
-<body class="night login-page">
-  <div class="login-wrapper">
-    <div class="login-card glass login-card-animated">
+  <main class="login-shell">
+    <section class="login-card otp-card">
+      <div class="card-glow"></div>
+      <div class="card-shine"></div>
 
       <div class="login-header">
-        <img src="{{ url_for('static', filename='uniwiselogo.png') }}" alt="UniWise" class="login-logo">
-        <h1>UniWise Admin</h1>
-        <p>Secure administrator access</p>
+        <div class="brand-logo-wrapper">
+          <img
+            src="{{ url_for('static', filename='uniwiselogo&text.png') }}"
+            alt="UniWise Logo"
+            class="brand-logo"
+          >
+        </div>
+
+        <div class="login-badge">
+          <i class="bi bi-envelope-paper-heart"></i>
+          <span>Email Verification</span>
+        </div>
+
+        <h1>Verify OTP</h1>
+        <p>Enter the 6-digit code sent to the registered admin email address.</p>
       </div>
 
-      {% if error %}
-        <div class="login-error">
-          {{ error }}
-        </div>
-      {% endif %}
-
-      <form method="POST" class="login-form">
-        <div class="login-field">
-          <label for="username">Username</label>
-          <input id="username" type="text" name="username" placeholder="Enter your username" required>
-        </div>
-
-        <div class="login-field">
-          <label for="password">Password</label>
-
-          <div class="password-wrap">
-            <input id="password" type="password" name="password" placeholder="Enter your password" required>
-            <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">
-              <i class="bi bi-eye"></i>
-            </button>
+      <form
+        method="POST"
+        action="{{ url_for('verify_otp') }}"
+        class="login-form"
+        autocomplete="off"
+        spellcheck="false"
+      >
+        <div class="form-grid">
+          <div class="input-group">
+            <label for="otp">One-Time Password</label>
+            <div class="input-shell otp-shell">
+              <i class="bi bi-patch-check"></i>
+              <input
+                type="text"
+                id="otp"
+                name="otp"
+                placeholder="Enter 6-digit code"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                maxlength="6"
+                minlength="6"
+                required
+              >
+            </div>
           </div>
         </div>
 
+        {% if error %}
+        <div class="error-box">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="success-box">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>{{ success }}</span>
+        </div>
+        {% endif %}
+
         <button type="submit" class="login-btn">
-          <i class="bi bi-shield-lock"></i>
-          <span>Login</span>
+          <i class="bi bi-patch-check-fill"></i>
+          <span>Verify OTP</span>
         </button>
       </form>
 
-    </div>
-  </div>
+      <form method="POST" action="{{ url_for('resend_otp') }}" class="otp-secondary-form">
+        <button type="submit" class="secondary-btn">
+          <i class="bi bi-arrow-repeat"></i>
+          <span>Resend Code</span>
+        </button>
+      </form>
+
+      <div class="login-note">
+        <i class="bi bi-clock-history"></i>
+        <span>The OTP expires after a few minutes for your security.</span>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const passwordInput = document.getElementById("password");
-    const passwordToggle = document.getElementById("passwordToggle");
+    document.addEventListener("DOMContentLoaded", () => {
+      const otpInput = document.getElementById("otp");
 
-    passwordToggle?.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
+      if (otpInput) {
+        otpInput.addEventListener("input", () => {
+          otpInput.value = otpInput.value.replace(/\D/g, "").slice(0, 6);
+        });
 
-      passwordToggle.innerHTML = isPassword
-        ? '<i class="bi bi-eye-slash"></i>'
-        : '<i class="bi bi-eye"></i>';
-
-      passwordToggle.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+        otpInput.focus();
+      }
     });
   </script>
+  <script src="{{ url_for('static', filename='view-mode-init.js') }}"></script>
 </body>
 </html>

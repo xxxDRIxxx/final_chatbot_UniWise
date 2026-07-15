@@ -9,13 +9,20 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_classic.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_file
 import json
 import os
-from datetime import datetime
+import re
+import io
+import base64
+import secrets
+import threading
+from datetime import datetime, timedelta
 from uuid import uuid4
 from werkzeug.utils import secure_filename
 from functools import wraps
+import pyotp
+import qrcode
 
 app = Flask(__name__)
 app.secret_key = "uniwise_secret_key_123"
@@ -25,13 +32,22 @@ RESOURCES_FILE = os.path.join(BASE_DIR, "resources_db.json")
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
 LOGS_FILE = os.path.join(BASE_DIR, "chat_logs.json")
 DICT_FILE = os.path.join(BASE_DIR, "dictionary.json")
+SECURITY_FILE = os.path.join(BASE_DIR, "security.json")
+FAQ_INSIGHTS_FILE = os.path.join(BASE_DIR, "faq_insights.json")
 
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 ALLOWED_EXTENSIONS = {
     "png", "jpg", "jpeg", "gif", "webp",
     "pdf", "doc", "docx", "ppt", "pptx",
-    "xls", "xlsx", "txt", "zip", "rar"
+    "xls", "xlsx", "txt", "zip", "rar",
+    "mp4", "webm", "mov", "ogg"
 }
+
+# --- Security / 2FA / trusted-device settings ---
+MAX_LOGIN_ATTEMPTS = 5
+LOGIN_LOCKOUT_MINUTES = 15
+TRUSTED_DEVICE_DAYS = 30
+DEVICE_COOKIE_NAME = "uw_device_token"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB total request size
@@ -63,13 +79,17 @@ if os.path.exists(DB_FOLDER):
 print("Building AI vector database...")
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 vectorstore = Chroma.from_documents(
-    documents=splits, 
-    embedding=embeddings, 
+    documents=splits,
+    embedding=embeddings,
     persist_directory=DB_FOLDER
 )
 retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
-llm = ChatOllama(model="llama3")
+llm = ChatOllama(
+    model="llama3",
+    keep_alive="30m",  # keep the model loaded in Ollama between requests -- avoids a slow reload every message
+    num_predict=350  # caps generation length; answers are meant to be brief, so this shortens response time
+)
 
 contextualize_q_prompt = ChatPromptTemplate.from_messages([
     ("system", """Given a chat history and the latest user question, formulate a standalone question 
@@ -82,12 +102,12 @@ history_aware_retriever = create_history_aware_retriever(llm, retriever, context
 
 qa_prompt = ChatPromptTemplate.from_messages([
     ("system", """You are UniWise, a professional and friendly school assistant for Senior High School within Bacoor Elementary School.
-    
+
     Context from our FAQ: {context}
-    
+
     LATEST LIVE ANNOUNCEMENTS & POSTS:
     {latest_news}
-    
+
     Strict Instructions:
     1. GREETINGS: Only introduce yourself if the user explicitly types a greeting.
     2. DEFAULT TO BRIEF: Provide brief, 1-to-2 sentence answers. 
@@ -95,6 +115,7 @@ qa_prompt = ChatPromptTemplate.from_messages([
     4. PINNED POSTS: Always prioritize information from posts marked [PINNED - HIGH PRIORITY].
     5. ATTACHMENTS (CRITICAL): If an announcement contains an 'Attachment URL', you MUST provide that link to the user in your response using this exact markdown format: [File Name](URL). Do not leave out the link if they ask about the post!
     6. ANTI-HALLUCINATION: NEVER invent steps or fees.
+    7. FORMATTING: Bold the specific, important details a student would scan for -- deadlines, dates, fees, room/office names, requirements -- using markdown like **July 25** or **Room 204**. Do not bold entire sentences, only the key terms.
     """),
     MessagesPlaceholder("chat_history"),
     ("human", "{input}"),
@@ -105,6 +126,7 @@ rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chai
 
 # Global chat history memory
 chat_history = []
+
 
 # =========================
 # FILE HELPERS
@@ -186,7 +208,8 @@ def get_default_resources_data():
                 "text": "Bring complete documents, valid details, and confirm the office or concern before going to school."
             }
         ],
-        "posts": []
+        "posts": [],
+        "hero_slider": {"items": []}
     }
 
 
@@ -218,6 +241,11 @@ def load_resources():
     if "posts" not in data or not isinstance(data["posts"], list):
         data["posts"] = []
 
+    if "hero_slider" not in data or not isinstance(data["hero_slider"], dict):
+        data["hero_slider"] = {"items": []}
+    if "items" not in data["hero_slider"] or not isinstance(data["hero_slider"]["items"], list):
+        data["hero_slider"]["items"] = []
+
     school = data.get("school", {})
     if "coordinates" not in school:
         lat = school.get("latitude", 14.4589)
@@ -234,10 +262,12 @@ def load_resources():
         )
 
     if "map_embed" not in school:
-        school["map_embed"] = "https://www.google.com/maps?q=Senior+Highschool+within+Bacoor+Elementary+School&output=embed"
+        school[
+            "map_embed"] = "https://www.google.com/maps?q=Senior+Highschool+within+Bacoor+Elementary+School&output=embed"
 
     if "google_maps_search" not in school:
-        school["google_maps_search"] = "https://www.google.com/maps/search/?api=1&query=Senior+Highschool+within+Bacoor+Elementary+School"
+        school[
+            "google_maps_search"] = "https://www.google.com/maps/search/?api=1&query=Senior+Highschool+within+Bacoor+Elementary+School"
 
     data["school"] = school
 
@@ -288,6 +318,7 @@ def normalize_post_structure(post):
         "caption": post.get("caption", post.get("body", "")),
         "author": post.get("author", "Admin"),
         "attachments": attachments,
+        "is_pinned": bool(post.get("is_pinned", False)),
         "created_at": post.get("created_at", now_str()),
         "updated_at": post.get("updated_at", post.get("created_at", now_str()))
     }
@@ -326,7 +357,24 @@ def load_dictionary():
 # AUTH HELPERS
 # =========================
 def is_logged_in():
-    return session.get("admin_logged_in") is True
+    if session.get("admin_logged_in") is not True:
+        return False
+
+    username = session.get("admin_username")
+    if not username:
+        return False
+
+    sec_data = load_security()
+    sec = sec_data.get("admins", {}).get(username)
+    if not sec:
+        return False
+
+    # If sessions were revoked (password change / "revoke other sessions"),
+    # any session carrying an older version number is no longer valid.
+    if session.get("session_version") != sec.get("session_version", 1):
+        return False
+
+    return True
 
 
 def login_required(view_func):
@@ -335,6 +383,7 @@ def login_required(view_func):
         if not is_logged_in():
             return redirect(url_for("login"))
         return view_func(*args, **kwargs)
+
     return wrapped_view
 
 
@@ -353,11 +402,176 @@ def verify_admin_credentials(username, password):
         (
             user for user in users
             if str(user.get("username", "")).strip() == username
-            and str(user.get("password", "")).strip() == password
+               and str(user.get("password", "")).strip() == password
         ),
         None
     )
     return found
+
+
+# =========================
+# SECURITY / 2FA / TRUSTED DEVICES
+# =========================
+def default_admin_security():
+    return {
+        "totp_secret": None,
+        "totp_enabled": False,
+        "failed_attempts": 0,
+        "lockout_until": None,
+        "session_version": 1,
+        "trusted_devices": [],
+        "access_log": []
+    }
+
+
+def load_security():
+    data = load_json_file(SECURITY_FILE, {"admins": {}})
+    if "admins" not in data or not isinstance(data["admins"], dict):
+        data["admins"] = {}
+    return data
+
+
+def save_security(data):
+    save_json_file(SECURITY_FILE, data)
+
+
+def get_admin_security(sec_data, username):
+    admins = sec_data.setdefault("admins", {})
+    if username not in admins or not isinstance(admins[username], dict):
+        admins[username] = default_admin_security()
+    sec = admins[username]
+    # Fill in any missing keys for records created before a feature was added
+    for key, val in default_admin_security().items():
+        sec.setdefault(key, val)
+    return sec
+
+
+def is_locked_out(sec):
+    lockout_until = sec.get("lockout_until")
+    if not lockout_until:
+        return False
+    try:
+        until = datetime.fromisoformat(lockout_until)
+    except (ValueError, TypeError):
+        sec["lockout_until"] = None
+        return False
+    if datetime.now() >= until:
+        sec["lockout_until"] = None
+        sec["failed_attempts"] = 0
+        return False
+    return True
+
+
+def describe_device(user_agent_string):
+    ua = (user_agent_string or "").lower()
+    device_type = "mobile" if any(k in ua for k in ("mobile", "android", "iphone")) else "desktop"
+
+    browser = "Browser"
+    for key, label in [("edg", "Edge"), ("chrome", "Chrome"), ("firefox", "Firefox"), ("safari", "Safari")]:
+        if key in ua:
+            browser = label
+            break
+
+    os_name = "Unknown OS"
+    for key, label in [("windows", "Windows"), ("mac os", "macOS"), ("android", "Android"), ("iphone", "iPhone"),
+                       ("linux", "Linux")]:
+        if key in ua:
+            os_name = label
+            break
+
+    return f"{browser} on {os_name}", device_type
+
+
+def find_trusted_device(sec, token):
+    if not token:
+        return None
+    now = datetime.now()
+    for device in sec.get("trusted_devices", []):
+        if device.get("token") != token:
+            continue
+        try:
+            until = datetime.fromisoformat(device.get("trusted_until", ""))
+        except (ValueError, TypeError):
+            continue
+        if now <= until:
+            return device
+    return None
+
+
+def register_trusted_device(username):
+    """Creates a new trusted-device record for this admin and returns (device_id, token)."""
+    sec_data = load_security()
+    sec = get_admin_security(sec_data, username)
+
+    token = secrets.token_hex(24)
+    device_name, device_type = describe_device(request.headers.get("User-Agent", ""))
+
+    device = {
+        "id": uuid4().hex,
+        "token": token,
+        "device_name": device_name,
+        "device_type": device_type,
+        "ip_address": request.remote_addr or "",
+        "user_agent": request.headers.get("User-Agent", ""),
+        "created_at": now_str(),
+        "last_seen": now_str(),
+        "trusted_until": (datetime.now() + timedelta(days=TRUSTED_DEVICE_DAYS)).isoformat()
+    }
+
+    sec.setdefault("trusted_devices", []).append(device)
+    save_security(sec_data)
+    return device["id"], token
+
+
+def finalize_login(username, device_id=None):
+    """Marks the current Flask session as a logged-in admin session and logs the access event."""
+    sec_data = load_security()
+    sec = get_admin_security(sec_data, username)
+
+    session["admin_logged_in"] = True
+    session["admin_username"] = username
+    session["session_version"] = sec.get("session_version", 1)
+    session["device_session_id"] = device_id
+    session.pop("pending_admin_username", None)
+    session.pop("pending_remember_device", None)
+    session.pop("pending_totp_secret", None)
+
+    device_name, device_type = describe_device(request.headers.get("User-Agent", ""))
+    log_entry = {
+        "device": device_name,
+        "device_type": device_type,
+        "user_agent": request.headers.get("User-Agent", ""),
+        "ip": request.remote_addr or "",
+        "login_at": now_str(),
+        "device_id": device_id
+    }
+    access_log = sec.setdefault("access_log", [])
+    access_log.insert(0, log_entry)
+    sec["access_log"] = access_log[:20]
+    save_security(sec_data)
+
+
+def generate_qr_data_uri(text):
+    img = qrcode.make(text)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    encoded = base64.b64encode(buf.getvalue()).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
+
+
+# =========================
+# FAQ INSIGHTS HELPERS
+# =========================
+def load_faq_insights():
+    return load_json_file(FAQ_INSIGHTS_FILE, [])
+
+
+def save_faq_insights(data):
+    save_json_file(FAQ_INSIGHTS_FILE, data)
+
+
+def normalize_question_text(text):
+    return re.sub(r"\s+", " ", (text or "").strip().lower())
 
 
 # =========================
@@ -506,27 +720,197 @@ def login():
         return redirect(url_for("admin"))
 
     error = ""
+    attempts_left = None
+    max_attempts = MAX_LOGIN_ATTEMPTS
 
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
+        remember_device = bool(request.form.get("remember_device"))
 
-        found = verify_admin_credentials(username, password)
+        sec_data = load_security()
+        sec = get_admin_security(sec_data, username)
 
-        if found:
-            session["admin_logged_in"] = True
-            session["admin_username"] = username
-            return redirect(url_for("admin"))
+        if is_locked_out(sec):
+            save_security(sec_data)
+            attempts_left = 0
+            error = "Maximum login attempts reached. Please try again later."
+        else:
+            found = verify_admin_credentials(username, password)
 
-        error = "Invalid username or password."
+            if found:
+                sec["failed_attempts"] = 0
+                sec["lockout_until"] = None
+                save_security(sec_data)
 
-    return render_template("admin-login.html", error=error)
+                # Skip 2FA entirely if this browser is already a trusted device
+                device_token = request.cookies.get(DEVICE_COOKIE_NAME)
+                trusted = find_trusted_device(sec, device_token) if device_token else None
+
+                if trusted:
+                    trusted["last_seen"] = now_str()
+                    save_security(sec_data)
+                    finalize_login(username, device_id=trusted["id"])
+                    return redirect(url_for("admin"))
+
+                # Otherwise stash the pending login and route through 2FA
+                session["pending_admin_username"] = username
+                session["pending_remember_device"] = remember_device
+
+                if not sec.get("totp_enabled"):
+                    return redirect(url_for("setup_2fa"))
+                return redirect(url_for("verify_otp"))
+
+            sec["failed_attempts"] = sec.get("failed_attempts", 0) + 1
+            if sec["failed_attempts"] >= MAX_LOGIN_ATTEMPTS:
+                sec["lockout_until"] = (datetime.now() + timedelta(minutes=LOGIN_LOCKOUT_MINUTES)).isoformat()
+                attempts_left = 0
+                error = "Maximum login attempts reached. Please try again later."
+            else:
+                attempts_left = MAX_LOGIN_ATTEMPTS - sec["failed_attempts"]
+                error = "Invalid username or password."
+            save_security(sec_data)
+
+    return render_template(
+        "admin-login.html",
+        error=error,
+        attempts_left=attempts_left,
+        max_attempts=max_attempts
+    )
+
+
+@app.route("/setup-2fa", methods=["GET", "POST"], endpoint="setup_2fa")
+def setup_2fa():
+    username = session.get("pending_admin_username")
+    if not username:
+        return redirect(url_for("login"))
+
+    if "pending_totp_secret" not in session:
+        session["pending_totp_secret"] = pyotp.random_base32()
+
+    secret = session["pending_totp_secret"]
+    error = ""
+
+    if request.method == "POST":
+        code = request.form.get("otp", "").strip()
+
+        if pyotp.TOTP(secret).verify(code, valid_window=1):
+            sec_data = load_security()
+            sec = get_admin_security(sec_data, username)
+            sec["totp_secret"] = secret
+            sec["totp_enabled"] = True
+            save_security(sec_data)
+
+            remember_device = session.get("pending_remember_device", False)
+
+            device_id = None
+            device_token = None
+            if remember_device:
+                device_id, device_token = register_trusted_device(username)
+
+            finalize_login(username, device_id=device_id)
+
+            resp = redirect(url_for("admin"))
+            if device_token:
+                resp.set_cookie(
+                    DEVICE_COOKIE_NAME, device_token,
+                    max_age=TRUSTED_DEVICE_DAYS * 86400,
+                    httponly=True, samesite="Lax"
+                )
+            return resp
+
+        error = "Invalid code. Please try again."
+
+    provisioning_uri = pyotp.TOTP(secret).provisioning_uri(name=username, issuer_name="UniWise Admin")
+    qr_code_data = generate_qr_data_uri(provisioning_uri)
+
+    return render_template("admin-setup-2fa.html", qr_code_data=qr_code_data, secret=secret, error=error)
+
+
+@app.route("/verify-otp", methods=["GET", "POST"], endpoint="verify_otp")
+def verify_otp():
+    username = session.get("pending_admin_username")
+    if not username:
+        return redirect(url_for("login"))
+
+    error = ""
+    success = ""
+
+    if request.method == "POST":
+        code = request.form.get("otp", "").strip()
+
+        sec_data = load_security()
+        sec = get_admin_security(sec_data, username)
+        secret = sec.get("totp_secret")
+
+        if secret and pyotp.TOTP(secret).verify(code, valid_window=1):
+            remember_device = session.get("pending_remember_device", False)
+
+            device_id = None
+            device_token = None
+            if remember_device:
+                device_id, device_token = register_trusted_device(username)
+
+            finalize_login(username, device_id=device_id)
+
+            resp = redirect(url_for("admin"))
+            if device_token:
+                resp.set_cookie(
+                    DEVICE_COOKIE_NAME, device_token,
+                    max_age=TRUSTED_DEVICE_DAYS * 86400,
+                    httponly=True, samesite="Lax"
+                )
+            return resp
+
+        error = "Invalid or expired code. Please try again."
+
+    return render_template("admin-otp.html", error=error, success=success)
+
+
+@app.route("/resend-otp", methods=["POST"], endpoint="resend_otp")
+def resend_otp():
+    if not session.get("pending_admin_username"):
+        return redirect(url_for("login"))
+
+    # TOTP codes rotate automatically every 30s in the authenticator app --
+    # there is nothing to actively "resend", so just point the user at it.
+    success = (
+        "Open Microsoft Authenticator and use the current 6-digit code shown "
+        "for your UniWise account -- codes refresh automatically every 30 seconds."
+    )
+    return render_template("admin-otp.html", error="", success=success)
+
+
+@app.route("/admin/devices", endpoint="admin_devices")
+@login_required
+def admin_devices():
+    sec_data = load_security()
+    sec = get_admin_security(sec_data, session.get("admin_username"))
+    devices = sec.get("trusted_devices", [])
+    return render_template(
+        "admin-devices.html",
+        devices=devices,
+        current_session_id=session.get("device_session_id")
+    )
+
+
+@app.route("/admin/devices/<device_id>/revoke", methods=["POST"], endpoint="revoke_admin_device")
+@login_required
+def revoke_admin_device(device_id):
+    username = session.get("admin_username")
+    sec_data = load_security()
+    sec = get_admin_security(sec_data, username)
+    sec["trusted_devices"] = [d for d in sec.get("trusted_devices", []) if d.get("id") != device_id]
+    save_security(sec_data)
+    return redirect(url_for("admin_devices"))
 
 
 @app.route("/logout")
 def logout():
     session.pop("admin_logged_in", None)
     session.pop("admin_username", None)
+    session.pop("session_version", None)
+    session.pop("device_session_id", None)
     return redirect(url_for("login"))
 
 
@@ -535,11 +919,11 @@ def logout():
 def admin():
     # 1. Load the data from your JSON file
     resources_data = load_resources()
-    
+
     return render_template(
-        "admin.html", # Make sure this matches your new HTML filename
+        "admin.html",  # Make sure this matches your new HTML filename
         admin_name=session.get("admin_username", "Admin"),
-        resources_data=resources_data # 2. Pass the data to the HTML file!
+        resources_data=resources_data  # 2. Pass the data to the HTML file!
     )
 
 
@@ -672,8 +1056,161 @@ def save_contact():
 
 
 # =========================
+# ROUTES - HERO SLIDER (LED bulletin media)
+# =========================
+@app.route("/api/resources/hero-slider", methods=["POST"])
+def save_hero_slider():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    try:
+        keep_ids = json.loads(request.form.get("keep_existing_items", "[]"))
+        durations = json.loads(request.form.get("durations", "{}"))
+
+        resources_data = load_resources()
+        hero = resources_data.get("hero_slider", {"items": []})
+        existing_items = hero.get("items", [])
+
+        kept_items = []
+        for item in existing_items:
+            if item.get("id") in keep_ids:
+                item["duration"] = int(durations.get(item["id"], item.get("duration", 7000)))
+                kept_items.append(item)
+            else:
+                delete_physical_file_by_url(item.get("url", ""))
+
+        for uploaded_file in request.files.getlist("led_media"):
+            if not uploaded_file or not uploaded_file.filename:
+                continue
+            saved = save_uploaded_file(uploaded_file)
+            duration_key = f"duration_new_{uploaded_file.filename}"
+            duration = int(request.form.get(duration_key, 7000))
+            kept_items.append({
+                "id": uuid4().hex,
+                "url": saved["url"],
+                "name": saved["name"],
+                "type": saved["type"],
+                "duration": max(5000, duration)
+            })
+
+        hero["items"] = kept_items
+        resources_data["hero_slider"] = hero
+        save_resources(resources_data)
+
+        return jsonify({
+            "success": True,
+            "data": {"items": kept_items}
+        })
+    except ValueError as ve:
+        return jsonify({
+            "success": False,
+            "error": str(ve)
+        }), 400
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+# =========================
 # ROUTES - ADMIN POSTS
 # =========================
+@app.route("/admin/publish", methods=["POST"], endpoint="admin_publish")
+def admin_publish():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    try:
+        post_type = request.form.get("post_type", "announcement").strip() or "announcement"
+        poster_role = request.form.get("poster_role", "").strip()
+        title = request.form.get("announcement_title", "").strip()
+        body = request.form.get("announcement_body", "").strip()
+        extra = request.form.get("announcement_extra", "").strip()
+
+        images = request.files.getlist("images")
+        videos = request.files.getlist("videos")
+        other_files = request.files.getlist("files")
+
+        has_any_file = any(f.filename for f in images + videos + other_files)
+        if not title and not body and not extra and not has_any_file:
+            return jsonify({
+                "success": False,
+                "error": "Please write something or attach media before publishing."
+            }), 400
+
+        attachments = []
+        for uploaded_file in images:
+            if uploaded_file and uploaded_file.filename:
+                saved = save_uploaded_file(uploaded_file)
+                saved["type"] = "image"
+                attachments.append(saved)
+        for uploaded_file in videos:
+            if uploaded_file and uploaded_file.filename:
+                saved = save_uploaded_file(uploaded_file)
+                saved["type"] = "video"
+                attachments.append(saved)
+        for uploaded_file in other_files:
+            if uploaded_file and uploaded_file.filename:
+                attachments.append(save_uploaded_file(uploaded_file))
+
+        resources_data = load_resources()
+        posts = resources_data.get("posts", [])
+        updates = resources_data.get("updates", [])
+
+        new_post = {
+            "id": uuid4().hex,
+            "type": post_type,
+            "title": title,
+            "body": body,
+            "extra": extra,
+            "caption": body,
+            "author": poster_role or session.get("admin_username", "Admin"),
+            "attachments": attachments,
+            "is_pinned": False,
+            "created_at": now_str(),
+            "updated_at": now_str()
+        }
+
+        posts.insert(0, new_post)
+        resources_data["posts"] = posts
+
+        if post_type == "announcement":
+            resources_data["announcement"] = {
+                "title": title or resources_data.get("announcement", {}).get("title", ""),
+                "body": body or resources_data.get("announcement", {}).get("body", ""),
+                "extra": extra
+            }
+        elif post_type in {"status", "update"}:
+            updates.insert(0, {
+                "label": "Status" if post_type == "status" else "Update",
+                "icon": "bi-chat-dots-fill" if post_type == "status" else "bi-info-circle-fill",
+                "title": title or "Untitled Update",
+                "text": body or extra or ""
+            })
+            resources_data["updates"] = updates
+
+        save_resources(resources_data)
+
+        return jsonify({
+            "success": True,
+            "message": "Post published successfully.",
+            "post": new_post
+        })
+    except ValueError as ve:
+        return jsonify({
+            "success": False,
+            "error": str(ve)
+        }), 400
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
 @app.route("/api/admin/post", methods=["POST"])
 def admin_post():
     auth_error = api_login_required()
@@ -843,7 +1380,8 @@ def update_admin_post(post_id):
 
         title = request.form.get("title", target_post.get("title", "")).strip()
         body = request.form.get("body", target_post.get("body", "")).strip()
-        post_type = request.form.get("type", target_post.get("type", "upload")).strip() or target_post.get("type", "upload")
+        post_type = request.form.get("type", target_post.get("type", "upload")).strip() or target_post.get("type",
+                                                                                                           "upload")
 
         file_list = request.files.getlist("files")
         single_file = request.files.get("file")
@@ -926,6 +1464,7 @@ def delete_admin_post(post_id):
             "error": str(e)
         }), 500
 
+
 @app.route("/api/admin/posts/<post_id>/pin", methods=["POST"])
 def toggle_pin_post(post_id):
     auth_error = api_login_required()
@@ -934,22 +1473,22 @@ def toggle_pin_post(post_id):
     try:
         resources_data = load_resources()
         posts = resources_data.get("posts", [])
-        
+
         target_post = None
         for p in posts:
             if str(p.get("id")) == str(post_id):
-                p["is_pinned"] = not p.get("is_pinned", False) # Toggle pin status
+                p["is_pinned"] = not p.get("is_pinned", False)  # Toggle pin status
                 target_post = p
                 break
-                
+
         if not target_post:
             return jsonify({"success": False, "error": "Post not found."}), 404
-            
+
         save_resources(resources_data)
         return jsonify({"success": True, "is_pinned": target_post["is_pinned"]})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-    
+
 
 # =========================
 # ROUTES - ANALYTICS / LOGS
@@ -1018,85 +1557,174 @@ def analytics():
             "error": str(e)
         }), 500
 
+
 # =========================
 # ROUTES - CHATBOT
 # =========================
-@app.route("/api/chat", methods=["POST"])
-def chat():
+def generate_chat_reply(user_input):
+    """Runs the actual RAG/llama3 pipeline for one message and returns (reply_text, image_url).
+    Pulled out on its own so it can run either synchronously (in /api/chat) or in a
+    background thread (in /api/chat/start) that keeps working even if the browser
+    tab navigates to a different page."""
     global chat_history
-    
-    data = request.get_json() or {}
-    user_input = data.get("message", "").strip()
-    
-    if not user_input:
-        return jsonify({"success": False, "error": "No message provided"}), 400
 
-    try:
-        # 1. Log the question to your existing chat_logs.json
-        logs = load_logs()
-        logs.append({
-            "question": user_input,
-            "created_at": now_str()
-        })
-        save_logs(logs)
+    # 1. Log the question to your existing chat_logs.json
+    logs = load_logs()
+    logs.append({
+        "question": user_input,
+        "created_at": now_str()
+    })
+    save_logs(logs)
 
-# --- NEW: Fetch Live Posts, Pins, and Attachments ---
-        resources_data = load_resources()
-        posts = resources_data.get("posts", [])
-        
-        news_list = []
-        for p in posts:
-            pin_status = "[PINNED - HIGH PRIORITY] " if p.get("is_pinned") else ""
-            title = p.get("title", "")
-            body = p.get("body", "")
-            date = p.get("created_at", "")
-            
-            # Extract attachments if this is an "upload" post
-            attach_str = ""
-            if p.get("attachments"):
-                links = [f"[{a.get('name', 'File')}]({a.get('url', '')})" for a in p.get("attachments")]
-                attach_str = f" | Attachment URLs: {', '.join(links)}"
-                
-            news_list.append(f"{pin_status}Date: {date} | Title: {title} | Content: {body}{attach_str}")
-            
-        latest_news_str = "\n\n".join(news_list) if news_list else "No recent announcements."
-        # ---------------------------------------------------
+    # --- Fetch Live Posts, Pins, and Attachments ---
+    resources_data = load_resources()
+    posts = resources_data.get("posts", [])
 
-        # 2. Get the answer from LangChain, passing the live news
+    news_list = []
+    for p in posts:
+        pin_status = "[PINNED - HIGH PRIORITY] " if p.get("is_pinned") else ""
+        title = p.get("title", "")
+        body = p.get("body", "")
+        date = p.get("created_at", "")
+
+        # Extract attachments if this is an "upload" post
+        attach_str = ""
+        if p.get("attachments"):
+            links = [f"[{a.get('name', 'File')}]({a.get('url', '')})" for a in p.get("attachments")]
+            attach_str = f" | Attachment URLs: {', '.join(links)}"
+
+        news_list.append(f"{pin_status}Date: {date} | Title: {title} | Content: {body}{attach_str}")
+
+    latest_news_str = "\n\n".join(news_list) if news_list else "No recent announcements."
+    # ---------------------------------------------------
+
+    # 2. Get the answer from LangChain, passing the live news
+    # Speed optimization: the full rag_chain re-asks the LLM to "reformulate" the
+    # question using chat history before it even looks anything up. On the very
+    # first message of a conversation there is no history to reformulate against,
+    # so that step is pure overhead -- skip straight to the retriever + answer chain.
+    if chat_history:
         response = rag_chain.invoke({
-            "input": user_input, 
+            "input": user_input,
             "chat_history": chat_history,
             "latest_news": latest_news_str
         })
         full_answer = response.get("answer", "I'm having trouble retrieving that information.")
-        
-        # 3. Update conversation memory
-        chat_history.extend([
-            HumanMessage(content=user_input),
-            AIMessage(content=full_answer),
-        ])
-        
-        # 4. Return the JSON payload to the frontend
-        image_attachment = None
-        # Check the first post/announcement for an attachment
-        recent_posts = posts[:1] 
-        if recent_posts and recent_posts[0].get("attachments"):
-            # Filter for image type
-            for attach in recent_posts[0].get("attachments"):
-                if attach.get("type") == "image":
-                    image_attachment = attach.get("url")
-                    break
+    else:
+        retrieved_docs = retriever.invoke(user_input)
+        response = question_answer_chain.invoke({
+            "input": user_input,
+            "chat_history": chat_history,
+            "context": retrieved_docs,
+            "latest_news": latest_news_str
+        })
+        full_answer = response if isinstance(response, str) else response.get("answer",
+                                                                              "I'm having trouble retrieving that information.")
 
+    # 3. Update conversation memory
+    chat_history.extend([
+        HumanMessage(content=user_input),
+        AIMessage(content=full_answer),
+    ])
+
+    # 4. Only attach an image if the answer actually references that specific
+    #    post -- e.g. it includes the post's markdown link `[Name](url)` because
+    #    the instructions told the model to cite attachments it discusses.
+    image_attachment = None
+    for p in posts:
+        for attach in p.get("attachments", []):
+            url = attach.get("url", "")
+            if url and url in full_answer and attach.get("type") == "image":
+                image_attachment = url
+                break
+        if image_attachment:
+            break
+
+    return full_answer, image_attachment
+
+
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    """Synchronous version -- kept for backwards compatibility / simple testing.
+    The chat UI now uses /api/chat/start + /api/chat/status instead, so a reply
+    survives the user navigating to another page while it's still generating."""
+    data = request.get_json() or {}
+    user_input = data.get("message", "").strip()
+
+    if not user_input:
+        return jsonify({"success": False, "error": "No message provided"}), 400
+
+    try:
+        full_answer, image_attachment = generate_chat_reply(user_input)
         return jsonify({
-            "success": True, 
+            "success": True,
             "reply": full_answer,
-            "image_url": image_attachment # Send the URL explicitly to the UI
+            "image_url": image_attachment  # Only set when the reply actually references that image
         })
     except Exception as e:
         return jsonify({
             "success": False,
             "error": str(e)
         }), 500
+
+
+# In-memory job store for background chat generation. job_id -> dict.
+# Lets a reply keep generating on the server even if the browser tab
+# navigates to Resources/Settings/History/Admin and back.
+chat_jobs = {}
+chat_jobs_lock = threading.Lock()
+
+
+def _run_chat_job(job_id, user_input):
+    try:
+        full_answer, image_attachment = generate_chat_reply(user_input)
+        with chat_jobs_lock:
+            chat_jobs[job_id] = {
+                "status": "done",
+                "reply": full_answer,
+                "image_url": image_attachment
+            }
+    except Exception as e:
+        with chat_jobs_lock:
+            chat_jobs[job_id] = {
+                "status": "error",
+                "error": str(e)
+            }
+
+
+@app.route("/api/chat/start", methods=["POST"])
+def chat_start():
+    data = request.get_json() or {}
+    user_input = data.get("message", "").strip()
+
+    if not user_input:
+        return jsonify({"success": False, "error": "No message provided"}), 400
+
+    job_id = uuid4().hex
+    with chat_jobs_lock:
+        chat_jobs[job_id] = {"status": "pending"}
+
+    thread = threading.Thread(target=_run_chat_job, args=(job_id, user_input), daemon=True)
+    thread.start()
+
+    return jsonify({"success": True, "job_id": job_id})
+
+
+@app.route("/api/chat/status/<job_id>", methods=["GET"])
+def chat_status(job_id):
+    with chat_jobs_lock:
+        job = chat_jobs.get(job_id)
+        if not job:
+            return jsonify({"success": False, "error": "Unknown or already-delivered job id"}), 404
+
+        result = dict(job)
+        # Once a finished result has been read once, drop it -- keeps this dict
+        # from growing forever. The frontend only needs to see "done"/"error" once.
+        if result.get("status") in ("done", "error"):
+            del chat_jobs[job_id]
+
+    return jsonify({"success": True, **result})
+
 
 # =========================
 # ROUTES - DICTIONARY
@@ -1126,5 +1754,333 @@ def dictionary_lookup():
         }), 500
 
 
+# =========================
+# ROUTES - FAQ INSIGHTS (admin panel)
+# =========================
+@app.route("/api/faq-insights", methods=["GET"])
+def api_faq_insights_list():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    items = load_faq_insights()
+    pending = [i for i in items if i.get("status") == "pending"]
+    approved = [i for i in items if i.get("status") == "approved"]
+
+    return jsonify({
+        "success": True,
+        "data": {
+            "new_questions": pending,
+            "top_faqs": approved,
+            "all_questions": items
+        }
+    })
+
+
+@app.route("/api/faq-insights", methods=["POST"])
+def api_faq_insights_create():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    data = request.get_json() or {}
+    question = (data.get("question") or "").strip()
+    answer = (data.get("answer") or "").strip()
+    status = data.get("status", "pending")
+
+    if not question:
+        return jsonify({"success": False, "error": "Question is required."}), 400
+
+    items = load_faq_insights()
+    norm = normalize_question_text(question)
+    existing = next((i for i in items if normalize_question_text(i.get("question", "")) == norm), None)
+
+    if existing:
+        existing["answer"] = answer or existing.get("answer", "")
+        existing["status"] = status
+        existing["updated_at"] = now_str()
+        save_faq_insights(items)
+        return jsonify({"success": True, "data": existing})
+
+    new_item = {
+        "id": uuid4().hex,
+        "question": question,
+        "answer": answer,
+        "count": 1,
+        "status": status,
+        "created_at": now_str(),
+        "updated_at": now_str()
+    }
+    items.append(new_item)
+    save_faq_insights(items)
+
+    return jsonify({"success": True, "data": new_item})
+
+
+@app.route("/api/faq-insights/<item_id>", methods=["PUT"])
+def api_faq_insights_update(item_id):
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    data = request.get_json() or {}
+    items = load_faq_insights()
+    target = next((i for i in items if str(i.get("id")) == str(item_id)), None)
+
+    if not target:
+        return jsonify({"success": False, "error": "FAQ not found."}), 404
+
+    if "question" in data:
+        target["question"] = (data.get("question") or "").strip()
+    if "answer" in data:
+        target["answer"] = (data.get("answer") or "").strip()
+    if data.get("approve"):
+        target["status"] = "approved"
+    target["updated_at"] = now_str()
+
+    save_faq_insights(items)
+    return jsonify({"success": True, "data": target})
+
+
+@app.route("/api/faq-insights/<item_id>", methods=["DELETE"])
+def api_faq_insights_delete(item_id):
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    items = load_faq_insights()
+    remaining = [i for i in items if str(i.get("id")) != str(item_id)]
+
+    if len(remaining) == len(items):
+        return jsonify({"success": False, "error": "FAQ not found."}), 404
+
+    save_faq_insights(remaining)
+    return jsonify({"success": True})
+
+
+@app.route("/api/faq-insights/<item_id>/approve", methods=["POST"])
+def api_faq_insights_approve(item_id):
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    items = load_faq_insights()
+    target = next((i for i in items if str(i.get("id")) == str(item_id)), None)
+
+    if not target:
+        return jsonify({"success": False, "error": "FAQ not found."}), 404
+
+    target["status"] = "approved"
+    target["updated_at"] = now_str()
+    save_faq_insights(items)
+
+    return jsonify({"success": True, "data": target})
+
+
+# =========================
+# ROUTES - CHATBOT SUPPORT (public, used by the chat widget)
+# =========================
+@app.route("/api/chatbot/faqs", methods=["GET"])
+def api_chatbot_faqs():
+    items = load_faq_insights()
+    approved = [
+        {"question": i.get("question", ""), "answer": i.get("answer", "")}
+        for i in items if i.get("status") == "approved"
+    ]
+    return jsonify({"success": True, "data": approved})
+
+
+@app.route("/api/sync-chat-history-to-faqs", methods=["POST"])
+def api_sync_chat_history_to_faqs():
+    data = request.get_json() or {}
+    questions = data.get("questions", [])
+
+    if not isinstance(questions, list):
+        return jsonify({"success": False, "error": "Invalid payload."}), 400
+
+    items = load_faq_insights()
+    by_norm = {normalize_question_text(i.get("question", "")): i for i in items}
+    changed = False
+
+    for question in questions:
+        question = (question or "").strip()
+        if not question:
+            continue
+
+        norm = normalize_question_text(question)
+        if norm in by_norm:
+            by_norm[norm]["count"] = int(by_norm[norm].get("count", 0)) + 1
+            by_norm[norm]["updated_at"] = now_str()
+        else:
+            new_item = {
+                "id": uuid4().hex,
+                "question": question,
+                "answer": "",
+                "count": 1,
+                "status": "pending",
+                "created_at": now_str(),
+                "updated_at": now_str()
+            }
+            items.append(new_item)
+            by_norm[norm] = new_item
+        changed = True
+
+    if changed:
+        save_faq_insights(items)
+
+    return jsonify({"success": True})
+
+
+@app.route("/api/chatbot/questions", methods=["POST"])
+def api_chatbot_questions():
+    data = request.get_json() or {}
+    question = (data.get("question") or "").strip()
+
+    if not question:
+        return jsonify({"success": False, "error": "No question provided"}), 400
+
+    logs = load_logs()
+    logs.append({
+        "question": question,
+        "created_at": now_str()
+    })
+    save_logs(logs)
+
+    return jsonify({"success": True})
+
+
+@app.route("/api/announcement/latest", methods=["GET"])
+def api_announcement_latest():
+    resources_data = load_resources()
+    posts = resources_data.get("posts", [])
+
+    if not posts:
+        return jsonify({"success": True, "data": None})
+
+    pinned = next((p for p in posts if p.get("is_pinned")), None)
+    post = pinned or posts[0]
+
+    return jsonify({
+        "success": True,
+        "data": {
+            "title": post.get("title", ""),
+            "body": post.get("body", ""),
+            "extra": post.get("extra", ""),
+            "attachments": post.get("attachments", []),
+            "posted_by": post.get("author", ""),
+            "created_at": post.get("created_at", "")
+        }
+    })
+
+
+# =========================
+# ROUTES - ADMIN ACCOUNT / SESSION SECURITY
+# =========================
+@app.route("/api/admin/access-log", methods=["GET"])
+def api_admin_access_log():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    sec_data = load_security()
+    sec = get_admin_security(sec_data, session.get("admin_username"))
+    current_device_id = session.get("device_session_id")
+
+    logs = []
+    for i, entry in enumerate(sec.get("access_log", [])):
+        item = dict(entry)
+        item["is_current"] = (i == 0) or (
+                    entry.get("device_id") == current_device_id and entry.get("device_id") is not None)
+        logs.append(item)
+
+    return jsonify({"success": True, "data": {"logs": logs}})
+
+
+@app.route("/api/admin/revoke-sessions", methods=["POST"])
+def api_admin_revoke_sessions():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    username = session.get("admin_username")
+    sec_data = load_security()
+    sec = get_admin_security(sec_data, username)
+
+    sec["session_version"] = sec.get("session_version", 1) + 1
+
+    current_device_id = session.get("device_session_id")
+    sec["trusted_devices"] = [
+        d for d in sec.get("trusted_devices", [])
+        if d.get("id") == current_device_id
+    ]
+    save_security(sec_data)
+
+    # Keep the current browser logged in under the new session version
+    session["session_version"] = sec["session_version"]
+
+    return jsonify({"success": True})
+
+
+@app.route("/api/admin/change-password", methods=["POST"])
+def api_admin_change_password():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    data = request.get_json() or {}
+    current_password = data.get("current_password", "")
+    new_password = data.get("new_password", "")
+
+    if len(new_password) < 8:
+        return jsonify({"success": False, "error": "New password must be at least 8 characters."}), 400
+
+    username = session.get("admin_username")
+    users_data = load_users()
+    admins = users_data.get("admins", [])
+    target = next((u for u in admins if u.get("username") == username), None)
+
+    if not target or str(target.get("password", "")) != current_password:
+        return jsonify({"success": False, "error": "Current password is incorrect."}), 400
+
+    target["password"] = new_password
+    save_json_file(USERS_FILE, users_data)
+
+    return jsonify({"success": True})
+
+
+@app.route("/api/admin/backup", methods=["POST"])
+def api_admin_backup():
+    auth_error = api_login_required()
+    if auth_error:
+        return auth_error
+
+    data = request.get_json() or {}
+    password = data.get("password", "")
+    username = session.get("admin_username")
+
+    if not verify_admin_credentials(username, password):
+        return jsonify({"success": False, "error": "Incorrect password."}), 401
+
+    backup_payload = {
+        "generated_at": now_str(),
+        "resources": load_resources(),
+        "faq_insights": load_faq_insights(),
+        "chat_logs": load_logs(),
+        "dictionary": load_dictionary()
+    }
+
+    buf = io.BytesIO(json.dumps(backup_payload, indent=2, ensure_ascii=False).encode("utf-8"))
+    buf.seek(0)
+
+    return send_file(
+        buf,
+        mimetype="application/json",
+        as_attachment=True,
+        download_name=f"uniwise-backup-{datetime.now().strftime('%Y%m%d')}.json"
+    )
+
+
 if __name__ == "__main__":
-    app.run(debug=False)
+    # threaded=True lets the app handle status-polling requests while a
+    # background chat job is still running in its own thread
+    app.run(debug=False, threaded=True)

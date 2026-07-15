@@ -3,73 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UniWise | Admin Login </title>
-
+  <title>UW | Admin Login</title>
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='admin-login.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin-login.css') }}?v=600">
+  <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}?v=500">
 </head>
 <body>
-  <a href="{{ url_for('index') }}" class="back-btn">
-    <i class="bi bi-chevron-left"></i>
-    <span>Chat</span>
-  </a>
+
+  <!-- Header — matches chat page style -->
+  <header class="admin-login-header">
+    <div class="login-header-left">
+      <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise" class="login-header-logo" />
+      <div class="login-header-text">
+        <h1 class="login-header-title">UniWise</h1>
+        <span class="login-header-sub">Admin Portal</span>
+      </div>
+    </div>
+    <a href="{{ url_for('index') }}" class="login-header-back">
+      <i class="bi bi-chevron-left"></i> Back to Chat
+    </a>
+  </header>
 
   <main class="login-shell">
     <section class="login-card">
-      <div class="card-glow"></div>
 
       <div class="login-header">
         <div class="brand-logo-wrapper">
-          <img
-            src="{{ url_for('static', filename='uniwiselogo&text.png') }}"
-            alt="UniWise Logo"
-            class="brand-logo"
-          >
+          <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo" class="brand-logo">
         </div>
-
-        <h1>UniWise Admin</h1>
-        <p>Secure administrator access</p>
+        <div class="login-badge">
+          <i class="bi bi-shield-lock-fill"></i> Admin Security Portal
+        </div>
+        <h1>Welcome back</h1>
+        <p>Sign in to your administrator account</p>
       </div>
 
-      <form method="POST" action="{{ url_for('login') }}" class="login-form">
-        <div class="input-group">
-          <label for="username">Username</label>
-          <div class="input-shell">
-            <i class="bi bi-person"></i>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Enter username"
-              autocomplete="username"
-              required
-            >
+      <form
+        method="POST"
+        action="{{ url_for('login') }}"
+        class="login-form"
+        autocomplete="off"
+        spellcheck="false"
+      >
+        <input type="text"     name="fake_username" class="hidden-decoy" autocomplete="username">
+        <input type="password" name="fake_password" class="hidden-decoy" autocomplete="new-password">
+
+        <div class="form-grid">
+          <div class="input-group">
+            <label for="username">Username</label>
+            <div class="input-shell">
+              <i class="bi bi-person"></i>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <div class="input-shell password-shell">
+              <i class="bi bi-lock"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="new-password"
+                minlength="8"
+                required
+              >
+              <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="input-group">
-          <label for="password">Password</label>
-          <div class="input-shell password-shell">
-            <i class="bi bi-lock"></i>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter password"
-              autocomplete="current-password"
-              required
-            >
-            <button
-              type="button"
-              class="toggle-password"
-              id="togglePassword"
-              aria-label="Show password"
-            >
-              <i class="bi bi-eye"></i>
-            </button>
-          </div>
+        <div class="remember-device-row">
+          <label class="remember-device-check">
+            <input type="checkbox" id="rememberDevice" name="remember_device">
+            <span>Remember this device</span>
+          </label>
         </div>
+
+        {% if attempts_left is not none %}
+        <div class="attempt-box {% if attempts_left == 0 %}locked{% endif %}">
+          <i class="bi {% if attempts_left == 0 %}bi-shield-x{% else %}bi-info-circle{% endif %}"></i>
+          <span>
+            {% if attempts_left == 0 %}
+              Maximum login attempts reached.
+            {% else %}
+              Attempts remaining: <strong>{{ attempts_left }}</strong> of <strong>{{ max_attempts }}</strong>
+            {% endif %}
+          </span>
+        </div>
+        {% endif %}
 
         {% if error %}
         <div class="error-box">
@@ -78,33 +114,21 @@
         </div>
         {% endif %}
 
-        <button type="submit" class="login-btn">
-          <i class="bi bi-shield-check"></i>
-          <span>Login</span>
+        <button type="submit" class="login-btn" {% if attempts_left == 0 %}disabled{% endif %}>
+          <i class="bi {% if attempts_left == 0 %}bi-lock-fill{% else %}bi-shield-check{% endif %}"></i>
+          <span>{% if attempts_left == 0 %}Account Locked{% else %}Sign In{% endif %}</span>
         </button>
+
+        <div class="login-note">
+          <i class="bi bi-phone"></i>
+          After signing in, you'll be asked to enter a code from Microsoft Authenticator.
+        </div>
       </form>
     </section>
   </main>
 
-  <script>
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-
-    if (togglePassword && passwordInput) {
-      togglePassword.addEventListener("click", () => {
-        const isPassword = passwordInput.type === "password";
-        passwordInput.type = isPassword ? "text" : "password";
-
-        togglePassword.innerHTML = isPassword
-          ? '<i class="bi bi-eye-slash"></i>'
-          : '<i class="bi bi-eye"></i>';
-
-        togglePassword.setAttribute(
-          "aria-label",
-          isPassword ? "Hide password" : "Show password"
-        );
-      });
-    }
-  </script>
+  <script src="{{ url_for('static', filename='responsive.js') }}?v=500"></script>
+  <script src="{{ url_for('static', filename='view-mode-init.js') }}"></script>
+  <script src="{{ url_for('static', filename='admin-login.js') }}?v=600"></script>
 </body>
 </html>

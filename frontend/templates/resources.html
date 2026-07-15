@@ -3,591 +3,678 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniWise | Resources</title>
-
+  <title>UW | Resources </title>
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='resources.css') }}?v=50">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,700;1,9..144,900&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='resources.css') }}?v=501" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}?v=501" />
+<base target="_blank">
 </head>
-<body class="night theme-bluegold font-inter size-medium bubble-default">
+<body>
+  <div class="resources-page" id="resourcesPage">
 
-  <div class="resources-shell">
-
-    <!-- TOP NAV -->
-    <header class="resources-header glass-panel">
-      <div class="header-left">
-        <div class="brand-badge">
-          <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo" class="brand-logo">
+    <!-- TOPBAR -->
+    <header class="topbar resources-header" id="resourcesHeader">
+      <div class="topbar-inner">
+        <a href="/" class="brand-wrap">
+          <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo" class="brand-logo" />
+          <span class="brand-text">UniWise</span>
+        </a>
+        <nav class="top-nav" id="topNav">
+          <a href="#aboutSchoolSection" class="top-nav-link quick-nav-card" data-nav="aboutSchoolSection">About School</a>
+          <a href="#announcementsSection" class="top-nav-link quick-nav-card" data-nav="announcementsSection">Posts</a>
+          <a href="#mapsSection" class="top-nav-link quick-nav-card" data-nav="mapsSection">Maps</a>
+          <a href="#contactsLinksSection" class="top-nav-link quick-nav-card" data-nav="contactsLinksSection">Contacts</a>
+          <a href="#aboutUniwiseSection" class="top-nav-link quick-nav-card" data-nav="aboutUniwiseSection">About UniWise</a>
+        </nav>
+        <div class="top-actions">
+          <div class="nav-drawer-wrap" id="navDrawerWrap">
+            <button class="top-btn nav-drawer-btn" type="button" id="navDrawerTrigger" aria-label="Open menu" aria-expanded="false" aria-controls="navDrawerMenu">
+              <i class="bi bi-list nav-drawer-icon"></i>
+              <span class="btn-text">Menu</span>
+            </button>
+            <div class="nav-drawer-menu" id="navDrawerMenu" hidden>
+              <button class="nav-drawer-item" type="button" onclick="goHome()">
+                <i class="bi bi-house-fill"></i> Home
+              </button>
+              <button class="nav-drawer-item" type="button" onclick="goSettings()">
+                <i class="bi bi-gear-fill"></i> Settings
+              </button>
+              <button class="nav-drawer-item" type="button" onclick="goAdmin()">
+                <i class="bi bi-person-lock"></i> Admin
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div class="brand-copy">
-          <div class="mini-label">UniWise Resource Hub</div>
-          <h1>School Resources</h1>
-          <p>Announcements, school posts, maps, contacts, and official links in one polished feed.</p>
-        </div>
-      </div>
-
-      <div class="header-actions">
-        <button onclick="goHome()" class="header-btn" title="Home">
-          <i class="bi bi-house-fill"></i>
-        </button>
-
-        <button onclick="goSettings()" class="header-btn" title="Settings">
-          <i class="bi bi-gear-fill"></i>
-        </button>
       </div>
     </header>
 
-    <!-- HERO STRIP -->
-    <section class="hero-strip glass-panel">
-      <div class="hero-copy">
-        <div class="pill-label">
-          <i class="bi bi-grid-1x2-fill"></i>
-          <span>Campus Feed</span>
+    <main class="resource-main">
+
+      <!-- ═══════════════════════════════════════════
+           1. HERO INTRO — Campers opening
+      ═══════════════════════════════════════════ -->
+      <section class="theme-band band-campers band-intro" id="introSection">
+        <!-- School logo background watermark -->
+        <div class="intro-bg-logo">
+          <img src="/static/shsbes_bg.png" alt="" aria-hidden="true" />
         </div>
-        <h2>Latest announcement, updates, and school uploads</h2>
-        <p>Built like a clean social feed with a softer Apple-style visual layer for a more premium reading experience.</p>
-      </div>
-
-      <div class="hero-stats">
-        <div class="hero-stat-card">
-          <span>Total Feed Items</span>
-          <strong>
-            {% if resources_data.posts and resources_data.posts|length > 0 %}
-              {{ 1 + (resources_data.posts | length) }}
-            {% elif resources_data.updates %}
-              {{ 1 + (resources_data.updates | length) }}
-            {% else %}
-              1
-            {% endif %}
-          </strong>
+        <div class="intro-noise"></div>
+        <div class="intro-orbs">
+          <span class="i-orb i-orb-1"></span>
+          <span class="i-orb i-orb-2"></span>
+          <span class="i-orb i-orb-3"></span>
         </div>
-
-        <div class="hero-stat-card">
-          <span>Pinned</span>
-          <strong>1</strong>
+        <div class="intro-ring-outer">
+          <div class="intro-ring-inner"></div>
         </div>
-
-        <div class="hero-stat-card">
-          <span>Posts</span>
-          <strong>
-            {% if resources_data.posts %}
-              {{ resources_data.posts | length }}
-            {% elif resources_data.updates %}
-              {{ resources_data.updates | length }}
-            {% else %}
-              0
-            {% endif %}
-          </strong>
-        </div>
-      </div>
-    </section>
-
-    <!-- MAIN FEED LAYOUT -->
-    <section class="feed-layout">
-
-      <!-- LEFT SIDEBAR -->
-      <aside class="feed-sidebar">
-
-        <div class="sidebar-card glass-panel">
-          <div class="sidebar-head">
-            <div class="pill-label">
-              <i class="bi bi-info-circle-fill"></i>
-              <span>About</span>
-            </div>
-            <h3>{{ resources_data.about.title if resources_data.about.title else "About UniWise" }}</h3>
+        <div class="band-inner intro-inner">
+          <div class="intro-badge">
+            <span class="intro-badge-dot"></span>
+            UniWise Resource Hub
           </div>
-
-          <div class="sidebar-body">
-            <p>{{ resources_data.about.text1 }}</p>
-            <p>{{ resources_data.about.text2 }}</p>
-          </div>
-        </div>
-
-        <div class="sidebar-card glass-panel">
-          <div class="sidebar-head">
-            <div class="pill-label">
-              <i class="bi bi-telephone-fill"></i>
-              <span>Contact</span>
-            </div>
-            <h3>School Contact</h3>
-          </div>
-
-          <div class="contact-list">
-            <div class="contact-row">
-              <span class="contact-label">Phone</span>
-              <span class="contact-value" id="contactPhone">{{ resources_data.contact.phone }}</span>
-            </div>
-
-            <div class="contact-row">
-              <span class="contact-label">Email</span>
-              <span class="contact-value" id="contactEmail">{{ resources_data.contact.email }}</span>
-            </div>
-
-            <div class="contact-row">
-              <span class="contact-label">Location</span>
-              <span class="contact-value" id="contactLocation">{{ resources_data.contact.location }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="sidebar-card glass-panel">
-          <div class="sidebar-head">
-            <div class="pill-label">
-              <i class="bi bi-link-45deg"></i>
-              <span>Official Links</span>
-            </div>
-            <h3>Verified Pages</h3>
-          </div>
-
-          <div class="official-links">
-            <a
-              class="official-link"
-              href="{{ resources_data.links.website }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="official-link-left">
-                <div class="official-link-icon"><i class="bi bi-globe2"></i></div>
-                <div>
-                  <strong>School Website</strong>
-                  <span>Open the official campus site</span>
-                </div>
-              </div>
-              <i class="bi bi-box-arrow-up-right"></i>
+          <h1 class="intro-headline">
+            <em class="ih-script">Welcome,</em>
+            <strong class="ih-main">CAMPERS!</strong>
+          </h1>
+          <p class="intro-desc">
+            Your single-stop hub for announcements, school posts, campus maps,
+            emergency contacts, and official links.
+          </p>
+          <div class="intro-btns">
+            <a href="#directorySection" class="ibtn ibtn-solid">
+              <i class="bi bi-compass-fill"></i> <span>Explore</span>
             </a>
+            <a href="#announcementsSection" class="ibtn ibtn-ghost">
+              <i class="bi bi-megaphone-fill"></i> <span>Announcements</span>
+            </a>
+          </div>
 
-            <a
-              class="official-link"
-              href="{{ resources_data.links.facebook }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="official-link-left">
-                <div class="official-link-icon"><i class="bi bi-facebook"></i></div>
-                <div>
-                  <strong>Facebook Page</strong>
-                  <span>View school announcements</span>
-                </div>
+          <!-- floating accent pills -->
+          <div class="intro-float-pills">
+            <span class="fp fp-1"><i class="bi bi-geo-alt-fill"></i> Campus Maps</span>
+            <span class="fp fp-2"><i class="bi bi-megaphone-fill"></i> Updates</span>
+            <span class="fp fp-3"><i class="bi bi-telephone-fill"></i> Hotlines</span>
+            <span class="fp fp-4"><i class="bi bi-mortarboard-fill"></i> Admission</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════
+           2. QUICK DIRECTORY
+      ═══════════════════════════════════════════ -->
+      <section class="theme-band band-light band-directory" id="directorySection">
+        <div class="band-inner">
+          <div class="dir-head">
+            <span class="dir-overline">Find what you need</span>
+            <h2 class="dir-title">Quick Directory</h2>
+          </div>
+          <div class="dir-grid">
+            <a href="#aboutSchoolSection" class="dir-tile quick-nav-card" data-nav="aboutSchoolSection">
+              <div class="dir-tile-icon dir-icon-school">
+                <i class="bi bi-building-fill"></i>
               </div>
-              <i class="bi bi-box-arrow-up-right"></i>
+              <div class="dir-tile-text">
+                <strong>About School</strong>
+                <span>Mission & Vision</span>
+              </div>
+            </a>
+            <a href="#announcementsSection" class="dir-tile quick-nav-card" data-nav="announcementsSection">
+              <div class="dir-tile-icon dir-icon-announce">
+                <i class="bi bi-megaphone-fill"></i>
+              </div>
+              <div class="dir-tile-text">
+                <strong>Announcements</strong>
+                <span>Posts & updates</span>
+              </div>
+            </a>
+            <a href="#mapsSection" class="dir-tile quick-nav-card" data-nav="mapsSection">
+              <div class="dir-tile-icon dir-icon-map">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
+              <div class="dir-tile-text">
+                <strong>Maps</strong>
+                <span>Navigate campus</span>
+              </div>
+            </a>
+            <a href="#contactsLinksSection" class="dir-tile quick-nav-card" data-nav="contactsLinksSection">
+              <div class="dir-tile-icon dir-icon-contact">
+                <i class="bi bi-journal-text"></i>
+              </div>
+              <div class="dir-tile-text">
+                <strong>Contacts & Links</strong>
+                <span>Reach the school</span>
+              </div>
+            </a>
+            <a href="#aboutUniwiseSection" class="dir-tile quick-nav-card" data-nav="aboutUniwiseSection">
+              <div class="dir-tile-icon dir-icon-uw">
+                <i class="bi bi-cpu-fill"></i>
+              </div>
+              <div class="dir-tile-text">
+                <strong>About UniWise</strong>
+                <span>AI-Querie</span>
+              </div>
             </a>
           </div>
         </div>
-      </aside>
+      </section>
 
-      <!-- CENTER FEED -->
-      <main class="feed-center">
+      <!-- ═══════════════════════════════════════════
+           3. ABOUT SCHOOL — Merged with LED Bulletin
+      ═══════════════════════════════════════════ -->
+      <section class="theme-band band-school-mega" id="aboutSchoolSection">
+        <div class="school-texture"></div>
+        <div class="band-inner">
 
-        <!-- PINNED ANNOUNCEMENT -->
-        <article class="feed-post-card glass-panel pinned-post">
-          <div class="feed-post-head">
-            <div class="feed-post-avatar">
-              <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo">
-            </div>
-
-            <div class="feed-post-meta">
-              <div class="feed-post-author">UniWise School Admin</div>
-              <div class="feed-post-time">Official campus update</div>
-            </div>
-
-            <div class="feed-post-status">Pinned</div>
-          </div>
-
-          <div class="feed-chip-row">
-            <span class="feed-chip">
-              <i class="bi bi-megaphone-fill"></i>
-              Announcement
-            </span>
-          </div>
-
-          <h2 id="announcementTitle" class="feed-post-title large-title">{{ resources_data.announcement.title }}</h2>
-          <div id="announcementBody" class="feed-post-body">{{ resources_data.announcement.body }}</div>
-
-          {% if resources_data.announcement.extra %}
-          <div class="feed-post-extra" id="announcementExtra">
-            {{ resources_data.announcement.extra }}
-          </div>
-          {% endif %}
-        </article>
-
-        <!-- SOCIAL POSTS -->
-        <div class="feed-posts-stack">
-
-          {% if resources_data.posts and resources_data.posts|length > 0 %}
-            {% for post in resources_data.posts %}
-            {% set attachments = post.attachments if post.attachments else [] %}
-
-            <article class="feed-post-card glass-panel">
-              <div class="feed-post-head">
-                <div class="feed-post-avatar">
-                  <img src="{{ url_for('static', filename='uniwiselogo.png') }}" alt="UniWise Logo">
-                </div>
-
-                <div class="feed-post-meta">
-                  <div class="feed-post-author">{{ post.author if post.author else "UniWise School Admin" }}</div>
-                  <div class="feed-post-time">
-                    {% if post.type == "announcement" %}
-                      Announcement
-                    {% elif post.type == "status" %}
-                      Status
-                    {% elif post.type == "update" %}
-                      Update
-                    {% elif post.type == "upload" %}
-                      Upload
-                    {% else %}
-                      School Post
-                    {% endif %}
-                    {% if post.created_at %} • {{ post.created_at }}{% endif %}
-                  </div>
-                </div>
-
-                <div class="feed-post-status subtle-status">
-                  {% if post.type == "announcement" %}
-                    <i class="bi bi-megaphone-fill"></i>
-                  {% elif post.type == "status" %}
-                    <i class="bi bi-chat-dots-fill"></i>
-                  {% elif post.type == "update" %}
-                    <i class="bi bi-info-circle-fill"></i>
-                  {% elif post.type == "upload" %}
-                    <i class="bi bi-cloud-upload-fill"></i>
-                  {% else %}
-                    <i class="bi bi-stickies-fill"></i>
-                  {% endif %}
-                </div>
+          <!-- Section Header -->
+          <div class="school-mega-header">
+            <div class="school-badge">
+              <div class="school-badge-inner">
+                <i class="bi bi-building-fill"></i>
               </div>
+            </div>
+            <div class="school-tag-text">
+              <span class="school-overline">About the School</span>
+              <h2 class="school-heading" id="aboutSchoolTitle">Senior High School within<br>Bacoor Elementary School</h2>
+            </div>
+          </div>
 
-              <div class="feed-chip-row">
-                <span class="feed-chip">
-                  {% if post.type == "announcement" %}
-                    <i class="bi bi-megaphone-fill"></i><span>Announcement</span>
-                  {% elif post.type == "status" %}
-                    <i class="bi bi-chat-dots-fill"></i><span>Status</span>
-                  {% elif post.type == "update" %}
-                    <i class="bi bi-info-circle-fill"></i><span>Update</span>
-                  {% elif post.type == "upload" %}
-                    <i class="bi bi-cloud-upload-fill"></i><span>Upload</span>
-                  {% else %}
-                    <i class="bi bi-stickies-fill"></i><span>Post</span>
-                  {% endif %}
-                </span>
+          <!-- Two-col narrative -->
+          <div class="school-narrative-grid">
+            <div class="school-narrative-col">
+              <div class="school-quote-bar"></div>
+              <p id="aboutSchoolText1">Senior High School within Bacoor Elementary School was established on <strong>2016</strong>. It is one of the five public senior high schools at the <strong>Division of Bacoor City</strong>. It started catering students under the <strong>Science, Technology, Engineering, and Mathematics (STEM) Strand</strong> and later on the <strong>Humanities and Social Sciences (HUMSS) strand on 2020.</strong></p>
+            </div>
+            <div class="school-narrative-col">
+              <div class="school-quote-bar"></div>
+              <p id="aboutSchoolText2">Located in Tinocoro St., Brgy. Poblacion, City of Bacoor, Cavite — proudly serving the local community with quality public education. The school main gate is situated in <strong>Barangay Campo Santo</strong>, making it one of the key constituents and stakeholders of the community.</p>
+            </div>
+          </div>
+          <div class="school-tracks">
+            <button type="button" class="school-track-card track-stem strand-trigger" data-strand="stem" aria-label="View STEM strand details">
+              <div class="track-icon"><i class="bi bi-calculator-fill"></i></div>
+              <div>
+                <strong>STEM</strong>
+                <span>Science, Technology, Engineering & Math</span>
               </div>
+              <i class="bi bi-chevron-right track-arrow"></i>
+            </button>
+            <button type="button" class="school-track-card track-humss strand-trigger" data-strand="humss" aria-label="View HUMSS strand details">
+              <div class="track-icon"><i class="bi bi-book-fill"></i></div>
+              <div>
+                <strong>HUMSS</strong>
+                <span>Humanities & Social Sciences</span>
+              </div>
+              <i class="bi bi-chevron-right track-arrow"></i>
+            </button>
+            <a href="{{ resources_data.school.google_maps_search if resources_data and resources_data.school and resources_data.school.google_maps_search else 'https://www.google.com/maps/search/?api=1&query=Senior+Highschool+within+Bacoor+Elementary+School' }}" target="_blank" rel="noopener noreferrer" class="school-track-card track-location" aria-label="Open location in Google Maps">
+              <div class="track-icon"><i class="bi bi-geo-alt-fill"></i></div>
+              <div>
+                <strong>Location</strong>
+                <span>Bacoor, Cavite — City of Bacoor</span>
+              </div>
+              <i class="bi bi-box-arrow-up-right track-arrow"></i>
+            </a>
+          </div>
 
-              {% if post.title %}
-              <h3 class="feed-post-title">{{ post.title }}</h3>
-              {% endif %}
+          <!-- ── DIVIDER ── -->
+          <div class="school-section-divider">
+            <span class="school-divider-label"><i class="bi bi-tv-fill"></i> School Bulletin</span>
+          </div>
 
-              {% if post.body %}
-              <div class="feed-post-body">{{ post.body }}</div>
-              {% endif %}
-
-              {% if post.extra %}
-              <div class="feed-post-extra">{{ post.extra }}</div>
-              {% endif %}
-
-              <!-- New attachments format -->
-              {% if attachments and attachments|length > 0 %}
-                {% set image_attachments = attachments | selectattr('type', 'equalto', 'image') | list %}
-                {% set file_attachments = attachments | selectattr('type', 'equalto', 'file') | list %}
-
-                {% if image_attachments|length > 0 %}
-                  <div class="post-gallery
-                    {% if image_attachments|length == 1 %}one
-                    {% elif image_attachments|length == 2 %}two
-                    {% elif image_attachments|length == 3 %}three
-                    {% elif image_attachments|length == 4 %}four
-                    {% else %}more{% endif %}
-                  ">
-                    {% for item in image_attachments[:4] %}
-                      <div class="gallery-item">
-                        <img src="{{ item.url }}" alt="{{ item.name if item.name else 'Post image' }}">
-                        {% if image_attachments|length > 4 and loop.index == 4 %}
-                          <div class="gallery-more-overlay">+{{ image_attachments|length - 4 }}</div>
-                        {% endif %}
-                      </div>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-
-                {% if file_attachments|length > 0 %}
-                  <div class="post-files">
-                    {% for item in file_attachments %}
-                    <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" class="file-row">
-                      <div class="file-left">
-                        <div class="file-icon">
-                          <i class="bi bi-file-earmark-fill"></i>
-                        </div>
-                        <div class="file-meta">
-                          <div class="file-name">{{ item.name if item.name else 'Attached File' }}</div>
-                          <div class="file-sub">Open file</div>
-                        </div>
-                      </div>
-                      <div class="file-open-mini">
-                        <i class="bi bi-box-arrow-up-right"></i>
-                      </div>
-                    </a>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-
-              {% else %}
-                <!-- Backward compatibility old single file fields -->
-                {% if post.mediaType == "image" and post.mediaUrl %}
-                <div class="post-gallery one">
-                  <div class="gallery-item">
-                    <img src="{{ post.mediaUrl }}" alt="{{ post.title or 'Post image' }}">
-                  </div>
-                </div>
-                {% endif %}
-
-                {% if post.mediaType == "file" and post.mediaUrl %}
-                <div class="post-files">
-                  <a href="{{ post.mediaUrl }}" target="_blank" rel="noopener noreferrer" class="file-row">
-                    <div class="file-left">
-                      <div class="file-icon">
-                        <i class="bi bi-file-earmark-fill"></i>
-                      </div>
-                      <div class="file-meta">
-                        <div class="file-name">{{ post.fileName if post.fileName else 'Attached File' }}</div>
-                        <div class="file-sub">Open file</div>
-                      </div>
+          <!-- LED Bulletin + Mission/Vision layout-->
+          <div class="led-layout-merged">
+            <div class="led-left">
+              <div class="led-screen-wrap">
+                <div class="led-bezel">
+                  <div class="led-screen" id="heroLedBg">
+                    <div class="hero-led-empty">
+                      <i class="bi bi-image-alt"></i>
+                      <span>No LED media yet.</span>
                     </div>
-                    <div class="file-open-mini">
-                      <i class="bi bi-box-arrow-up-right"></i>
-                    </div>
-                  </a>
-                </div>
-                {% endif %}
-              {% endif %}
-            </article>
-            {% endfor %}
-
-          {% elif resources_data.updates %}
-            {% for update in resources_data.updates %}
-            <article class="feed-post-card glass-panel">
-              <div class="feed-post-head">
-                <div class="feed-post-avatar">
-                  <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo">
-                </div>
-
-                <div class="feed-post-meta">
-                  <div class="feed-post-author">UniWise School Admin</div>
-                  <div class="feed-post-time">{{ update.label if update.label else "Update" }}</div>
-                </div>
-
-                <div class="feed-post-status subtle-status">
-                  <i class="bi {{ update.icon if update.icon else 'bi-info-circle-fill' }}"></i>
+                  </div>
+                  <button class="led-arrow led-arrow-prev" id="ledPrevBtn" type="button" aria-label="Previous slide">
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+                  <button class="led-arrow led-arrow-next" id="ledNextBtn" type="button" aria-label="Next slide">
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                  <div class="led-dots" id="ledDots"></div>
+                  <div class="led-stand"></div>
+                  <div class="led-base"></div>
                 </div>
               </div>
-
-              <div class="feed-chip-row">
-                <span class="feed-chip">
-                  <i class="bi {{ update.icon if update.icon else 'bi-info-circle-fill' }}"></i>
-                  <span>{{ update.label if update.label else "Update" }}</span>
-                </span>
+              <div class="led-yellow-card">
+                <div class="led-yellow-eyebrow">A quick look</div>
+                <p id="schoolShortDesc">Senior High School within Bacoor ES — a learning home for STEM and HUMSS campers, empowering minds and enriching futures.</p>
               </div>
+            </div>
 
-              <h3 class="feed-post-title">{{ update.title }}</h3>
-              <div class="feed-post-body">{{ update.text }}</div>
-            </article>
-            {% endfor %}
+            <!-- Mission / Vision / External Context-->
+            <div class="led-right">
+              <article class="led-ctx-item">
+                <div class="ctx-icon"><i class="bi bi-bullseye"></i></div>
+                <div class="ctx-body">
+                  <h4>Mission</h4>
+                  <p id="schoolMission">To deliver quality, learner-centered Senior High School education that builds competent, values-driven, and future-ready campers.</p>
+                </div>
+              </article>
+              <article class="led-ctx-item">
+                <div class="ctx-icon"><i class="bi bi-eye-fill"></i></div>
+                <div class="ctx-body">
+                  <h4>Vision</h4>
+                  <p id="schoolVision">A leading senior high community in Bacoor, nurturing well-rounded learners ready for higher education and life.</p>
+                </div>
+              </article>
+              <article class="led-ctx-item">
+                <div class="ctx-icon"><i class="bi bi-globe2"></i></div>
+                <div class="ctx-body">
+                  <h4>External Context</h4>
+                  <p id="schoolExternalContext">SHS within Bacoor ES was first housed in SHS Dulong Bayan. In June 2021, the school was transferred and housed within Bacoor ES. The school promotes educational growth in Barangay Campo Santo and helps uplift the standard of living and enhances participation in the basic functions of society.</p>
+                </div>
+              </article>
+              <article class="led-ctx-item">
+                <div class="ctx-icon"><i class="bi bi-people-fill"></i></div>
+                <div class="ctx-body">
+                  <h4>Community & Political</h4>
+                  <p>The chairperson of the <strong>Local School Board is the City Mayor</strong>, where the schools share the <strong>Special Education Fund (SEF)</strong>. The City Mayor has control over the <strong>Local Government Unit (LGU)</strong>, which shares with the Provincial Government Unit (PGU) to support the schools.</p>
+                </div>
+              </article>
+            </div>
+          </div>
 
-          {% else %}
-            <article class="feed-post-card glass-panel empty-post-state">
-              <div class="empty-state large-empty">
-                <i class="bi bi-inboxes-fill"></i>
-                <h3>No posts yet</h3>
-                <p>School announcements and updates will appear here once available.</p>
+        </div>
+      </section>
+
+      <!--ANNOUNCEMENTS & SCHOOL POSTS-->
+      <section class="theme-band band-posts" id="announcementsSection">
+        <div class="band-inner">
+          <div class="posts-wrapper">
+            <div class="section-head">
+              <span class="section-overline">Latest from the school</span>
+              <h2 class="section-title">Announcements &amp; Posts</h2>
+              <p class="section-sub">See the pinned announcement and all published school updates.</p>
+            </div>
+
+            <!-- Pinned announcement -->
+            <article class="fb-post fb-post--featured" id="announcementCard">
+              <header class="fb-post-head">
+                <div class="fb-avatar">
+                  <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise">
+                </div>
+                <div class="fb-meta">
+                  <div class="fb-author-row">
+                    <span class="fb-author" id="announcementAuthor">Campers' Admin</span>
+                    <span class="fb-verified" title="Verified"><i class="bi bi-patch-check-fill"></i></span>
+                  </div>
+                  <div class="fb-time">
+                    <i class="bi bi-pin-angle-fill"></i>
+                    Pinned announcement
+                  </div>
+                </div>
+                <span class="fb-chip fb-chip--announce"><i class="bi bi-megaphone-fill"></i> Announcement</span>
+              </header>
+              <div class="fb-body">
+                <h3 class="fb-title" id="announcementTitle">No announcement title yet</h3>
+                <div class="fb-text" id="announcementBody">Your latest announcement will appear here.</div>
+                <div class="fb-extra" id="announcementExtra" style="display:none;"></div>
               </div>
             </article>
-          {% endif %}
 
-        </div>
-      </main>
-
-      <!-- RIGHT SIDEBAR -->
-      <aside class="feed-rightbar">
-        <div class="sidebar-card glass-panel">
-          <div class="sidebar-head">
-            <div class="pill-label">
-              <i class="bi bi-bar-chart-fill"></i>
-              <span>Overview</span>
+            <!-- Feed -->
+            <div id="publishedPostsList" class="fb-feed">
+              <div class="empty-box large-empty">
+                <i class="bi bi-stickies"></i>
+                <span>No published posts yet.</span>
+              </div>
             </div>
-            <h3>Feed Organizer</h3>
-          </div>
-
-          <div class="summary-list">
-            <div class="summary-row">
-              <span>Total Feed Items</span>
-              <strong>
-                {% if resources_data.posts %}
-                  {{ 1 + (resources_data.posts | length) }}
-                {% elif resources_data.updates %}
-                  {{ 1 + (resources_data.updates | length) }}
-                {% else %}
-                  1
-                {% endif %}
-              </strong>
-            </div>
-
-            <div class="summary-row">
-              <span>Pinned</span>
-              <strong>1</strong>
-            </div>
-
-            <div class="summary-row">
-              <span>Regular Posts</span>
-              <strong>
-                {% if resources_data.posts %}
-                  {{ resources_data.posts | length }}
-                {% elif resources_data.updates %}
-                  {{ resources_data.updates | length }}
-                {% else %}
-                  0
-                {% endif %}
-              </strong>
-            </div>
-          </div>
-
-          <div class="side-note">
-            Updates are arranged in a clean vertical stream so reading stays smooth even when more posts are added.
           </div>
         </div>
+      </section>
 
-        <div class="sidebar-card glass-panel">
-          <div class="sidebar-head">
-            <div class="pill-label">
-              <i class="bi bi-pin-map-fill"></i>
-              <span>Location</span>
-            </div>
-            <h3>{{ resources_data.school.name }}</h3>
+      <!--MAPS-->
+      <section class="theme-band band-dark" id="mapsSection">
+        <div class="band-inner">
+          <div class="section-head">
+            <span class="section-overline section-overline--light">Navigate campus</span>
+            <h2 class="section-title section-title--light">Maps &amp; Travel</h2>
+            <p class="section-sub section-sub--light">Preview the school location and plan your route.</p>
           </div>
 
-          <div class="mini-map-wrap">
-            <iframe
-              id="schoolMap"
-              src="{{ resources_data.school.map_embed }}"
-              loading="lazy"
-              allowfullscreen
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-
-          <button
-            type="button"
-            class="soft-btn full-btn"
-            onclick="window.open('{{ resources_data.school.google_maps_search }}','_blank')">
-            <i class="bi bi-box-arrow-up-right"></i>
-            Open in Google Maps
-          </button>
-        </div>
-      </aside>
-    </section>
-
-    <!-- ROUTE / MAP SECTION -->
-    <section class="travel-section glass-panel">
-      <div class="travel-section-head">
-        <div>
-          <div class="pill-label">
-            <i class="bi bi-geo-alt-fill"></i>
-            <span>Campus Finder</span>
-          </div>
-          <h2>Locate the school and estimate your travel</h2>
-          <p>Use your current location or type your address manually to get a route and estimated travel time.</p>
-        </div>
-      </div>
-
-      <div class="travel-grid">
-        <div class="travel-card">
-          <div class="travel-card-head">
-            <h3>Get Directions</h3>
-            <p>Enter your address or detect your location automatically.</p>
-          </div>
-
-          <div class="travel-form">
-            <label for="userLocation">Your location</label>
-
-            <div class="input-row">
-              <input
-                type="text"
-                id="userLocation"
-                placeholder="Enter your address, barangay, or city"
-              />
-              <button id="detectLocationBtn" class="soft-btn detect-btn" type="button">
-                <i class="bi bi-crosshair"></i>
-                Detect
+          <div class="maps-grid">
+            <div class="content-card map-card">
+              <div class="card-head">
+                <h3><i class="bi bi-map-fill"></i> School Map</h3>
+              </div>
+              <div class="mini-map-wrap">
+                <iframe id="miniMapFrame"
+                  src="{{ resources_data.school.map_embed if resources_data and resources_data.school and resources_data.school.map_embed else 'https://www.google.com/maps?q=Senior+Highschool+within+Bacoor+Elementary+School&output=embed' }}"
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+              <button class="action-btn primary-btn full-btn" type="button" onclick="openFullMap()">
+                <i class="bi bi-box-arrow-up-right"></i> Open Full Map
               </button>
             </div>
 
-            <button id="routeBtn" class="primary-btn" type="button">
-              <i class="bi bi-sign-turn-right-fill"></i>
-              Open Route
-            </button>
-          </div>
-
-          <div class="travel-info">
-            <div class="travel-row">
-              <span>Destination</span>
-              <strong>{{ resources_data.school.name }}</strong>
-            </div>
-
-            <div class="travel-row">
-              <span>Distance</span>
-              <strong id="travelDistance">--</strong>
-            </div>
-
-            <div class="travel-row">
-              <span>Estimated travel time</span>
-              <strong id="travelDuration">--</strong>
-            </div>
-
-            <div class="travel-row">
-              <span>Mode</span>
-              <strong id="travelMode">Driving estimate</strong>
-            </div>
-
-            <div class="travel-row">
-              <span>Status</span>
-              <strong id="travelStatus">Waiting for your location input</strong>
+            <div class="content-card map-card">
+              <div class="card-head">
+                <h3><i class="bi bi-sign-turn-right-fill"></i> Travel Estimate</h3>
+              </div>
+              <div class="travel-form">
+                <div class="input-row">
+                  <input type="text" id="userLocation" placeholder="Enter your starting location" />
+                  <button type="button" class="action-btn secondary-btn" id="detectLocationBtn" title="Use current location">
+                    <i class="bi bi-crosshair"></i>
+                  </button>
+                </div>
+                <button type="button" class="action-btn primary-btn" id="routeBtn">
+                  Get Route Estimate
+                </button>
+              </div>
+              <div class="travel-info">
+                <div class="travel-row"><span>Destination</span><strong id="travelDestination">Senior Highschool within Bacoor Elementary School</strong></div>
+                <div class="travel-row"><span>Status</span><strong id="travelStatus">Waiting for input</strong></div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div class="travel-note">
-            Travel time shown here is an estimate and may differ from live traffic data in Google Maps.
+      <!-- CONTACTS + EMERGENCY + LINKS-->
+      <section class="theme-band band-campers band-contacts" id="contactsLinksSection">
+        <div class="band-inner">
+          <div class="section-head">
+            <span class="section-overline section-overline--light">Reach the school</span>
+            <h2 class="section-title section-title--light">Contacts &amp; Links</h2>
+            <p class="section-sub section-sub--light">Campus contacts, emergency hotlines, and official pages.</p>
+          </div>
+
+          <!--Campus Contacts + Official Links -->
+          <div class="contacts-top-row">
+            <section class="content-card">
+              <div class="card-head"><h3><i class="bi bi-telephone-fill"></i> Campus Contacts</h3></div>
+              <div class="contact-list" id="contactList">
+                <div class="contact-row">
+                  <span class="contact-label">Phone</span>
+                  <div class="contact-value">No contact information yet.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="content-card">
+              <div class="card-head"><h3><i class="bi bi-link-45deg"></i> Official Links</h3></div>
+              <div class="official-links" id="officialLinksList">
+                <div class="empty-box compact-empty">
+                  <i class="bi bi-link-45deg"></i>
+                  <span>No official links yet.</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!--Emergency Hotlines-->
+          <div class="emergency-full-row">
+            <section class="content-card emergency-card emergency-card--wide">
+              <div class="card-head">
+                <h3><i class="bi bi-exclamation-triangle-fill"></i> Emergency Hotlines</h3>
+                <span class="emergency-subtitle">Tap a row to call</span>
+              </div>
+              <div class="emergency-list emergency-list--grid" id="emergencyList">
+                <!-- BRRMO -->
+                <a href="tel:046-417-0727" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-orange"><i class="bi bi-shield-exclamation"></i></div>
+                    <div><strong>BRRMO</strong><span>Bacoor Disaster Risk Reduction & Management Office</span></div>
+                  </div>
+                  <span class="em-num">(046) 417-0727</span>
+                </a>
+                <!-- PNP Bacoor -->
+                <a href="tel:046-417-6366" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-blue"><i class="bi bi-shield-shaded"></i></div>
+                    <div><strong>PNP Bacoor City</strong><span>Philippine National Police — Bacoor City</span></div>
+                  </div>
+                  <span class="em-num">(046) 417-6366</span>
+                </a>
+                <!-- BFP Bacoor -->
+                <a href="tel:046-417-6060" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-red"><i class="bi bi-fire"></i></div>
+                    <div><strong>BFP Bacoor City</strong><span>Bureau of Fire Protection — Bacoor City</span></div>
+                  </div>
+                  <span class="em-num">(046) 417-6060</span>
+                </a>
+                <!-- National Emergency -->
+                <a href="tel:911" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-red"><i class="bi bi-shield-fill"></i></div>
+                    <div><strong>National Emergency</strong><span>Police, Fire, Medical</span></div>
+                  </div>
+                  <span class="em-num">911</span>
+                </a>
+                <!-- Red Cross -->
+                <a href="tel:143" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-green"><i class="bi bi-heart-pulse-fill"></i></div>
+                    <div><strong>Philippine Red Cross</strong><span>Medical assistance & disaster relief</span></div>
+                  </div>
+                  <span class="em-num">143</span>
+                </a>
+                <!-- Bacoor Doctors Medical Center -->
+                <a href="tel:046-416-6275" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-teal"><i class="bi bi-hospital-fill"></i></div>
+                    <div><strong>Bacoor Doctors Medical Center</strong><span>Nearest hospital</span></div>
+                  </div>
+                  <span class="em-num">(046) 416-6275</span>
+                </a>
+                <!-- Bacoor District Hospital -->
+                <a href="tel:09067940208" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-teal"><i class="bi bi-hospital-fill"></i></div>
+                    <div><strong>Bacoor District Hospital</strong><span>Public district hospital</span></div>
+                  </div>
+                  <span class="em-num">0906 794 0208</span>
+                </a>
+                <!-- St. Dominic -->
+                <a href="tel:046-417-2520" class="emergency-row">
+                  <div class="em-left">
+                    <div class="em-icon em-teal"><i class="bi bi-hospital-fill"></i></div>
+                    <div><strong>St. Dominic Medical Center</strong><span>Private hospital — Bacoor</span></div>
+                  </div>
+                  <span class="em-num">(046) 417-2520</span>
+                </a>
+              </div>
+            </section>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ABOUT UNIWISE -->
+      <section class="theme-band band-navy" id="aboutUniwiseSection">
+        <div class="navy-grid-lines"></div>
+        <div class="navy-glow"></div>
+        <div class="band-inner">
+
+          <div class="uw-layout">
+
+            <div class="uw-content">
+              <div class="uw-eyebrow">
+                <span class="uw-eyebrow-dot"></span>
+                Powered by AI. Built for Campers.
+              </div>
+              <h2 class="uw-heading">
+                <span id="aboutTitle">Your Intelligent<br>School Companion</span>
+              </h2>
+              <p class="uw-text" id="aboutText1">UniWise is an AI-powered school assistant built specifically for the students, faculty, and visitors of SHS within Bacoor Elementary School. It delivers fast, accurate, and conversational answers — no more waiting in line or sifting through pages.</p>
+              <p class="uw-text" id="aboutText2">Ask about enrollment requirements, class schedules, office hours, campus events, school announcements, emergency contacts, or directions around the campus. UniWise is available anytime, giving you the information you need, when you need it.</p>
+              <div class="uw-caps">
+                <span class="uw-cap"><i class="bi bi-mortarboard-fill"></i> Admission Requirements</span>
+                <span class="uw-cap"><i class="bi bi-calendar3"></i> Class Schedules</span>
+                <span class="uw-cap"><i class="bi bi-telephone-fill"></i> Office Contacts</span>
+                <span class="uw-cap"><i class="bi bi-megaphone-fill"></i> Announcements</span>
+                <span class="uw-cap"><i class="bi bi-geo-alt-fill"></i> Location Guidance</span>
+                <span class="uw-cap"><i class="bi bi-patch-question-fill"></i> Campus FAQs</span>
+                <span class="uw-cap"><i class="bi bi-clock-history"></i> Available 24/7</span>
+                <span class="uw-cap"><i class="bi bi-translate"></i> Easy to Use</span>
+              </div>
+            </div>
+            <div class="uw-card-wrap">
+              <div class="uw-chat-card">
+                <div class="uw-chat-header">
+                  <div class="uw-chat-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <span class="uw-chat-title">UniWise AI</span>
+                  <span class="uw-chat-status"><i class="bi bi-circle-fill"></i> Online</span>
+                </div>
+                <div class="uw-chat-body">
+                  <div class="uw-chat-msg uw-msg-user">
+                    <span>What are the admission requirements?</span>
+                  </div>
+                  <div class="uw-chat-msg uw-msg-bot">
+                    <div class="uw-bot-avatar"><i class="bi bi-cpu-fill"></i></div>
+                    <span>Here are the admission requirements for Senior High School enrollment at Bacoor Elementary School…</span>
+                  </div>
+                  <div class="uw-chat-msg uw-msg-user">
+                    <span>What are the office hours?</span>
+                  </div>
+                  <div class="uw-chat-msg uw-msg-bot">
+                    <div class="uw-bot-avatar"><i class="bi bi-cpu-fill"></i></div>
+                    <span>The registrar's office is open Monday to Friday, 8:00 AM – 5:00 PM.</span>
+                  </div>
+                </div>
+                <div class="uw-chat-input-row">
+                  <span class="uw-chat-input-fake">Ask UniWise school inquiries...</span>
+                  <button type="button" class="uw-chat-send"><i class="bi bi-send-fill"></i></button>
+                </div>
+              </div>
+              <div class="uw-card-glow"></div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Page footer -->
+    <footer class="resources-footer">
+      <div class="band-inner">
+        <span>© UniWise — AI Based School Queries</span>
+        <span class="footer-sep">·</span>
+        <span>Senior Highschool within Bacoor Elementary School</span>
+      </div>
+    </footer>
+
+    <div class="strand-drawer-overlay" id="strandOverlay" aria-hidden="true"></div>
+    <aside class="strand-drawer" id="strandDrawer" aria-label="Strand information" hidden>
+      <div class="strand-drawer-inner">
+        <button class="strand-drawer-close" id="strandDrawerClose" type="button" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+
+        <!-- STEM content -->
+        <div class="strand-panel" id="strandPanelStem">
+          <div class="strand-header strand-header-stem">
+            <div class="strand-badge"><i class="bi bi-calculator-fill"></i></div>
+            <div>
+              <span class="strand-overline">Academic Track</span>
+              <h2>STEM Strand</h2>
+              <p>Science, Technology, Engineering & Mathematics</p>
+            </div>
+          </div>
+          <div class="strand-body">
+            <div class="strand-section">
+              <h4><i class="bi bi-info-circle-fill"></i> About the Strand</h4>
+              <p>The STEM strand under the Academic Track prepares students for college courses in science, technology, engineering, and mathematics. It emphasizes critical thinking, problem-solving, and research skills essential for STEM-related degrees.</p>
+            </div>
+            <div class="strand-section">
+              <h4><i class="bi bi-journal-text"></i> Core Subjects</h4>
+              <ul class="strand-list">
+                <li><i class="bi bi-check2-circle"></i> Pre-Calculus & Basic Calculus</li>
+                <li><i class="bi bi-check2-circle"></i> General Chemistry 1 & 2</li>
+                <li><i class="bi bi-check2-circle"></i> General Biology 1 & 2</li>
+                <li><i class="bi bi-check2-circle"></i> General Physics 1 & 2</li>
+                <li><i class="bi bi-check2-circle"></i> Research / Capstone Project</li>
+                <li><i class="bi bi-check2-circle"></i> Empowerment Technologies</li>
+              </ul>
+            </div>
+            <div class="strand-section">
+              <h4><i class="bi bi-mortarboard-fill"></i> Career Pathways</h4>
+              <div class="strand-pills">
+                <span>Engineering</span><span>Medicine</span><span>Architecture</span>
+                <span>Computer Science</span><span>Nursing</span><span>Education (Science/Math)</span>
+                <span>Information Technology</span><span>Environmental Science</span>
+              </div>
+            </div>
+            <div class="strand-section">
+              <h4><i class="bi bi-calendar3"></i> Year Offered</h4>
+              <p>STEM has been offered at SHS within Bacoor ES since <strong>2016</strong>, the founding year of the school.</p>
+            </div>
           </div>
         </div>
 
-        <div class="travel-card map-card">
-          <div class="travel-card-head">
-            <h3>Campus Map</h3>
-            <p>Explore the school location in a larger map panel.</p>
+        <!-- HUMSS content -->
+        <div class="strand-panel" id="strandPanelHumss" hidden>
+          <div class="strand-header strand-header-humss">
+            <div class="strand-badge"><i class="bi bi-book-fill"></i></div>
+            <div>
+              <span class="strand-overline">Academic Track</span>
+              <h2>HUMSS Strand</h2>
+              <p>Humanities & Social Sciences</p>
+            </div>
           </div>
-
-          <div class="large-map-wrap">
-            <iframe
-              src="{{ resources_data.school.map_embed }}"
-              loading="lazy"
-              allowfullscreen
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+          <div class="strand-body">
+            <div class="strand-section">
+              <h4><i class="bi bi-info-circle-fill"></i> About the Strand</h4>
+              <p>The HUMSS strand focuses on society, culture, politics, literature, and the arts. It develops students' communication, analytical, and creative skills — ideal for those pursuing careers in education, law, journalism, social work, and the humanities.</p>
+            </div>
+            <div class="strand-section">
+              <h4><i class="bi bi-journal-text"></i> Core Subjects</h4>
+              <ul class="strand-list">
+                <li><i class="bi bi-check2-circle"></i> Creative Writing</li>
+                <li><i class="bi bi-check2-circle"></i> Trends, Networks & Critical Thinking</li>
+                <li><i class="bi bi-check2-circle"></i> Introduction to World Religions & Belief Systems</li>
+                <li><i class="bi bi-check2-circle"></i> Disciplines & Ideas in Social Sciences</li>
+                <li><i class="bi bi-check2-circle"></i> Philippine Politics & Governance</li>
+                <li><i class="bi bi-check2-circle"></i> Community Engagement & Solidarity</li>
+              </ul>
+            </div>
+            <div class="strand-section">
+              <h4><i class="bi bi-mortarboard-fill"></i> Career Pathways</h4>
+              <div class="strand-pills">
+                <span>Law</span><span>Journalism</span><span>Social Work</span>
+                <span>Education (Humanities)</span><span>Psychology</span><span>Political Science</span>
+                <span>Communication Arts</span><span>Public Administration</span>
+              </div>
+            </div>
+            <div class="strand-section">
+              <h4><i class="bi bi-calendar3"></i> Year Offered</h4>
+              <p>HUMSS was added to SHS within Bacoor ES in <strong>2020</strong>, expanding the school's academic offerings.</p>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </aside>
 
+    <script>
+      window.resourcesConfig = {
+        schoolName: {{ (resources_data.school.name if resources_data and resources_data.school and resources_data.school.name else "Senior Highschool within Bacoor Elementary School") | tojson }},
+        schoolDestination: {{ (resources_data.school.destination if resources_data and resources_data.school and resources_data.school.destination else "Senior Highschool within Bacoor Elementary School, Bacoor, Cavite") | tojson }},
+        schoolMapEmbed: {{ (resources_data.school.map_embed if resources_data and resources_data.school and resources_data.school.map_embed else "https://www.google.com/maps?q=Senior+Highschool+within+Bacoor+Elementary+School&output=embed") | tojson }},
+        schoolGoogleMapsSearch: {{ (resources_data.school.google_maps_search if resources_data and resources_data.school and resources_data.school.google_maps_search else "https://www.google.com/maps/search/?api=1&query=Senior+Highschool+within+Bacoor+Elementary+School") | tojson }}
+      };
+      window.resourcesBootstrap = {{ (resources_data if resources_data else {}) | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='responsive.js') }}?v=501"></script>
+    <script src="{{ url_for('static', filename='view-mode-init.js') }}"></script>
+    <script src="{{ url_for('static', filename='resources.js') }}?v=502"></script>
   </div>
-
-  <script>
-    window.resourcesConfig = {
-      schoolName: {{ resources_data.school.name | tojson }},
-      schoolDestination: {{ resources_data.school.destination | tojson }},
-      schoolCoords: {
-        lat: {{ resources_data.school.coordinates.lat }},
-        lon: {{ resources_data.school.coordinates.lon }}
-      }
-    };
-  </script>
-
-  <script src="{{ url_for('static', filename='resources.js') }}?v=50"></script>
 </body>
 </html>

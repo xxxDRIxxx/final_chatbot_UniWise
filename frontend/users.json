@@ -2,7 +2,8 @@
   "admins": [
     {
       "username": "admin",
-      "password": "admin123"
+      "password": "admin123",
+      "totp_secret": "7PCHCEFZ62ODDPAQBVPIIY3XECY3NDEO"
     }
   ]
 }
