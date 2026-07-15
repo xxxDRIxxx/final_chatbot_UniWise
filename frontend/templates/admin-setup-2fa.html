@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UW | Setup 2FA</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uniwiselogo&text.png') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin-login.css') }}?v=600">
+  <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}?v=500">
+</head>
+<body>
+
+  <header class="admin-login-header">
+    <div class="login-header-left">
+      <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise" class="login-header-logo" />
+      <div class="login-header-text">
+        <h1 class="login-header-title">UniWise</h1>
+        <span class="login-header-sub">Setup 2FA</span>
+      </div>
+    </div>
+    <a href="{{ url_for('login') }}" class="login-header-back">
+      <i class="bi bi-chevron-left"></i> Back
+    </a>
+  </header>
+
+  <main class="login-shell">
+    <section class="login-card otp-card">
+
+      <div class="login-header">
+        <div class="brand-logo-wrapper">
+          <img src="{{ url_for('static', filename='uniwiselogo&text.png') }}" alt="UniWise Logo" class="brand-logo">
+        </div>
+        <div class="login-badge">
+          <i class="bi bi-phone"></i> 2-Step Verification Setup
+        </div>
+        <h1>Set up Authenticator</h1>
+        <p>Scan the QR code below in Microsoft Authenticator, then enter the 6-digit code.</p>
+      </div>
+
+      <div class="setup-steps">
+        <div class="setup-step">
+          <span>1</span>
+          <p>Open <strong>Microsoft Authenticator</strong> on your phone.</p>
+        </div>
+        <div class="setup-step">
+          <span>2</span>
+          <p>Tap <strong>+</strong> and choose <strong>Other account</strong>.</p>
+        </div>
+        <div class="setup-step">
+          <span>3</span>
+          <p>Scan the QR code, then enter the 6-digit code below.</p>
+        </div>
+      </div>
+
+      <div class="qr-setup-box">
+        <img src="{{ qr_code_data }}" alt="Authenticator QR Code" class="qr-image">
+        <details class="manual-key-box">
+          <summary><i class="bi bi-keyboard"></i> Can't scan? Enter manually</summary>
+          <div class="secret-text">
+            <strong>Setup key:</strong><br>{{ secret }}
+          </div>
+        </details>
+      </div>
+
+      <div class="card-divider"></div>
+
+      <form method="POST" action="{{ url_for('setup_2fa') }}" class="login-form" id="setup2faForm" autocomplete="off">
+        <div class="input-group">
+          <div class="otp-label-row">
+            <label for="otp">Verification Code</label>
+            <div class="otp-timer-badge" id="otpTimerBadge">
+              <i class="bi bi-clock-history"></i>
+              <span>New code in <strong id="otpTimer">30s</strong></span>
+            </div>
+          </div>
+          <div class="input-shell otp-shell">
+            <i class="bi bi-shield-lock"></i>
+            <input
+              type="text"
+              id="otp"
+              name="otp"
+              placeholder="000000"
+              inputmode="numeric"
+              maxlength="6"
+              minlength="6"
+              required
+            >
+          </div>
+        </div>
+
+        {% if error %}
+        <div class="error-box">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="login-btn" id="finishSetupBtn">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>Finish Setup</span>
+        </button>
+
+        <div class="login-note">
+          <i class="bi bi-info-circle"></i>
+          This setup only needs to be done once unless 2FA is reset.
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const otpInput     = document.getElementById("otp");
+      const form         = document.getElementById("setup2faForm");
+      const finishBtn    = document.getElementById("finishSetupBtn");
+      const otpTimer     = document.getElementById("otpTimer");
+
+      function updateCountdown() {
+        const remaining = 30 - (Math.floor(Date.now() / 1000) % 30);
+        if (otpTimer) otpTimer.textContent = `${remaining}s`;
+      }
+
+      if (otpInput) {
+        otpInput.addEventListener("input", () => {
+          otpInput.value = otpInput.value.replace(/\D/g, "").slice(0, 6);
+        });
+        otpInput.focus();
+      }
+
+      if (form && finishBtn) {
+        form.addEventListener("submit", () => {
+          finishBtn.disabled = true;
+          finishBtn.innerHTML = `<i class="bi bi-arrow-repeat"></i><span>Finishing setup…</span>`;
+        });
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      if (window.history?.replaceState) {
+        window.history.replaceState(null, "", window.location.href);
+      }
+    });
+  </script>
+  <script src="{{ url_for('static', filename='responsive.js') }}?v=500"></script>
+  <script src="{{ url_for('static', filename='view-mode-init.js') }}"></script>
+</body>
+</html>
