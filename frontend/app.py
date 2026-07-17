@@ -14,11 +14,9 @@ import json
 import os
 import re
 import io
-import difflib
 import base64
 import secrets
 import threading
-import hashlib
 from datetime import datetime, timedelta
 from uuid import uuid4
 from werkzeug.utils import secure_filename
@@ -71,66 +69,64 @@ with open(FAQ_FILE, "r", encoding="utf-8") as f:
     text_content = f.read()
 
 docs = [Document(page_content=text_content)]
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+# Increase chunk size slightly so full paragraphs stay intact
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=700, chunk_overlap=150)
 splits = text_splitter.split_documents(docs)
 
-# Speed: only rebuild the vector DB (re-runs embeddings on every chunk) when
-# faq.txt has actually changed since last time. Previously this wiped and
-# rebuilt it on every single server restart, even with no edits to faq.txt --
-# on a slow machine that alone can take a while before the app can serve a
-# single request.
-FAQ_HASH_FILE = os.path.join(PROJECT_ROOT, ".faq_hash")
-current_faq_hash = hashlib.sha256(text_content.encode("utf-8")).hexdigest()
-previous_faq_hash = None
-if os.path.exists(FAQ_HASH_FILE):
-    with open(FAQ_HASH_FILE, "r", encoding="utf-8") as f:
-        previous_faq_hash = f.read().strip()
-
-needs_rebuild = (current_faq_hash != previous_faq_hash) or not os.path.exists(DB_FOLDER)
-
-if needs_rebuild and os.path.exists(DB_FOLDER):
-    print("faq.txt changed -- rebuilding vector database...")
+if os.path.exists(DB_FOLDER):
+    print("Clearing old memory to sync latest FAQ updates...")
     shutil.rmtree(DB_FOLDER)
 
+print("Building AI vector database...")
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
-
-if needs_rebuild:
-    print("Building AI vector database...")
-    vectorstore = Chroma.from_documents(
-        documents=splits,
-        embedding=embeddings,
-        persist_directory=DB_FOLDER
-    )
-    with open(FAQ_HASH_FILE, "w", encoding="utf-8") as f:
-        f.write(current_faq_hash)
-else:
-    print("faq.txt unchanged -- reusing existing vector database...")
-    vectorstore = Chroma(persist_directory=DB_FOLDER, embedding_function=embeddings)
-
-retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
-
-llm = ChatOllama(
-    model="llama3",
-    keep_alive="30m",  # keep the model loaded in Ollama between requests -- avoids a slow reload every message
-    num_predict=350,  # caps generation length; answers are meant to be brief, so this shortens response time
-    num_ctx=2048  # smaller context window than the 8192 default -- less memory to allocate per request,
-    # which speeds up generation. Raise this back up if answers ever get cut short because
-    # a question legitimately needs a lot of retrieved context (long announcement lists, etc).
+vectorstore = Chroma.from_documents(
+    documents=splits,
+    embedding=embeddings,
+    persist_directory=DB_FOLDER
 )
 
-# Warm the model up once at startup instead of on the first real user message --
-# the very first call to a model Ollama hasn't loaded yet is always the slowest one.
-try:
-    print("Warming up llama3...")
-    llm.invoke("Hello")
-    print("llama3 is warmed up and ready.")
-except Exception as warm_err:
-    print(f"Warm-up call failed (Ollama may not be running yet): {warm_err}")
+# ---------------------------------------------------------------------------
+# SCOPE GUARDRAIL (Fix 1 of 2 — retrieval side):
+# Plain top-k similarity search (the old `search_kwargs={"k": 3}` config)
+# ALWAYS returns k documents, even when none of them are actually relevant --
+# it just returns whichever chunks are "least far away." That means an
+# off-topic question like "write me a poem" still handed the LLM 3 FAQ
+# chunks about enrollment, which gave the model something to "helpfully"
+# riff on using its own general knowledge.
+#
+# Switching to `similarity_score_threshold` makes retrieval return NOTHING
+# when the best match still isn't relevant enough, so genuinely off-topic
+# questions reach the prompt with an empty {context}. This is what lets the
+# SCOPE rule in qa_prompt below actually have something to key off of.
+#
+# NOTE: You will likely need to tune RETRIEVAL_SCORE_THRESHOLD for your
+# embedding model/data. Start around 0.4-0.5, then log a few real on-topic
+# and off-topic queries and their scores to dial it in. If the bot starts
+# refusing real FAQ questions, lower it; if it still answers off-topic
+# questions, raise it.
+# ---------------------------------------------------------------------------
+RETRIEVAL_SCORE_THRESHOLD = 0.38
+
+retriever = vectorstore.as_retriever(
+    search_type="similarity_score_threshold",
+    search_kwargs={"k": 10, "score_threshold": RETRIEVAL_SCORE_THRESHOLD}
+)
+
+llm = ChatOllama(model="llama3")
 
 contextualize_q_prompt = ChatPromptTemplate.from_messages([
     ("system", """Given a chat history and the latest user question, formulate a standalone question 
-    which can be understood without the chat history. Do NOT answer the question, 
-    just reformulate it if needed and otherwise return it as is."""),
+    which can be understood without the chat history. 
+    
+    CRITICAL TRANSLATION RULE: 
+    You must expand common student abbreviations and slang into formal terms before searching. 
+    For example: 
+    - "tf" -> "tuition fee"
+    - "reqs" -> "requirements"
+    - "sched" -> "schedule"
+    - "prof" -> "teacher"
+    
+    Do NOT answer the question, just reformulate and translate it if needed, otherwise return it as is."""),
     MessagesPlaceholder("chat_history"),
     ("human", "{input}"),
 ])
@@ -145,13 +141,28 @@ qa_prompt = ChatPromptTemplate.from_messages([
     {latest_news}
 
     Strict Instructions:
+    0. SCOPE GUARDRAIL (HIGHEST PRIORITY): 
+    This school is "Senior High School within Bacoor Elementary School" (SHS within BES). Discuss ONLY topics in the Context, Latest Live Announcements, or general Q&A about THIS school.
+    - NEVER FILL GAPS: If the Context does not contain the SPECIFIC fact, decline to answer.
+    - NEVER break character to mention that you are an AI/LLM.
+
     1. GREETINGS: Only introduce yourself if the user explicitly types a greeting.
-    2. DEFAULT TO BRIEF: Provide brief, 1-to-2 sentence answers. 
-    3. DATE MATH: Calculate dates silently. If a post from July 7 says "tomorrow", state July 8.
-    4. PINNED POSTS: Always prioritize information from posts marked [PINNED - HIGH PRIORITY].
-    5. ATTACHMENTS (CRITICAL): If an announcement contains an 'Attachment URL', you MUST provide that link to the user in your response using this exact markdown format: [File Name](URL). Do not leave out the link if they ask about the post!
-    6. ANTI-HALLUCINATION: NEVER invent steps or fees.
-    7. FORMATTING: Bold the specific, important details a student would scan for -- deadlines, dates, fees, room/office names, requirements -- using markdown like **July 25** or **Room 204**. Do not bold entire sentences, only the key terms.
+    
+    2. DYNAMIC LENGTH (BRIEF BY DEFAULT): 
+    - Default to 1-to-2 sentence summaries.
+    - EXCEPTION: If the user uses "detailed", "full", "complete", "more info", or "tell me everything", provide a comprehensive answer.
+    
+    3. CLARIFY AMBIGUITY (CRITICAL): 
+    If the user's input is a broad, high-level topic keyword (specifically: "process", "requirements", "schedule", "enrollment", "clearance", "ID", "transfer", "admission") and does NOT specify which service or document they are asking about, you must NOT provide the answer immediately. Instead, ask for clarification. Reply naturally: "I can help with that! Could you please specify which service or document you are asking about?"
+    
+    4. DATE MATH: Calculate dates silently. 
+    5. PINNED POSTS: Always prioritize posts marked [PINNED - HIGH PRIORITY]. 
+    6. ATTACHMENTS (CRITICAL): Provide links as [File Name](URL). Never claim you cannot send images.
+    7. ANTI-HALLUCINATION: NEVER invent steps or fees.
+    8. FORMATTING: Bold important details like **July 25** or **Room 204**.
+    9. ANNOUNCEMENT FILTERING: If a user asks for announcements about a SPECIFIC topic, check LATEST LIVE ANNOUNCEMENTS. If no match, reply: "There are currently no announcements regarding [Topic]."
+    10. LISTING ANNOUNCEMENTS: If the user asks for "other", "all", or "more" announcements, provide a bulleted list of available posts.
+    11. TOPIC ISOLATION: ONLY answer the specific topic requested. Ignore unrelated context chunks.
     """),
     MessagesPlaceholder("chat_history"),
     ("human", "{input}"),
@@ -162,12 +173,7 @@ rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chai
 
 # Global chat history memory
 chat_history = []
-CHAT_HISTORY_MAX_MESSAGES = 12  # keep the last 6 exchanges (12 messages) -- speed:
 
-
-# everything in here gets resent to the LLM on every
-# single message, so an unbounded history makes each
-# reply in a long conversation slower than the last.
 
 # =========================
 # FILE HELPERS
@@ -613,193 +619,6 @@ def save_faq_insights(data):
 
 def normalize_question_text(text):
     return re.sub(r"\s+", " ", (text or "").strip().lower())
-
-
-# =========================
-# FAQ SIMILARITY MATCHING
-# ---------------------------------------------------------------
-# Used to (1) group differently-worded versions of the same question
-# together instead of creating a new pending FAQ for each phrasing,
-# and (2) auto-fold a new question into an already-approved FAQ (as
-# a "variant" phrasing) instead of creating a duplicate.
-#
-# Matching is semantic first (reuses the same Ollama embedding model
-# already loaded for the chatbot's RAG search), with a lexical
-# fallback (keyword overlap + fuzzy string ratio) used only if the
-# embedding call fails, e.g. Ollama isn't reachable.
-#
-# TUNE THESE against your real traffic -- these are starting points,
-# not guaranteed-correct values. Raise them if unrelated questions
-# start getting merged together; lower them if obvious duplicates
-# ("enrollment" vs "enrollment form") keep showing up as separate
-# pending entries.
-# =========================
-FAQ_STOP_WORDS = {
-    "the", "a", "an", "is", "are", "was", "were", "do", "does", "did", "can", "could",
-    "will", "would", "should", "may", "might", "how", "what", "when", "where", "who",
-    "why", "which", "to", "of", "in", "on", "at", "for", "with", "about", "and", "or",
-    "but", "if", "i", "you", "my", "your", "we", "our", "they", "their", "it", "its",
-    "be", "have", "has", "had", "am", "been", "being", "get", "got", "please", "tell",
-    "me", "us", "this", "that", "these", "those", "not", "no", "than", "then", "there",
-    "here",
-}
-
-# Cosine similarity (semantic) thresholds
-FAQ_MERGE_THRESHOLD = 0.86         # confident enough to treat as literally the same question
-FAQ_SUGGESTION_THRESHOLD = 0.68    # loose enough to surface as a possible "reuse this answer" suggestion
-
-# Fuzzy/keyword-overlap (lexical) thresholds -- only used if embeddings fail
-FAQ_MERGE_THRESHOLD_LEXICAL = 0.6
-FAQ_SUGGESTION_THRESHOLD_LEXICAL = 0.4
-
-
-def extract_keywords(text):
-    words = re.findall(r"[a-z0-9]+", (text or "").lower())
-    return [w for w in words if len(w) > 2 and w not in FAQ_STOP_WORDS]
-
-
-def lexical_similarity(a, b):
-    """Fallback similarity using keyword overlap (Jaccard) blended with a
-    fuzzy character-level ratio, so typos and reordering still match."""
-    kw_a, kw_b = set(extract_keywords(a)), set(extract_keywords(b))
-    jaccard = (len(kw_a & kw_b) / len(kw_a | kw_b)) if (kw_a or kw_b) else 0.0
-    ratio = difflib.SequenceMatcher(None, normalize_question_text(a), normalize_question_text(b)).ratio()
-    return max(jaccard, ratio)
-
-
-def cosine_similarity(vec_a, vec_b):
-    if not vec_a or not vec_b or len(vec_a) != len(vec_b):
-        return 0.0
-    dot = sum(x * y for x, y in zip(vec_a, vec_b))
-    norm_a = sum(x * x for x in vec_a) ** 0.5
-    norm_b = sum(y * y for y in vec_b) ** 0.5
-    if norm_a == 0 or norm_b == 0:
-        return 0.0
-    return dot / (norm_a * norm_b)
-
-
-def embed_question_text(text):
-    """Embeds a question using the same Ollama model used for the chatbot's
-    retriever. Returns None (never raises) if Ollama is unreachable, so the
-    caller can fall back to lexical matching instead of erroring out."""
-    text = (text or "").strip()
-    if not text:
-        return None
-    try:
-        return embeddings.embed_query(text)
-    except Exception as embed_err:
-        print(f"FAQ similarity: embedding failed, falling back to lexical match ({embed_err})")
-        return None
-
-
-def get_item_embedding(item):
-    """Returns (and caches on the item) the question embedding. Mutates
-    `item` in place -- caller is responsible for calling save_faq_insights()
-    afterward if the cached embedding should be persisted."""
-    cached = item.get("embedding")
-    if isinstance(cached, list) and cached:
-        return cached
-    vec = embed_question_text(item.get("question", ""))
-    if vec:
-        item["embedding"] = vec
-    return vec
-
-
-def question_similarity(question, item, question_embedding=None):
-    """Best-effort similarity score between a raw question string and an
-    existing FAQ item (checking the item's main question AND any stored
-    variant phrasings). Returns (score, used_semantic_bool)."""
-    vec_q = question_embedding if question_embedding is not None else embed_question_text(question)
-    best_score = 0.0
-    used_semantic = vec_q is not None
-
-    candidates = [item.get("question", "")] + list(item.get("variants") or [])
-    for candidate in candidates:
-        if not candidate:
-            continue
-        if vec_q is not None:
-            vec_c = get_item_embedding(item) if candidate == item.get("question", "") else embed_question_text(candidate)
-            if vec_c:
-                best_score = max(best_score, cosine_similarity(vec_q, vec_c))
-                continue
-        # Lexical fallback for this candidate (embeddings unavailable)
-        best_score = max(best_score, lexical_similarity(question, candidate))
-        used_semantic = False
-
-    return best_score, used_semantic
-
-
-def find_similar_faq(items, question, statuses=("approved", "pending"), exclude_id=None, mode="merge"):
-    """Finds the best-matching existing FAQ item for `question`.
-    mode="merge" uses the strict (duplicate-confidence) thresholds;
-    mode="suggest" uses the looser suggestion thresholds.
-    Returns (item_or_None, score)."""
-    question_embedding = embed_question_text(question)
-    best_item, best_score, best_semantic = None, 0.0, False
-
-    for item in items:
-        if exclude_id is not None and str(item.get("id")) == str(exclude_id):
-            continue
-        if item.get("status") not in statuses:
-            continue
-        score, used_semantic = question_similarity(question, item, question_embedding=question_embedding)
-        if score > best_score:
-            best_item, best_score, best_semantic = item, score, used_semantic
-
-    if best_item is None:
-        return None, 0.0
-
-    if mode == "suggest":
-        threshold = FAQ_SUGGESTION_THRESHOLD if best_semantic else FAQ_SUGGESTION_THRESHOLD_LEXICAL
-    else:
-        threshold = FAQ_MERGE_THRESHOLD if best_semantic else FAQ_MERGE_THRESHOLD_LEXICAL
-
-    if best_score >= threshold:
-        return best_item, best_score
-    return None, 0.0
-
-
-def add_variant_phrasing(item, phrasing):
-    """Records an alternate wording of a question on an existing FAQ item,
-    without duplicating the canonical question text."""
-    phrasing = (phrasing or "").strip()
-    if not phrasing:
-        return
-    variants = item.setdefault("variants", [])
-    norm_main = normalize_question_text(item.get("question", ""))
-    norm_phrasing = normalize_question_text(phrasing)
-    if norm_phrasing == norm_main:
-        return
-    if any(normalize_question_text(v) == norm_phrasing for v in variants):
-        return
-    variants.append(phrasing)
-
-
-def approve_faq_item(items, item_id):
-    """Approves a pending FAQ, merging it into an existing similar
-    *approved* FAQ if one already exists (instead of creating a duplicate
-    approved entry). Mutates `items` in place.
-    Returns (result_item, merged_bool) or (None, False) if not found."""
-    target = next((i for i in items if str(i.get("id")) == str(item_id)), None)
-    if not target:
-        return None, False
-
-    match, _score = find_similar_faq(items, target.get("question", ""), statuses=("approved",),
-                                      exclude_id=item_id, mode="merge")
-    if match:
-        match["count"] = int(match.get("count", 0)) + int(target.get("count", 0))
-        add_variant_phrasing(match, target.get("question", ""))
-        for variant in (target.get("variants") or []):
-            add_variant_phrasing(match, variant)
-        if not match.get("answer") and target.get("answer"):
-            match["answer"] = target.get("answer")
-        match["updated_at"] = now_str()
-        items[:] = [i for i in items if str(i.get("id")) != str(item_id)]
-        return match, True
-
-    target["status"] = "approved"
-    target["updated_at"] = now_str()
-    return target, False
 
 
 # =========================
@@ -1785,6 +1604,22 @@ def analytics():
             "error": str(e)
         }), 500
 
+import re
+
+def generate_chat_reply(user_input):
+    # 1. PYTHON-LEVEL SLANG TRANSLATOR
+    # This guarantees abbreviations are fixed BEFORE searching the database
+    slang_map = {
+        r'\btf\b': 'tuition fee',
+        r'\breqs\b': 'requirements',
+        r'\bsched\b': 'schedule',
+        r'\bprof\b': 'teacher',
+        r'\binfo\b': 'information'
+    }
+    
+    for slang, formal in slang_map.items():
+        # re.IGNORECASE makes sure it catches "TF", "Tf", and "tf"
+        user_input = re.sub(slang, formal, user_input, flags=re.IGNORECASE)
 
 # =========================
 # ROUTES - CHATBOT
@@ -1825,38 +1660,86 @@ def generate_chat_reply(user_input):
 
     latest_news_str = "\n\n".join(news_list) if news_list else "No recent announcements."
     # ---------------------------------------------------
+    # 1. PASTE THE JSON PARSING BLOCK HERE
+    try:
+        with open('resources_db.json', 'r', encoding='utf-8') as f:
+            db = json.load(f)
+            formatted_news = ""
+            
+            main_announcement = db.get('announcement', {})
+            if main_announcement:
+                main_title = main_announcement.get('title', 'Notice')
+                main_body = main_announcement.get('body', '')
+                formatted_news += f"[PINNED ANNOUNCEMENT] {main_title}: {main_body}\n\n"
+            
+            posts = db.get('posts', [])
+            posts.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+            
+            # Format the top 10 recent posts
+            for post in posts[:10]:
+                title = post.get('title', '').strip()
+                body = post.get('body', '').strip()  
+                date = post.get('created_at', 'Unknown Date')
+                
+                # FALLBACK: If title and body are empty (like an image-only post), give it a name
+                if not title and not body:
+                    title = "Image/File Update"
 
-    # 2. Get the answer from LangChain, passing the live news
-    # Speed optimization: the full rag_chain re-asks the LLM to "reformulate" the
-    # question using chat history before it even looks anything up. On the very
-    # first message of a conversation there is no history to reformulate against,
-    # so that step is pure overhead -- skip straight to the retriever + answer chain.
-    if chat_history:
-        response = rag_chain.invoke({
-            "input": user_input,
-            "chat_history": chat_history,
-            "latest_news": latest_news_str
-        })
-        full_answer = response.get("answer", "I'm having trouble retrieving that information.")
-    else:
-        retrieved_docs = retriever.invoke(user_input)
-        response = question_answer_chain.invoke({
-            "input": user_input,
-            "chat_history": chat_history,
-            "context": retrieved_docs,
-            "latest_news": latest_news_str
-        })
-        full_answer = response if isinstance(response, str) else response.get("answer",
-                                                                              "I'm having trouble retrieving that information.")
+                formatted_news += f"[{date}] {title}: {body}\n"
+                
+                attachments = post.get('attachments', [])
+                for att in attachments:
+                    url = att.get('url', '')
+                    name = att.get('name', 'Attachment')
+                    formatted_news += f"Attachment URL: [{name}]({url})\n"
+                    
+                formatted_news += "\n"
+                
+    except Exception as e:
+        formatted_news = "No live announcements currently available."
 
-    # 3. Update conversation memory (trimmed so long conversations don't keep
-    #    growing the prompt sent to the LLM on every message)
+    latest_news_str = formatted_news
+
+# 2. Get the answer from LangChain, passing the live news
+    try:
+        if chat_history:
+            # Full RAG chain: Rephrases the question using history, retrieves docs, and answers
+            response = rag_chain.invoke({
+                "input": user_input,
+                "chat_history": chat_history,
+                "latest_news": latest_news_str
+            })
+            # create_retrieval_chain always returns a dict containing the "answer" key
+            full_answer = response.get("answer", "I'm having trouble retrieving that information.")
+        else:
+            # First-message speed optimization: Bypasses history rephrasing entirely
+            retrieved_docs = retriever.invoke(user_input)
+            response = question_answer_chain.invoke({
+                "input": user_input,
+                "chat_history": [],
+                "context": retrieved_docs,
+                "latest_news": latest_news_str
+            })
+            # create_stuff_documents_chain returns a raw string, but we add a fallback check just in case
+            if isinstance(response, str):
+                full_answer = response
+            elif isinstance(response, dict):
+                full_answer = response.get("answer", "I'm having trouble retrieving that information.")
+            else:
+                full_answer = "I'm having trouble retrieving that information."
+                
+        # Clean up any accidental leading/trailing whitespace from the model output
+        full_answer = full_answer.strip()
+
+    except Exception as chain_error:
+        print(chain_error) # Keeps track of execution errors in your server console
+        full_answer = "I encountered an error while processing your request. Please try again."
+
+    # 3. Update conversation memory
     chat_history.extend([
         HumanMessage(content=user_input),
         AIMessage(content=full_answer),
     ])
-    if len(chat_history) > CHAT_HISTORY_MAX_MESSAGES:
-        chat_history = chat_history[-CHAT_HISTORY_MAX_MESSAGES:]
 
     # 4. Only attach an image if the answer actually references that specific
     #    post -- e.g. it includes the post's markdown link `[Name](url)` because
@@ -2031,21 +1914,7 @@ def api_faq_insights_create():
         existing["status"] = status
         existing["updated_at"] = now_str()
         save_faq_insights(items)
-        return jsonify({"success": True, "data": existing, "merged": False})
-
-    # Not an exact match -- check if this is just a differently-worded version
-    # of a question we already have, so we don't create a near-duplicate.
-    match, _score = find_similar_faq(items, question, statuses=("approved", "pending"), mode="merge")
-    if match:
-        match["count"] = int(match.get("count", 0)) + 1
-        add_variant_phrasing(match, question)
-        if answer and (status == "approved" or not match.get("answer")):
-            match["answer"] = answer
-        if status == "approved" and match.get("status") != "approved":
-            match["status"] = "approved"
-        match["updated_at"] = now_str()
-        save_faq_insights(items)
-        return jsonify({"success": True, "data": match, "merged": True})
+        return jsonify({"success": True, "data": existing})
 
     new_item = {
         "id": uuid4().hex,
@@ -2053,14 +1922,13 @@ def api_faq_insights_create():
         "answer": answer,
         "count": 1,
         "status": status,
-        "variants": [],
         "created_at": now_str(),
         "updated_at": now_str()
     }
     items.append(new_item)
     save_faq_insights(items)
 
-    return jsonify({"success": True, "data": new_item, "merged": False})
+    return jsonify({"success": True, "data": new_item})
 
 
 @app.route("/api/faq-insights/<item_id>", methods=["PUT"])
@@ -2078,18 +1946,14 @@ def api_faq_insights_update(item_id):
 
     if "question" in data:
         target["question"] = (data.get("question") or "").strip()
-        target.pop("embedding", None)  # question text changed -- stale cached vector
     if "answer" in data:
         target["answer"] = (data.get("answer") or "").strip()
-
-    result, merged = target, False
     if data.get("approve"):
-        result, merged = approve_faq_item(items, item_id)
-    else:
-        target["updated_at"] = now_str()
+        target["status"] = "approved"
+    target["updated_at"] = now_str()
 
     save_faq_insights(items)
-    return jsonify({"success": True, "data": result, "merged": merged})
+    return jsonify({"success": True, "data": target})
 
 
 @app.route("/api/faq-insights/<item_id>", methods=["DELETE"])
@@ -2115,46 +1979,16 @@ def api_faq_insights_approve(item_id):
         return auth_error
 
     items = load_faq_insights()
-    result, merged = approve_faq_item(items, item_id)
-
-    if result is None:
-        return jsonify({"success": False, "error": "FAQ not found."}), 404
-
-    save_faq_insights(items)
-    return jsonify({"success": True, "data": result, "merged": merged})
-
-
-@app.route("/api/faq-insights/<item_id>/suggestions", methods=["GET"])
-def api_faq_insights_suggestions(item_id):
-    auth_error = api_login_required()
-    if auth_error:
-        return auth_error
-
-    items = load_faq_insights()
     target = next((i for i in items if str(i.get("id")) == str(item_id)), None)
+
     if not target:
         return jsonify({"success": False, "error": "FAQ not found."}), 404
 
-    question = target.get("question", "")
-    question_embedding = embed_question_text(question)
+    target["status"] = "approved"
+    target["updated_at"] = now_str()
+    save_faq_insights(items)
 
-    suggestions = []
-    for item in items:
-        if str(item.get("id")) == str(item_id) or item.get("status") != "approved":
-            continue
-        score, used_semantic = question_similarity(question, item, question_embedding=question_embedding)
-        threshold = FAQ_SUGGESTION_THRESHOLD if used_semantic else FAQ_SUGGESTION_THRESHOLD_LEXICAL
-        if score >= threshold:
-            suggestions.append({
-                "id": item.get("id"),
-                "question": item.get("question", ""),
-                "answer": item.get("answer", ""),
-                "score": round(score, 3)
-            })
-
-    save_faq_insights(items)  # persist any embeddings computed/cached along the way
-    suggestions.sort(key=lambda s: s["score"], reverse=True)
-    return jsonify({"success": True, "data": suggestions[:5]})
+    return jsonify({"success": True, "data": target})
 
 
 # =========================
@@ -2188,37 +2022,21 @@ def api_sync_chat_history_to_faqs():
             continue
 
         norm = normalize_question_text(question)
-        exact = by_norm.get(norm)
-        if exact:
-            # Identical wording (after basic normalization) -- just bump the count.
-            exact["count"] = int(exact.get("count", 0)) + 1
-            exact["updated_at"] = now_str()
-            changed = True
-            continue
-
-        # Different wording -- check whether it's a variant of a question we
-        # already have (pending OR approved) before creating a new entry.
-        match, _score = find_similar_faq(items, question, statuses=("approved", "pending"), mode="merge")
-        if match:
-            match["count"] = int(match.get("count", 0)) + 1
-            add_variant_phrasing(match, question)
-            match["updated_at"] = now_str()
-            by_norm[norm] = match
-            changed = True
-            continue
-
-        new_item = {
-            "id": uuid4().hex,
-            "question": question,
-            "answer": "",
-            "count": 1,
-            "status": "pending",
-            "variants": [],
-            "created_at": now_str(),
-            "updated_at": now_str()
-        }
-        items.append(new_item)
-        by_norm[norm] = new_item
+        if norm in by_norm:
+            by_norm[norm]["count"] = int(by_norm[norm].get("count", 0)) + 1
+            by_norm[norm]["updated_at"] = now_str()
+        else:
+            new_item = {
+                "id": uuid4().hex,
+                "question": question,
+                "answer": "",
+                "count": 1,
+                "status": "pending",
+                "created_at": now_str(),
+                "updated_at": now_str()
+            }
+            items.append(new_item)
+            by_norm[norm] = new_item
         changed = True
 
     if changed:

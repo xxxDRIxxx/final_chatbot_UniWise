@@ -83,26 +83,6 @@
   },
   "posts": [
     {
-      "id": "4fa9ef80db8146ceb2cf738a5488505f",
-      "type": "announcement",
-      "title": "Testing 1",
-      "body": "Hello World!",
-      "extra": "",
-      "caption": "Hello World!",
-      "author": "admin",
-      "posted_by": "Campers' Admin",
-      "content_type": "image",
-      "attachments": [
-        {
-          "type": "image",
-          "url": "/static/uploads/fc302d6a4d3c40a8a29964513a9e3a5b.png",
-          "name": "School_Facade_1.png"
-        }
-      ],
-      "created_at": "2026-05-16 11:17:04",
-      "updated_at": "2026-05-16 11:17:04"
-    },
-    {
       "id": "a821f0ef7956461dbb57bd74aed02b13",
       "type": "announcement",
       "title": "CONGRATULATIONS! CAMPERS ARE SO PROUD OF YOU.",
@@ -110,8 +90,6 @@
       "extra": "",
       "caption": "Warmest congratulations to Mrs. Guianne Lei A. Lejano and Mr. Joven S. Rios for being QUALIFIED FOR RESEARCH PRESENTATION at the CALABARZON Educational Researchers’ Conference (CERCON) 2026!\r\n\r\nResearch Title: “Exploring Dimensions of Visual Learning: A Qualitative Systematic Review on the Utilization of Infographics in Media and Information Literacy.\"\r\n\r\nWe are proud of you! 👏",
       "author": "admin",
-      "posted_by": "Campers' Admin",
-      "content_type": "image",
       "attachments": [
         {
           "type": "image",
@@ -119,6 +97,7 @@
           "name": "pic2.jpg"
         }
       ],
+      "is_pinned": false,
       "created_at": "2026-05-16 03:21:25",
       "updated_at": "2026-05-16 03:21:25"
     },
@@ -130,8 +109,6 @@
       "extra": "",
       "caption": "In compliance with Department of Education (DepEd) Order No. 10, s. 2026, the Senior High School within Bacoor ES officially commenced the Summer Academic Remediation Program (SARP) today, May 6, 2026. This initiative is designed to support learners who may benefit from additional academic guidance and reinforcement in key subject areas.\r\nA Student Orientation was conducted to formally launch the program and to discuss its objectives, expectations, schedule, and requirements. The orientation was headed by Ms. Kynah Amor M. Darvin, School Principal II, together with the designated remediation teachers, Mr. Bryan Jazel Y. Paciente, SST I, and Mr. Neil Francis F. Sayson, SST I. During the session, students were encouraged to maximize this opportunity to enhance their academic skills, demonstrate commitment through regular attendance, and actively participate in all learning activities.\r\nThe school remains committed to providing inclusive and responsive interventions to ensure that every learner is supported and prepared for the upcoming school year.",
       "author": "admin",
-      "posted_by": "Campers' Admin",
-      "content_type": "image",
       "attachments": [
         {
           "type": "image",
@@ -139,6 +116,7 @@
           "name": "test1.jpg"
         }
       ],
+      "is_pinned": false,
       "created_at": "2026-05-16 03:18:37",
       "updated_at": "2026-05-16 03:18:37"
     },
@@ -150,8 +128,6 @@
       "extra": "",
       "caption": "📣 Senior High School Enrollment is Now Open!\r\nBegin your SHS journey at SHS within Bacoor Elementary School for SY 2026–2027.\r\n\r\nWe offer the Academic Track, including:\r\n🔬 STEM (Science, Technology, Engineering, and Mathematics) Cluster\r\n📚 Arts and Humanities and Social Sciences (HUMSS) Cluster\r\n\r\n📅 Enrollment runs from April 13 to June 5, 2026\r\n🕗 7:00 AM – 5:00 PM (Monday to Thursday)\r\n\r\nVisit the school to accomplish the Enhanced Basic Education Enrollment Form (E-BEEF) and submit the required documents.\r\n\r\n📌 Important Reminder:\r\nStudents who completed Early Registration (January 31–February 27, 2026) must still finalize their enrollment during the official enrollment period.\r\n\r\n📌 Basic Requirements:\r\n\r\n✅ Photocopy of PSA/NSO Birth Certificate\r\n✅ Original School Form 9 (Report Card)\r\n✅ Certificate of Completion (JHS)\r\n✅ 2 pieces 1x1 ID Photo (white background)\r\n✅ Long white folder\r\n\r\n📌 For Transferees:\r\n\r\n📂 Original School Form 9 from previous school (for evaluation)\r\n📂 Photocopy of PSA/NSO Birth Certificate\r\n📂 2 pieces 1x1 ID Photo (white background)\r\n📂 Long white folder\r\n\r\n🌟 Your future starts here! Enroll now and be a Proud Camper!",
       "author": "admin",
-      "posted_by": "Campers' Admin",
-      "content_type": "image",
       "attachments": [
         {
           "type": "image",
@@ -159,28 +135,9 @@
           "name": "pic1.jpg"
         }
       ],
+      "is_pinned": false,
       "created_at": "2026-05-14 15:05:22",
       "updated_at": "2026-05-14 15:05:22"
-    },
-    {
-      "id": "9bdcebdb309d4ea3ab880679b81a6813",
-      "type": "upload",
-      "title": "SAMPLE FILE",
-      "body": "sample_file",
-      "extra": "",
-      "caption": "sample_file",
-      "author": "admin",
-      "posted_by": "Campers' Registrar",
-      "content_type": "file",
-      "attachments": [
-        {
-          "type": "file",
-          "url": "/static/uploads/ad7b2445db6842919de1c9f748ebf5ee.pdf",
-          "name": "pageborder.pdf"
-        }
-      ],
-      "created_at": "2026-03-27 16:18:30",
-      "updated_at": "2026-03-27 16:18:30"
     }
   ]
 }

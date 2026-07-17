@@ -1,0 +1,30 @@
+{
+  "admins": {
+    "admin": {
+      "totp_secret": "AR2MGP64245SLR7UCW4EIFUPR4GISVG5",
+      "totp_enabled": true,
+      "failed_attempts": 0,
+      "lockout_until": null,
+      "session_version": 1,
+      "trusted_devices": [],
+      "access_log": [
+        {
+          "device": "Edge on Windows",
+          "device_type": "desktop",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0",
+          "ip": "127.0.0.1",
+          "login_at": "2026-07-17 17:35:01",
+          "device_id": null
+        },
+        {
+          "device": "Edge on Windows",
+          "device_type": "desktop",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0",
+          "ip": "127.0.0.1",
+          "login_at": "2026-07-17 15:46:12",
+          "device_id": null
+        }
+      ]
+    }
+  }
+}

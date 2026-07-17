@@ -6,7 +6,7 @@
    - All other logic unchanged
    ============================================================ */
 
-const HISTORY_KEY    = "uniwiseChatHistory_v6";   /* must match chat page */
+const HISTORY_KEY    = "uniwiseChatHistory_v5";   /* must match chat page */
 const THEME_KEY      = "uniwiseTheme_v5";          /* FIXED: was v4, chat uses v5 */
 const COLOR_KEY      = "uniwiseColorTheme_v1";
 const FONT_KEY       = "uniwiseFontStyle_v1";
