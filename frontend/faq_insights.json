@@ -3,11 +3,11 @@
     "id": "501532e1dcdc46a9aaf5fba98f5789ab",
     "question": "About the School",
     "answer": "",
-    "count": 18,
+    "count": 42,
     "status": "pending",
     "variants": [],
     "created_at": "2026-07-17 13:07:27",
-    "updated_at": "2026-07-17 17:32:26",
+    "updated_at": "2026-07-17 20:36:25",
     "embedding": [
       -0.037791368,
       0.037068285,
@@ -783,13 +783,13 @@
     "id": "839515f2c43940b086243d0fe9459593",
     "question": "enrollment",
     "answer": "",
-    "count": 47,
+    "count": 238,
     "status": "pending",
     "variants": [
       "Enrollment requirements"
     ],
     "created_at": "2026-07-17 13:07:29",
-    "updated_at": "2026-07-17 17:55:57",
+    "updated_at": "2026-07-17 20:36:25",
     "embedding": [
       -0.056847367,
       0.050435852,
@@ -2345,13 +2345,13 @@
     "id": "68cc61bd3804416fb685c7e1393a69da",
     "question": "hello",
     "answer": "",
-    "count": 12,
+    "count": 46,
     "status": "pending",
     "variants": [
       "hi"
     ],
     "created_at": "2026-07-17 13:13:45",
-    "updated_at": "2026-07-17 17:55:57",
+    "updated_at": "2026-07-17 20:36:25",
     "embedding": [
       0.017846163,
       -0.0058485162,
@@ -3127,11 +3127,11 @@
     "id": "78e1cf1be70049a09255ca97cfc4e8c4",
     "question": "Latest announcement",
     "answer": "",
-    "count": 39,
+    "count": 125,
     "status": "pending",
     "variants": [],
     "created_at": "2026-07-17 13:13:45",
-    "updated_at": "2026-07-17 17:55:57",
+    "updated_at": "2026-07-17 20:36:25",
     "embedding": [
       -0.00951429,
       -0.00051382923,
@@ -17199,10 +17199,10 @@
     "id": "4aedd6298ede427e92fa6029ec2b86a5",
     "question": "enrollment process",
     "answer": "",
-    "count": 13,
+    "count": 16,
     "status": "pending",
     "created_at": "2026-07-17 15:49:58",
-    "updated_at": "2026-07-17 17:32:26"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "1a0402ad5c5645149c61dc161dff44eb",
@@ -17244,10 +17244,10 @@
     "id": "4fa5edd481164b6d9a27bcfc2c9c7b2b",
     "question": "Enrollment requirements",
     "answer": "",
-    "count": 2,
+    "count": 5,
     "status": "pending",
     "created_at": "2026-07-17 16:01:06",
-    "updated_at": "2026-07-17 16:01:06"
+    "updated_at": "2026-07-17 19:47:18"
   },
   {
     "id": "5fba82498dad46bf8367d278cfbac551",
@@ -17307,261 +17307,927 @@
     "id": "49ae51d4f5154501b1858e4edde9a08c",
     "question": "enrollment announcements",
     "answer": "",
-    "count": 51,
+    "count": 153,
     "status": "pending",
     "created_at": "2026-07-17 16:20:34",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "d5c93027c2bd4d30b7c6707104ff10f3",
     "question": "is there an enrollment announcements?",
     "answer": "",
-    "count": 26,
+    "count": 76,
     "status": "pending",
     "created_at": "2026-07-17 16:28:57",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "4db2cdd24e7a48f08012638b096a6024",
     "question": "what are the announcements?",
     "answer": "",
-    "count": 13,
+    "count": 38,
     "status": "pending",
     "created_at": "2026-07-17 16:39:05",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "816278ee6807477aae3cb0e34ce2121d",
     "question": "enrollment announcement",
     "answer": "",
-    "count": 16,
+    "count": 66,
     "status": "pending",
     "created_at": "2026-07-17 16:39:18",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "105c4c827e6f4c0595d1eee45b220073",
     "question": "is there other announcements?",
     "answer": "",
-    "count": 10,
+    "count": 35,
     "status": "pending",
     "created_at": "2026-07-17 16:46:01",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "82f9136a31674d6a8d0cfbb607d05783",
     "question": "enrollment announcemntts",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "5362f27adacd43e5b6b2c0275b35dffe",
     "question": "can you tell me the top 5 announcements?",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "9cc289026e574d05ad195125fd2ff7dd",
     "question": "is there a class tomorrow?",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "cee98637c2484aa284887abdb6cf2286",
     "question": "I wpuld like to know how to cook sinigang",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "7e5bd1c675414495b46673858588d842",
     "question": "kung gusto ko lumipat ng eskuwelahan paano ko ito gagawin",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "8b57c44127e041ca865b6e06d70f66e6",
     "question": "can you tell me when is the enrollment?",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "0c7ca6a9736c4b69a9768717f8cc1ec1",
     "question": "can you tell me a short history of the school?",
     "answer": "",
-    "count": 9,
+    "count": 34,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "4ed058cd23ae42049ec08e451ffdce11",
     "question": "yes",
     "answer": "",
-    "count": 9,
+    "count": 37,
     "status": "pending",
     "created_at": "2026-07-17 16:56:58",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "a9033c8f25404ddfb2e312111720fa8c",
     "question": "can you tell me detailed history of the school?",
     "answer": "",
-    "count": 8,
+    "count": 33,
     "status": "pending",
     "created_at": "2026-07-17 17:00:30",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "3b93fe56942b4570bc384c33404dd114",
     "question": "hsitory of the school",
     "answer": "",
-    "count": 8,
+    "count": 33,
     "status": "pending",
     "created_at": "2026-07-17 17:00:30",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "126d1ce5745b4bed97f72eeba52c30c7",
     "question": "about the school?",
     "answer": "",
-    "count": 8,
+    "count": 33,
     "status": "pending",
     "created_at": "2026-07-17 17:00:30",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "c55b21c706de4c3c85fd093b0ab8c6ca",
     "question": "school history",
     "answer": "",
-    "count": 7,
+    "count": 32,
     "status": "pending",
     "created_at": "2026-07-17 17:04:26",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "a973e0ab810544819f414ac997fffabb",
     "question": "brief history of the school?",
     "answer": "",
-    "count": 7,
+    "count": 32,
     "status": "pending",
     "created_at": "2026-07-17 17:04:26",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "0a9fe8e1b0454636b47e2054c0db1e15",
     "question": "about school",
     "answer": "",
-    "count": 6,
+    "count": 49,
     "status": "pending",
     "created_at": "2026-07-17 17:09:45",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "ad3a3c01a7644fd2a90fec9243e35305",
     "question": "tf",
     "answer": "",
-    "count": 12,
+    "count": 62,
     "status": "pending",
     "created_at": "2026-07-17 17:09:45",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "74b929639b784f90b13b4fff85295047",
     "question": "tf means tuition fee",
     "answer": "",
-    "count": 6,
+    "count": 31,
     "status": "pending",
     "created_at": "2026-07-17 17:09:45",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "4b02be2a76614e20a3cd7f9cc54d7310",
     "question": "how much is the tuition fee",
     "answer": "",
-    "count": 6,
+    "count": 31,
     "status": "pending",
     "created_at": "2026-07-17 17:09:45",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "e56b3e6e67ff4ad4bd6760f7ee5a4e03",
     "question": "can you just send the pic 2 image",
     "answer": "",
-    "count": 5,
+    "count": 30,
     "status": "pending",
     "created_at": "2026-07-17 17:13:48",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "91e05da0f4b24aca8a5286bdc5db62ae",
     "question": "send me the pictures",
     "answer": "",
-    "count": 4,
+    "count": 29,
     "status": "pending",
     "created_at": "2026-07-17 17:35:40",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "c1323a51f56f43ea93e3c415b4486ae3",
     "question": "annnouncements with pics",
     "answer": "",
-    "count": 4,
+    "count": 29,
     "status": "pending",
     "created_at": "2026-07-17 17:35:40",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "1d3136073d73406a957e725a923d3cf3",
     "question": "enrolment",
     "answer": "",
-    "count": 3,
+    "count": 28,
     "status": "pending",
     "created_at": "2026-07-17 17:51:11",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "a3acb79bcc504eccaf35f088c0723a94",
     "question": "how",
     "answer": "",
-    "count": 3,
+    "count": 28,
     "status": "pending",
     "created_at": "2026-07-17 17:51:11",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "f56656073c6b46e48e8e673e721bd6e3",
     "question": "ano",
     "answer": "",
-    "count": 3,
+    "count": 28,
     "status": "pending",
     "created_at": "2026-07-17 17:51:11",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
   },
   {
     "id": "e055830496ec44da9fbd1dd006108a63",
     "question": "process",
     "answer": "",
-    "count": 4,
+    "count": 104,
     "status": "pending",
     "created_at": "2026-07-17 17:51:29",
-    "updated_at": "2026-07-17 17:55:57"
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "2cb098773ab340ae865d9d255374ec4e",
+    "question": "brief enrollment process",
+    "answer": "",
+    "count": 25,
+    "status": "pending",
+    "created_at": "2026-07-17 18:39:59",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "46c40062eeac431f96f3709f287ceb9c",
+    "question": "how to enroll",
+    "answer": "",
+    "count": 45,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "c8c14765df6648ea98b37b9e488dda07",
+    "question": "good day. what are the requirements.",
+    "answer": "",
+    "count": 24,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "489038c0f7d14b5fbe690b49e0cfed48",
+    "question": "mabuhay! ano mga kailangan",
+    "answer": "",
+    "count": 24,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "dc168a65e6dc41d6b0cee7b6cbaa3eac",
+    "question": "transfer requirements",
+    "answer": "",
+    "count": 24,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "3813f4e9d05a4166be43f985e11ebb55",
+    "question": "transfer from bacoor elementary school to another school",
+    "answer": "",
+    "count": 67,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "9faca3dfff6846b68f51f25034772d93",
+    "question": "how to cook boiled egg",
+    "answer": "",
+    "count": 24,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "7e96042201aa481a8850d22d05b68dd4",
+    "question": "how to travel to japan",
+    "answer": "",
+    "count": 48,
+    "status": "pending",
+    "created_at": "2026-07-17 19:00:24",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "1fb7c53cb09d47a9a4c27c690bf4c233",
+    "question": "how to cook sinigang",
+    "answer": "",
+    "count": 23,
+    "status": "pending",
+    "created_at": "2026-07-17 19:03:03",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "d85cdb4bb7614510869b650545589e3a",
+    "question": "how to cook fried egg",
+    "answer": "",
+    "count": 22,
+    "status": "pending",
+    "created_at": "2026-07-17 19:06:33",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "3a14a4d5d6c840b0830467da4f26a169",
+    "question": "i want to travel to japan",
+    "answer": "",
+    "count": 22,
+    "status": "pending",
+    "created_at": "2026-07-17 19:06:33",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "99f454a8fc06465faf6f0eee13976817",
+    "question": "what do you think of britney spears?",
+    "answer": "",
+    "count": 22,
+    "status": "pending",
+    "created_at": "2026-07-17 19:06:33",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "eaedd4bbec434e8bb3a417a948afd706",
+    "question": "enroll",
+    "answer": "",
+    "count": 22,
+    "status": "pending",
+    "created_at": "2026-07-17 19:06:33",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "78ec5382faac4e55972ef6e70e6de6c4",
+    "question": "request school records",
+    "answer": "",
+    "count": 21,
+    "status": "pending",
+    "created_at": "2026-07-17 19:13:34",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "6c19f7e7067c4fdcab306cbd7c8e2b62",
+    "question": "school location",
+    "answer": "",
+    "count": 21,
+    "status": "pending",
+    "created_at": "2026-07-17 19:13:34",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "01ff1c343f9c49e48cb974bc25e27c61",
+    "question": "school principal",
+    "answer": "",
+    "count": 21,
+    "status": "pending",
+    "created_at": "2026-07-17 19:13:34",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "14ad79716fe342eb92fc5eead1938422",
+    "question": "how to boil eggs and make salad",
+    "answer": "",
+    "count": 62,
+    "status": "pending",
+    "created_at": "2026-07-17 19:13:34",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "c7c3aee5badf48b39ce701c68cfde19e",
+    "question": "information for mobile legends",
+    "answer": "",
+    "count": 20,
+    "status": "pending",
+    "created_at": "2026-07-17 19:14:57",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "372040400f924a08a79b9c77d205f9c5",
+    "question": "requirements for enrollment",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "c461fbf0a42248639fc099c7c001ce46",
+    "question": "where to pay",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "78d8449d0a8e48a4af8bb34618fb2fe6",
+    "question": "programs offered",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "9a7daf7e5b2d460bbb06c411e02118cb",
+    "question": "elective subject",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "b8329bfe59214a74add02495030d3578",
+    "question": "how many minutes to boil eggs",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "3f04c1e9271840cb8ce6e8349b86f1c1",
+    "question": "how to brush your teeth with missing front teeth",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "30791ad7246342ee9af49b27b1cd1483",
+    "question": "how to reduce stress",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "2d2d00ae797c48b6a2ef5ba7ef4f8b6b",
+    "question": "engine requirements to pass thru NLEX",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "4c22ad61d89c46a08357b8e876dcee95",
+    "question": "difference between a gasoline and diesel engine",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "5b6f5c3aa2874582bbef852c53db2800",
+    "question": "how to court a woman with visual disabilities",
+    "answer": "",
+    "count": 19,
+    "status": "pending",
+    "created_at": "2026-07-17 19:27:56",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "6dbe549ab6ac47059b1409902ea53db5",
+    "question": "can you tell me about the history and how to boil an egg and make a salad",
+    "answer": "",
+    "count": 18,
+    "status": "pending",
+    "created_at": "2026-07-17 19:29:44",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "c8041df73f73488ebff69562603450ea",
+    "question": "yes please history of school",
+    "answer": "",
+    "count": 35,
+    "status": "pending",
+    "created_at": "2026-07-17 19:29:44",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "f14595f2c80d4f95842e40e31bead372",
+    "question": "how to boil and egg and make a salad",
+    "answer": "",
+    "count": 17,
+    "status": "pending",
+    "created_at": "2026-07-17 19:33:43",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "778b21e7f4ed49c7b126a8b669549c1c",
+    "question": "schedule",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 19:44:49",
+    "updated_at": "2026-07-17 19:47:18"
+  },
+  {
+    "id": "a0ea7e542e7b4a7db0704cd723277550",
+    "question": "enrollment schedule",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 19:44:49",
+    "updated_at": "2026-07-17 19:47:18"
+  },
+  {
+    "id": "85ec7146c4514bf68e8d36fd9540c79f",
+    "question": "when is the enrollment",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 19:44:49",
+    "updated_at": "2026-07-17 19:47:18"
+  },
+  {
+    "id": "1dc9d9a7cd094541a1f93969711b67c4",
+    "question": "is there a post for enrollment period?",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 19:44:49",
+    "updated_at": "2026-07-17 19:47:18"
+  },
+  {
+    "id": "57930c95237a42a3931faeab325ae121",
+    "question": "how to boil an egg and make a salad",
+    "answer": "",
+    "count": 45,
+    "status": "pending",
+    "created_at": "2026-07-17 19:49:42",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "3c801a3098864aaa868ff8083f773f74",
+    "question": "fadsdsfa",
+    "answer": "",
+    "count": 8,
+    "status": "pending",
+    "created_at": "2026-07-17 19:52:40",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "5c0266d2ac7d4bd9b6bd96c9c0c4856c",
+    "question": "how to relieve stress",
+    "answer": "",
+    "count": 4,
+    "status": "pending",
+    "created_at": "2026-07-17 20:00:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "137abf9e571044719e1986b617c3f1b0",
+    "question": "can you help me travel to japan please",
+    "answer": "",
+    "count": 4,
+    "status": "pending",
+    "created_at": "2026-07-17 20:00:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "a55825bd360640f1ac3e93f7b03656ac",
+    "question": "what specifications of engine to go to nlex",
+    "answer": "",
+    "count": 4,
+    "status": "pending",
+    "created_at": "2026-07-17 20:00:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "1e5e123f16b94893a9a00a5b236b1901",
+    "question": "enrollment procedures",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "0c0a328309e442ce9d656bb5edb87828",
+    "question": "who is the head of registrar",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "9e9858dca18945f5858f5f26e7b6bb89",
+    "question": "how to claim documents",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "9d527a537aa14ad083ac70d4f4a85080",
+    "question": "I will claim my nephew's report card.",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "8309fca8635542878bb55d458a85b839",
+    "question": "Graduation",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "bee2ee13e5d849928d91ac2486ff1870",
+    "question": "how to order food",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "679ab6293d4449c8bf45001179bd4cfe",
+    "question": "what to eat at the canteen",
+    "answer": "",
+    "count": 6,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "d0c8972d6ee3480cada8ea224637e201",
+    "question": "how to order for delivery",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "98a56bbc852649229d6df819f7a5e43e",
+    "question": "what is the best seller",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "15f726c8cb2b4c8eacb84045abdd18a7",
+    "question": "canteen menu",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-17 20:09:18",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "d59542b4a19749c589f860952e37f4d3",
+    "question": "how to travel to usa",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "bdf4e822a04b475e8ea7f21137dbaa9d",
+    "question": "where to drink",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "091ac27b349244b886cda134e99b7af6",
+    "question": "liquors available at the canteen",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "af8a821719ef476d9014072baae0eb8b",
+    "question": "teacher",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "bb7e774dbf3645f29473f664a6fed5f0",
+    "question": "who is joy abuan",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "496f90feae954347834277f13c3b0a4e",
+    "question": "who is her mother",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "ac2e7426d6984c7e91dc0712e4f47919",
+    "question": "how to make a salad and be healthy",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "b033fe83d527446caf0a944f495028dd",
+    "question": "is a sensor an actuator",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "26488c28b548461ebf7b26e777118ef5",
+    "question": "how to cook rice",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "f7c18aef58e446f4b66aab414c4d0955",
+    "question": "how to make 40k in a week",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "09768911c14442b29054423279e45855",
+    "question": "how to write in chinese",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "54c8ed96fe41410bb435459b6f2d587b",
+    "question": "best laptops of 2026",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "2fee89eed6d94136b318c80e7537141f",
+    "question": "what is ogtt",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "1f8d274210054817826edf8bdbcb34a0",
+    "question": "process of OGTT",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-17 20:26:52",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "2ce526a80409460aaa2111e1435a54bf",
+    "question": "how to make a salad",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "eb92ce3afe3e4b98bf8157c071ef8de9",
+    "question": "how to mkae a salad and boil an egg",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "73983bd7208341d7a0886d8541d9547d",
+    "question": "what are the foods in the canteen?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "6eed2b72235040e4ab3a66f29a4d894d",
+    "question": "who is the registrar",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "9942dec9096f464ab0961f0e90b3177e",
+    "question": "what is the name of the registrar staff",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "3a0b004ed5a04de59d7ee5014b25c862",
+    "question": "who are the admins",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "dd5f0930155f4794a52783baf8ee1734",
+    "question": "how to travel to canada",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "c26794e311a144ad8e4667f9e174752f",
+    "question": "how to mkae food delivery",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "5c74aea25aa6417bb800a6616a7f25a9",
+    "question": "what are the menu in the canteen",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "4f3a337c47b24c22987c1d8efc1e5202",
+    "question": "yes pleas",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-17 20:36:25"
   }
 ]
