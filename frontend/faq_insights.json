@@ -783,13 +783,13 @@
     "id": "839515f2c43940b086243d0fe9459593",
     "question": "enrollment",
     "answer": "",
-    "count": 238,
+    "count": 249,
     "status": "pending",
     "variants": [
       "Enrollment requirements"
     ],
     "created_at": "2026-07-17 13:07:29",
-    "updated_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-20 18:13:07",
     "embedding": [
       -0.056847367,
       0.050435852,
@@ -2345,13 +2345,13 @@
     "id": "68cc61bd3804416fb685c7e1393a69da",
     "question": "hello",
     "answer": "",
-    "count": 46,
+    "count": 52,
     "status": "pending",
     "variants": [
       "hi"
     ],
     "created_at": "2026-07-17 13:13:45",
-    "updated_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-20 18:13:07",
     "embedding": [
       0.017846163,
       -0.0058485162,
@@ -3127,11 +3127,11 @@
     "id": "78e1cf1be70049a09255ca97cfc4e8c4",
     "question": "Latest announcement",
     "answer": "",
-    "count": 125,
+    "count": 128,
     "status": "pending",
     "variants": [],
     "created_at": "2026-07-17 13:13:45",
-    "updated_at": "2026-07-17 20:36:25",
+    "updated_at": "2026-07-20 17:12:12",
     "embedding": [
       -0.00951429,
       -0.00051382923,
@@ -17244,10 +17244,10 @@
     "id": "4fa5edd481164b6d9a27bcfc2c9c7b2b",
     "question": "Enrollment requirements",
     "answer": "",
-    "count": 5,
+    "count": 13,
     "status": "pending",
     "created_at": "2026-07-17 16:01:06",
-    "updated_at": "2026-07-17 19:47:18"
+    "updated_at": "2026-07-20 18:13:07"
   },
   {
     "id": "5fba82498dad46bf8367d278cfbac551",
@@ -17478,10 +17478,10 @@
     "id": "ad3a3c01a7644fd2a90fec9243e35305",
     "question": "tf",
     "answer": "",
-    "count": 62,
+    "count": 63,
     "status": "pending",
     "created_at": "2026-07-17 17:09:45",
-    "updated_at": "2026-07-17 20:36:25"
+    "updated_at": "2026-07-20 18:13:07"
   },
   {
     "id": "74b929639b784f90b13b4fff85295047",
@@ -18229,5 +18229,266 @@
     "status": "pending",
     "created_at": "2026-07-17 20:36:25",
     "updated_at": "2026-07-17 20:36:25"
+  },
+  {
+    "id": "895c6c8aba0e4144ac987f704cfd78d6",
+    "question": "tell me how to cook boiled egg",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "55baaf8a508d4bad821dc9eadfd145e5",
+    "question": "is there a post for enrollment schedule?",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "9be88d7fe5ab42f9872f5c628fa47291",
+    "question": "now can you tell me how to travel to usa",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "b572978808054b8d90f1239799312a14",
+    "question": "my nephew is a graduating student from jhs. can you tell me what to prepare for the enrollment/",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "5087037c4f294b8d92fe326a3db26c84",
+    "question": "now can you tell me how to cook an egg?",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "fa4d176609824301ab7490f6a0b8143d",
+    "question": "Who is the teachers",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "d3ed720e95704046870b37378c239cc8",
+    "question": "what else can you do?",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "648dc325a47448729991b33714cc8824",
+    "question": "how to cook an egg and make a salad?",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "814b183eea20415493038dc83dcbc870",
+    "question": "can you now tell me how to travel to japan and bake a salad",
+    "answer": "",
+    "count": 3,
+    "status": "pending",
+    "created_at": "2026-07-20 17:07:04",
+    "updated_at": "2026-07-20 17:12:12"
+  },
+  {
+    "id": "60582642c69546a38aa88d3ea81c6646",
+    "question": "is there a post regarding the enrollment?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:29:19",
+    "updated_at": "2026-07-20 17:29:19"
+  },
+  {
+    "id": "8b2f42e2713d4e088abafb607d55f898",
+    "question": "aside from that what is the latest announcement and how to cook an egg?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:29:19",
+    "updated_at": "2026-07-20 17:29:19"
+  },
+  {
+    "id": "933a028dfd2a4dd69226f2a39f6aee80",
+    "question": "how to cook an egg and make a salad",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:29:19",
+    "updated_at": "2026-07-20 17:29:19"
+  },
+  {
+    "id": "25037d78048d49449cd824091c158e31",
+    "question": "who are the teachers? and who to talk to when i want to enroll/",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:29:19",
+    "updated_at": "2026-07-20 17:29:19"
+  },
+  {
+    "id": "9d70ad1ab3564984ba74ea710cf1e499",
+    "question": "I have a graduating nephew and i want to know how to cook an boiled egg and make a salad?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:29:19",
+    "updated_at": "2026-07-20 17:29:19"
+  },
+  {
+    "id": "73237b52d28e4cd48937acd3a398759a",
+    "question": "enrollment requiremnts",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:30:44",
+    "updated_at": "2026-07-20 17:30:44"
+  },
+  {
+    "id": "36c03b90a2a447069e6986b698c7a096",
+    "question": "enrollment requirements?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:30:44",
+    "updated_at": "2026-07-20 17:30:44"
+  },
+  {
+    "id": "391b9630e638435abb4e1f1dbd8d2a2e",
+    "question": "can you tell me more about the enrollment/",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:36:29",
+    "updated_at": "2026-07-20 17:36:29"
+  },
+  {
+    "id": "7d26b68a83834bbf8701dcbc7e6fc3af",
+    "question": "enrollment processes",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:36:29",
+    "updated_at": "2026-07-20 17:36:29"
+  },
+  {
+    "id": "025a5121e0bd49c6b46391544b8dbd29",
+    "question": "I also hae a nephew who will graduate from jhs, can you tell me what to prepare for enrollment?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:36:29",
+    "updated_at": "2026-07-20 17:36:29"
+  },
+  {
+    "id": "ca016497488547578ca7e916f5d3c32c",
+    "question": "Now can you tell me how to cook an egg and make a salad?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:36:29",
+    "updated_at": "2026-07-20 17:36:29"
+  },
+  {
+    "id": "942f8afea83540f3a1826ccf7147299a",
+    "question": "how to travel to japan and cook an boild egg?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:36:29",
+    "updated_at": "2026-07-20 17:36:29"
+  },
+  {
+    "id": "840ce95bebb24e7490befc7dc58e30e4",
+    "question": "i wanna know how to cook a boiled egg and how to enroll my son in your school",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 17:36:29",
+    "updated_at": "2026-07-20 17:36:29"
+  },
+  {
+    "id": "f69d059650664303a786ab70c7ef2ea3",
+    "question": "can you tell me how to enroll?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "a29d253e7cb24f30a6e8fd74db6f8a22",
+    "question": "who are the employees in the school",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "3f08a2ae94c741188c410c2a32830391",
+    "question": "i have a graduating son, can you tell me how to enroll and when is the enrollment?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "613a42675c4e460ab5f2deee6cbab495",
+    "question": "what is the latest announcements",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "661847cdc53c44bca84134607eee3cc7",
+    "question": "tuition fee",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "4896712fb85d4e0f86dcc5ce0ea69be0",
+    "question": "can you tell me how to enroll an what are the requirements and how to cook an egg?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "ee58f91caa084ca58efd5e0bf516f9e1",
+    "question": "now can you instruct me how to boil an egg and travel to japan, and for my nephew how to enroll?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-20 18:13:07"
   }
 ]
