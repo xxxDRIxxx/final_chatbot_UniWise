@@ -783,13 +783,13 @@
     "id": "839515f2c43940b086243d0fe9459593",
     "question": "enrollment",
     "answer": "",
-    "count": 249,
+    "count": 252,
     "status": "pending",
     "variants": [
       "Enrollment requirements"
     ],
     "created_at": "2026-07-17 13:07:29",
-    "updated_at": "2026-07-20 18:13:07",
+    "updated_at": "2026-07-21 12:46:43",
     "embedding": [
       -0.056847367,
       0.050435852,
@@ -3127,11 +3127,11 @@
     "id": "78e1cf1be70049a09255ca97cfc4e8c4",
     "question": "Latest announcement",
     "answer": "",
-    "count": 128,
+    "count": 130,
     "status": "pending",
     "variants": [],
     "created_at": "2026-07-17 13:13:45",
-    "updated_at": "2026-07-20 17:12:12",
+    "updated_at": "2026-07-21 12:46:43",
     "embedding": [
       -0.00951429,
       -0.00051382923,
@@ -17199,10 +17199,10 @@
     "id": "4aedd6298ede427e92fa6029ec2b86a5",
     "question": "enrollment process",
     "answer": "",
-    "count": 16,
+    "count": 19,
     "status": "pending",
     "created_at": "2026-07-17 15:49:58",
-    "updated_at": "2026-07-17 20:36:25"
+    "updated_at": "2026-07-21 15:15:14"
   },
   {
     "id": "1a0402ad5c5645149c61dc161dff44eb",
@@ -17244,10 +17244,10 @@
     "id": "4fa5edd481164b6d9a27bcfc2c9c7b2b",
     "question": "Enrollment requirements",
     "answer": "",
-    "count": 13,
+    "count": 15,
     "status": "pending",
     "created_at": "2026-07-17 16:01:06",
-    "updated_at": "2026-07-20 18:13:07"
+    "updated_at": "2026-07-21 12:46:43"
   },
   {
     "id": "5fba82498dad46bf8367d278cfbac551",
@@ -17622,10 +17622,10 @@
     "id": "9faca3dfff6846b68f51f25034772d93",
     "question": "how to cook boiled egg",
     "answer": "",
-    "count": 24,
+    "count": 31,
     "status": "pending",
     "created_at": "2026-07-17 19:00:24",
-    "updated_at": "2026-07-17 20:36:25"
+    "updated_at": "2026-07-21 15:15:14"
   },
   {
     "id": "7e96042201aa481a8850d22d05b68dd4",
@@ -18490,5 +18490,851 @@
     "status": "pending",
     "created_at": "2026-07-20 18:13:07",
     "updated_at": "2026-07-20 18:13:07"
+  },
+  {
+    "id": "3fd042d1ae8547159338b7a6b021a274",
+    "question": "good evening. what are the credentials needed when you want to transfer to this school.",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 10:50:28",
+    "updated_at": "2026-07-21 10:50:28"
+  },
+  {
+    "id": "1e2717c08c2a4796baf5dd1effad5514",
+    "question": "process enrollment",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 10:50:28",
+    "updated_at": "2026-07-21 10:50:28"
+  },
+  {
+    "id": "660f279b9eeb4620b152bbeab33719b7",
+    "question": "STEM strand",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 10:50:28",
+    "updated_at": "2026-07-21 10:50:28"
+  },
+  {
+    "id": "37cdc830c41b4d28b4523b8b2ed1d0b2",
+    "question": "what are the available strands",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 10:50:28",
+    "updated_at": "2026-07-21 10:50:28"
+  },
+  {
+    "id": "2cfb4d57a5764013a9dd39ea8061ba0f",
+    "question": "how to cook a boiled egg?",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "bed637a3bd124112a666e386091b441f",
+    "question": "what are the prerequisites for enrollment and how to make a salad?",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "0b60ac82ce9b4aebb34b8fe30c61205d",
+    "question": "good day. who is the senior director",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "163757aecd4a4386899b45a70ea77a89",
+    "question": "who are the staff",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "50e5c03151be45e5b20600d19a25b71c",
+    "question": "who are the teachers",
+    "answer": "",
+    "count": 4,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "164da26f00c24108bacdf9430d355fcd",
+    "question": "Oliric C. Fabiolas",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "114f2378fcb0406a935316bc5164d547",
+    "question": "other matters regarding Mr. fabiolas",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "b7e9f80965d64b4d97ed11ff7e30cd4c",
+    "question": "show me the step by step procedures for enrollment",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "0317a3f57eaa4546879f6b2264fa6fc4",
+    "question": "what is next after step 3",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "ca884906548a480b91e6ae6e2d0f4498",
+    "question": "what is next after step 4",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "37c434eddd7241e6ac3e18726342670e",
+    "question": "what is next after step 5",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "43b48f66e5dd4d4aaccbe48a91a84507",
+    "question": "what are the things to bring at the first day of class",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "f0560c61bfe143a381794ba357fc8714",
+    "question": "what is the meaning of life",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "f5f832a420384465a9cb2bc72b581db7",
+    "question": "how to go fishing in Bacoor Elementary School",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "a063c2fdd1aa4d1082dd43e5413b3af5",
+    "question": "How to smile",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "031d8dec677f4e4381ea3b8aec519fa5",
+    "question": "what is binatog",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "0a04fe24265f4cbea18c08b79878ecba",
+    "question": "what is chicken curry",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "20a060d6299044daad4b3586767a5cb9",
+    "question": "how to cook chicken curry",
+    "answer": "",
+    "count": 4,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "94c2be9e26134663beed61361e6cede4",
+    "question": "what is fishing",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "25f4f7637481450fbea6a282fdb96d2e",
+    "question": "how to cook sunny side up egg",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "06b48ed211b1411982058f3f6348c435",
+    "question": "enrolmint steps",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "48f3aa7ab34d41929ca9de66a2975c95",
+    "question": "enrollment requremints",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "fa7ae91025eb442b82cc2d0fa8d96187",
+    "question": "how many buildings does the school have",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "b505b8e0a9874ebf95e0cfef7ac224d1",
+    "question": "how to go to the canteen from the main entrance",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "fba1c833dfdf426ebd0cb0e935699940",
+    "question": "how to be an engineer",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 12:37:39",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "6a42c9ac56bc4bb3a208478560701249",
+    "question": "Can tell me how to cook chicken curry?>",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "b11d0115455a468e9708dc1a0b3b33c8",
+    "question": "I want to know how to cook an egg and make a salad and how to enroll?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "a2c0814747e74a31957d0aee0ec64899",
+    "question": "how to fish in SHS within BES",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "dc95a16c84a44fb3b936b7e91191f8ba",
+    "question": "yes please elaborate",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "e52e74c81bdf4e38972011a72969591c",
+    "question": "how many buildings does it have>",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "328d46e8ed8949cb9106bc29baeafd24",
+    "question": "enrolmint sitps",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "b80ed1c4dfd54667bee28824a431bce3",
+    "question": "how to smile?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "70b9eb90b6254aedba54c992f96b675b",
+    "question": "What is right or wrong?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "53d8baf4c2714865951ca5eb4ad37664",
+    "question": "how to fish",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "c6e663d447b44cd88ea365cece24c533",
+    "question": "what is chicken curry?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "8e1e90414a8b45d788c97646c51800e8",
+    "question": "how to say goodbye?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "2591ded24caa438b8dc92db7449cd641",
+    "question": "what are your general tips",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "360c03333fac4880a62a0907358d0c67",
+    "question": "can you tell now how to cook an egg./",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "080b87a216814619aad29bef46624723",
+    "question": "what are your general tips on cooking an boiled egg",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 12:46:43",
+    "updated_at": "2026-07-21 12:46:43"
+  },
+  {
+    "id": "060230eb971e426694d92684eb3e6727",
+    "question": "good morning.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "e42110e34753485ea78d48ca4e767f79",
+    "question": "what are the help you can provide",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "d8fca68ac98549f3945adf28e63e1ed1",
+    "question": "are there any other matters",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "4c57041cbde4437d97bbd16e409adb5c",
+    "question": "what are the submission procedures in enrollment",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "41875e68f5284af6bde224aa2ba71b4e",
+    "question": "what are the services you can provide",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "790cecf96c4f4838a8031ffb763d2f28",
+    "question": "what about late enrollment",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "e70f2f158a9e45c9b1f72982e1d943a3",
+    "question": "document retrieval procedures",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "b345b3e83947423888cf991be29af2ab",
+    "question": "how to retrieve good moral certificate",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "eae65b13e8e648a2ae2ceb06fda962a1",
+    "question": "SF10",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "fd2820020bee4cccba91c9a8372d3d73",
+    "question": "what is sf10",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "343d9f5271b44e0b9a748ca46bd3db8c",
+    "question": "explain the details of each learning modes",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "f26415fc82c94264bffb0cbc1b9a0f98",
+    "question": "remote offline learning",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "0f8650a148e74eed800d0c5bf3ee2973",
+    "question": "remote offline fishing",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "d0f804aa995647cab6855dfa9a316557",
+    "question": "who is mr. fabiolas or mr. ugali",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1951e37a4eb34d1ca639aa0c68ca33cb",
+    "question": "who is the master teacher among mrs. abuan and mr. arevalo",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "b069374a8fd84539bfd6c88c1ede196b",
+    "question": "who are the other master teachers",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "311cca2c0e624465b0e9d5ca78c7a5f5",
+    "question": "how about mr. ugali",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "c448fe6bfdb24d73911ffba90698e071",
+    "question": "are you sure? is that your final answer?",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1cfd83941a564a3f94e9db1288ce8296",
+    "question": "but as i asked recently today, Mr. ugali is not a master teacher but only a subject teacher.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "5f4782198137496ebc82df091cd7cc43",
+    "question": "so what is now the final list of master teach and subject teacher?",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "7b3d830154284642863a79f3e457ff49",
+    "question": "who is the school pricipal",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "0c9ce2b1a9aa4b3c9408c395e01e8c56",
+    "question": "i thought it was Mr. Pedrito Masangkay. one of the staff said that the school principal is him.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "d4e799941d324bfe874dc8aa561358fc",
+    "question": "but I asked recently today, Mr. Masangkay is the school pricipal and not Ms. Darvin.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1f7920b8d8c34daea70f930b6ee63c2d",
+    "question": "Then who is now the school principal.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "7adb8c602872422d9fab9d2d9b86a6ff",
+    "question": "so give me the final list of school staff",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1c2d0f236acc4266aaa8784daaab0412",
+    "question": "i thought Mr. ugali is no a mster teacher. he is a subject teacher.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "3c340dcfa53d4c12880d20e90f661b4e",
+    "question": "what is the final list now",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "f1a43ee8c7394d1b8b12edcbd9c1e001",
+    "question": "i thought the pricipal is Mr. Masangkay. I am confused now. show me the updated final list.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "40fabc73ef274efda4629da34e1f3ec7",
+    "question": "i asked recently today, the Mr. Pedrito Msangkay is the school principal.",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "86eec1bc738f4409806ac36ca676fd90",
+    "question": "so what is the final list of the staff of the school",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "5ec8e888e2104995b1e62a20b64e3e90",
+    "question": "how to cook bread",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "22a5f25c337a4f9789d99618a8628815",
+    "question": "how to bake bread",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "f0760572dfac47878482c11c4f8af67c",
+    "question": "show me the list of the updated school staff",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1ba9e9fec575462a84daea2573ea6880",
+    "question": "step 5 must be first before step 3",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "2b50ada18b254ad3b6d3979c17172cd3",
+    "question": "what is the enrollment process\\",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "3e22261192d5406ca7c25e0a819449e5",
+    "question": "what is now the updated list of school staff as of today",
+    "answer": "",
+    "count": 2,
+    "status": "pending",
+    "created_at": "2026-07-21 14:57:45",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "d9b37077e89a4f56b5d70addd839db7a",
+    "question": "hellllllo",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "43ec5434a94b4cada23aaa407fe4f6d1",
+    "question": "What are the school process for enrollment?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "6f1357ea28904531b6e52613554d7837",
+    "question": "I think the step 5 is go fishing",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "612a691239e443ba8f1640c98d584e02",
+    "question": "I thought the step 5 of the enrollment process is to go back to your old school and get requirements?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "7a55254b528d4f9ca0d5418d9a7cd573",
+    "question": "Are you sure that the step 5 of the enrollment process is correct/",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1c7a12c801bc4eba809e0fca9b5fc28f",
+    "question": "who are the school teachers?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "6b3828510ec84981962cf0d06b0fa11a",
+    "question": "isnt Mr. Tyrone Mella a subject teacher? he is my advisor in 11-Earth which is my section",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "43cfbbf97f944b75ae7272d9f8762a92",
+    "question": "im pretty sure bryan jazel is not a subject teacher anymore but a master",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "8454aacaec664236abd12edd94c94c2a",
+    "question": "what do you do with eggs",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "51eeb5cae9b740358fefca9927be3de7",
+    "question": "enrollment or should i skip school?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "1cd17d3ab27943328aa983c4064d59ee",
+    "question": "what if i dont attend school?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "120d3e4126be4426a1630aa19f11e9c5",
+    "question": "can i attend school?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "8e08fca5d99a432286fdf0a6301ca267",
+    "question": "who is the master teach with the most experience",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "c5798e5843184a2fa90892370a39afd0",
+    "question": "what about abuan. illagan, or mr fabiolas",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
+  },
+  {
+    "id": "592d1d2a5bb84189afff0fce75589cc3",
+    "question": "then why did you not put them in your context?",
+    "answer": "",
+    "count": 1,
+    "status": "pending",
+    "created_at": "2026-07-21 15:15:14",
+    "updated_at": "2026-07-21 15:15:14"
   }
 ]
